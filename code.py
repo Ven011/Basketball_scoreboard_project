@@ -3,6 +3,7 @@ from adafruit_display_text import label
 import audioio
 import audiomp3
 import board
+import neopixel
 import digitalio
 import displayio
 import framebufferio
