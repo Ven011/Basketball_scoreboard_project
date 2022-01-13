@@ -178,7 +178,7 @@ while True:
 			# update the high score value if the score is greater than the current high score
 			if int(score_count.text) > int(game_hi_score.text): # int() is used in case value is a string
 				game_hi_score.text = score_count.text
-				get_set_high_score(value = score_count.text)
+				# get_set_high_score(value = score_count.text)
 
 			# exit game if the time is up
 			if int(time_count.text) == -1:
