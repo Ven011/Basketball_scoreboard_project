@@ -191,6 +191,7 @@ while True:
 			if int(time_count.text) == -1:
 				scoreboard_state = "inStart"
 				hiscore.text = highest_score
+				game_hiscore.text = highest_score
 				get_set_hiscore(value = highest_score) # save highest score
 				display.show(start_group) # REMOVE AFTER TESTING
 
