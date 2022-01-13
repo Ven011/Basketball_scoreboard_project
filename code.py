@@ -172,7 +172,7 @@ while True:
 				game_hi_score.text = score_count.text
 
 			# exit game if the time is up
-			if int(time_count.text) == 0:
+			if int(time_count.text) == -1:
 				scoreboard_state = "inStart"
 				hi_score.text = game_hi_score.text
 				display.show(start_group) # REMOVE AFTER TESTING
