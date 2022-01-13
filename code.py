@@ -144,7 +144,7 @@ while True:
   
 		while scoreboard_state == "inGame":
 			# Update the time left in the round
-			time_count.text = str(int(time.time() - game_start_time)) # int() to get whole number
+			time_count.text = str(60 - int(time.time() - game_start_time)) # int() to get whole number
 	
 			# FOR TESTING: increment the score when the button is pressed
 			if not button.value:
