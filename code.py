@@ -31,7 +31,7 @@ game_group = displayio.Group()
 
 # game functions
 def get_set_hiscore(value = "_"):
-	if value != "_":
+    	if value != "_":
  		hiscore_file = open("/temp/hiscore.txt", "w")
 		hiscore_file.write(value)
 		hiscore_file.close()
@@ -164,6 +164,8 @@ while True:
 
 		# game variables
 		highest_score = get_set_hiscore()
+  
+		game_hiscore.text = highest_score
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -192,7 +194,6 @@ while True:
 				time.sleep(1)
 				scoreboard_state = "inStart"
 				hiscore.text = highest_score
-				game_hiscore.text = highest_score
 				get_set_hiscore(value = highest_score) # save highest score
 				display.show(start_group) # REMOVE AFTER TESTING
 
