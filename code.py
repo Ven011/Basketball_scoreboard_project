@@ -156,6 +156,9 @@ while True:
 		display.show(game_group)
 		time.sleep(0.5) # wait half a second
 		game_start_time = time.time()
+  
+		# game variables
+		highest_score = get_set_high_score()
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -178,16 +181,13 @@ while True:
 			# update the high score value if the score is greater than the current high score
 			if int(score_count.text) > int(game_hi_score.text): # int() is used in case value is a string
 				game_hi_score.text = score_count.text
-				# get_set_high_score(value = score_count.text)
+				highest_score = score_count.text
 
 			# exit game if the time is up
 			if int(time_count.text) == -1:
-				# reset title properties
-				time_count.color = 0x45FF7F
-				time_count.text = "60"
-    
 				scoreboard_state = "inStart"
-				hi_score.text = get_set_high_score()
+				hi_score.text = highest_score
+				get_set_high_score(value = highest_score) # save highest score
 				display.show(start_group) # REMOVE AFTER TESTING
 
 	# blink the INSERT COIN title when on the start screen
