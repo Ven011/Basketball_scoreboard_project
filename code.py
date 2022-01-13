@@ -32,11 +32,11 @@ game_group = displayio.Group()
 # game functions
 def get_set_high_score(value = "_"):
     if value != "_":
-        high_score_file = open("/game_files/highscore.txt", "w") # open to read
+        high_score_file = open("game_files/highscore.txt", "w") # open to read
         high_score_file.write(value)
         high_score_file.close()
     else: # default value of zero for score indicated want to fetch high score
-        high_score_file = open("/game_files/highscore.txt", "r") # open to read
+        high_score_file = open("game_files/highscore.txt", "r") # open to read
         score = high_score_file.read()
         high_score_file.close()
         return score
