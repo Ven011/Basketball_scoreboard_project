@@ -147,7 +147,11 @@ while True:
 			time_count.text = str(60 - int(time.time() - game_start_time)) # int() to get whole number
 	
 			# FOR TESTING: increment the score when the button is pressed
-			if not button.value:
+			if not button.value and not button_state:
+				button_state = True
+
+			if button_state:
+				button_state = False
 				score_count.text = str(int(score_count.text) + 2)
  
 			# change the time value's color depending on time
