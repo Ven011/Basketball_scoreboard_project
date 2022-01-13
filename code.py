@@ -62,11 +62,11 @@ score_title = label.Label(font_virtual_pet_sans, text = "SCORE", color = 0x009CF
 score_title.x = 32
 score_title.y = 3
 
-time_count = label.Label(font_ozone, text = 60, color = 0x00FF2A) # color = green
+time_count = label.Label(font_ozone, text = "60", color = 0x00FF2A) # color = green
 time_count.x = 8
 time_count.y = 13
 
-score_count = label.Label(font_ozone, text = 0, color = 0xFFFFFF) # color = white
+score_count = label.Label(font_ozone, text = "0", color = 0xFFFFFF) # color = white
 score_count.x = 38
 score_count.y = 13
 
@@ -144,24 +144,24 @@ while True:
   
 		while scoreboard_state == "inGame":
 			# Update the time left in the round
-			time_count.text = int(time.time() - game_start_time) # int() to get whole number
+			time_count.text = str(int(time.time() - game_start_time)) # int() to get whole number
 	
 			# FOR TESTING: increment the score when the button is pressed
 			if not button.value:
-				score_count.text += 2
+				score_count.text = str(int(score_count.text) + 2)
  
 			# change the time value's color depending on time
-			if time_count.text < 20 and time_count.text > 11:
+			if int(time_count.text) < 20 and int(time_count.text) > 11:
 				time_count.color = 0x008B8B # yellow
-			elif time_count.text < 10 and time_count.text > 0:
+			elif int(time_count.text) < 10 and int(time_count.text) > 0:
 				time_count.color = 0xFF0000 # red
  
 			# Update high score value if the score is greater than the current high score
-			if score_count.text > int(hi_score.text): # int() is used in case value is a string
+			if int(score_count.text) > int(hi_score.text): # int() is used in case value is a string
 				hi_score.text = score_count.text
     
 			# Exit game if time is up
-			if time_count.text == 0:
+			if int(time_count.text) == 0:
 				scoreboard_state = "inStart"
 				display.show(start_group) # REMOVE AFTER TESTING
 	
