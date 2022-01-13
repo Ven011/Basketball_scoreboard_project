@@ -136,7 +136,7 @@ while True:
 		display.show(game_group)
   
 		time.sleep(0.5) # Wait half a second
-		time_count.text = 0
+		time_count.text = str(0)
 		game_start_time = time.time()
     
 		# reset title properties for a new game
