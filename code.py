@@ -145,7 +145,8 @@ while True:
 		time.sleep(0.5) # wait half a second
 		time_count.text = str(60)
 		game_start_time = time.time()
-
+		game_hi_score.text = hi_score.text
+		
 		# reset title properties for a new game
 		time_count.color = 0x45FF7F
 
