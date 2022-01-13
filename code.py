@@ -30,10 +30,10 @@ start_group = displayio.Group()
 game_group = displayio.Group()
 
 # game functions
-def get_set_high_score(value = 0):
-    if value:
+def get_set_high_score(value = "_"):
+    if value != "_":
         high_score_file = open("/game_files/highscore.txt", "w") # open to read
-        high_score_file.write(str(value))
+        high_score_file.write(value)
         high_score_file.close()
     else: # default value of zero for score indicated want to fetch high score
         high_score_file = open("/game_files/highscore.txt", "r") # open to read
@@ -90,8 +90,6 @@ game_hi_score_title.y = 27
 game_hi_score = label.Label(font_virtual_pet_sans, text = get_set_high_score(), color = 0xFF4568) 
 game_hi_score.x = 46
 game_hi_score.y = 27
-
-
 
 # add graphics to the display groups
 start_group.append(shootout_title)
@@ -154,10 +152,6 @@ while True:
 
 		# start the game
 		scoreboard_state = "inGame"
-
-		# reset title properties for a new game
-		time_count.color = 0x45FF7F
-		time_count.text = "60"
 		
 		display.show(game_group)
 		time.sleep(0.5) # wait half a second
@@ -188,6 +182,10 @@ while True:
 
 			# exit game if the time is up
 			if int(time_count.text) == -1:
+				# reset title properties
+				time_count.color = 0x45FF7F
+				time_count.text = "60"
+    
 				scoreboard_state = "inStart"
 				hi_score.text = get_set_high_score()
 				display.show(start_group) # REMOVE AFTER TESTING
