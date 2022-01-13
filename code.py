@@ -72,12 +72,12 @@ score_count.x = 37
 score_count.y = 14
 
 game_hi_score_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0xFFDC45)
-hi_score_title.x = 1
-hi_score_title.y = 29
+game_hi_score_title.x = 1
+game_hi_score_title.y = 27
 
 game_hi_score = label.Label(font_virtual_pet_sans, text = "000", color = 0xFF4568) 
-hi_score.x = 46
-hi_score.y = 29
+game_hi_score.x = 46
+game_hi_score.y = 27
 
 # add graphics to the display groups
 start_group.append(shootout_title)
@@ -145,8 +145,7 @@ while True:
 		time.sleep(0.5) # wait half a second
 		time_count.text = str(60)
 		game_start_time = time.time()
-		game_hi_score.text = hi_score.text
-		
+
 		# reset title properties for a new game
 		time_count.color = 0x45FF7F
 
