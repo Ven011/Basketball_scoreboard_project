@@ -188,7 +188,8 @@ while True:
 				highest_score = score_count.text
 
 			# exit game if the time is up
-			if int(time_count.text) == -1:
+			if int(time_count.text) == 0:
+				time.sleep(1)
 				scoreboard_state = "inStart"
 				hiscore.text = highest_score
 				game_hiscore.text = highest_score
