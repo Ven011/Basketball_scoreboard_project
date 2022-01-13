@@ -30,23 +30,23 @@ start_group = displayio.Group()
 game_group = displayio.Group()
 
 # game functions
-def get_set_high_score(value = "_"):
-    if value != "_":
-        high_score_file = open("/game_files/highscore.txt", "w") # open to read
-        high_score_file.write(value)
-        high_score_file.close()
-    else: # default value of zero for score indicated want to fetch high score
-        high_score_file = open("/game_files/highscore.txt", "r") # open to read
-        score = high_score_file.read()
-        high_score_file.close()
-        return score
+def get_set_hiscore(value = "_"):
+	if value != "_":
+ 		hiscore_file = open("/temp/hiscore.txt", "w")
+		hiscore_file.write(value)
+		hiscore_file.close()
+	else: # default value of zero for score indicated want to fetch hiscore
+		hiscore_file = open("/temp/hiscore.txt", "r")
+		score = hiscore_file.read()
+		hiscore_file.close()
+		return score
 
 # setup font
 font_ozone = bitmap_font.load_font("/fonts/ozone.bdf")
 font_virtual_pet_sans = bitmap_font.load_font("/fonts/virtual_pet_sans.bdf")
 
 # setup graphics for the start_group
-shootout_title = label.Label(font_ozone, text = "SHOOTOUT!", color = 0x45FF7F)
+shootout_title = label.Label(font_ozone, text = "SHOOTOUT!", color = 0x00B300)
 shootout_title.x = 3
 shootout_title.y = 3
 
@@ -58,52 +58,52 @@ coin_title = label.Label(font_virtual_pet_sans, text = "COIN", color = 0xFFFFFF)
 coin_title.x = 40
 coin_title.y = 17
 
-hi_score_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0xFFDC45)
-hi_score_title.x = 1
-hi_score_title.y = 29
+hiscore_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0x00B3B3)
+hiscore_title.x = 1
+hiscore_title.y = 29
 
-hi_score = label.Label(font_virtual_pet_sans, text = get_set_high_score(), color = 0xFF4568) 
-hi_score.x = 46
-hi_score.y = 29
+hiscore = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), color = 0xB30000)
+hiscore.x = 46
+hiscore.y = 29
 
 # setup graphics for the game_group
-time_title = label.Label(font_virtual_pet_sans, text = "TIME", color = 0xFF7F45)
+time_title = label.Label(font_virtual_pet_sans, text = "TIME", color = 0xB35A00)
 time_title.x = 3
-time_title.y = 6
+time_title.y = 4
 
-score_title = label.Label(font_virtual_pet_sans, text = "SCORE", color = 0x45C5FF)
-score_title.x = 32
-score_title.y = 6
-
-time_count = label.Label(font_ozone, text = "60", color = 0x45FF7F)
+time_count = label.Label(font_ozone, text = "60", color = 0x00B300)
 time_count.x = 8
-time_count.y = 14
+time_count.y = 13
+
+score_title = label.Label(font_virtual_pet_sans, text = "SCORE", color = 0x0000B3)
+score_title.x = 32
+score_title.y = 4
 
 score_count = label.Label(font_ozone, text = "0", color = 0xFFFFFF)
 score_count.x = 37
-score_count.y = 14
+score_count.y = 13
 
-game_hi_score_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0xFFDC45)
-game_hi_score_title.x = 1
-game_hi_score_title.y = 27
+game_hiscore_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0x00B3B3)
+game_hiscore_title.x = 1
+game_hiscore_title.y = 29
 
-game_hi_score = label.Label(font_virtual_pet_sans, text = get_set_high_score(), color = 0xFF4568) 
-game_hi_score.x = 46
-game_hi_score.y = 27
+game_hiscore = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), color = 0xB30000)
+game_hiscore.x = 46
+game_hiscore.y = 29
 
 # add graphics to the display groups
 start_group.append(shootout_title)
 start_group.append(insert_title)
 start_group.append(coin_title)
-start_group.append(hi_score_title)
-start_group.append(hi_score)
+start_group.append(hiscore_title)
+start_group.append(hiscore)
 
 game_group.append(time_title)
-game_group.append(score_title)
 game_group.append(time_count)
+game_group.append(score_title)
 game_group.append(score_count)
-game_group.append(game_hi_score_title)
-game_group.append(game_hi_score)
+game_group.append(game_hiscore_title)
+game_group.append(game_hiscore)
 
 # show the start_group
 display.show(start_group)
@@ -122,7 +122,7 @@ mp3stream.file = open(audio_file["shootout"], "rb")
 speaker.play(mp3stream)
 
 # setup button pin and state
-button = digitalio.DigitalInOut(board.D4)
+button = digitalio.DigitalInOut(board.SCL)
 button.direction = digitalio.Direction.INPUT
 button.pull = digitalio.Pull.UP
 
@@ -152,17 +152,18 @@ while True:
 
 		# start the game
 		scoreboard_state = "inGame"
+
 		# reset title properties
 		time_count.text = "60"
-		time_count.color = 0x45FF7F
+		time_count.color = 0x00B300
 		score_count.text = "0"
-		
+
 		display.show(game_group)
 		time.sleep(0.5) # wait half a second
 		game_start_time = time.time()
-  
+
 		# game variables
-		highest_score = get_set_high_score()
+		highest_score = get_set_hiscore()
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -174,23 +175,23 @@ while True:
 
 			if button_state:
 				button_state = False
-				score_count.text = str(int(score_count.text) + 2)
+				score_count.text = str(int(score_count.text) + 1)
 
 			# change the time value's color depending on time
 			if int(time_count.text) <= 20 and int(time_count.text) >= 11:
-				time_count.color = 0xFFDC45
+				time_count.color = 0xB3B300
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
-				time_count.color = 0xFF4568
+				time_count.color = 0xB30000
 
 			# update the high score value if the score is greater than the current high score
-			if int(score_count.text) > int(game_hi_score.text): # int() is used in case value is a string
+			if int(score_count.text) > int(game_hiscore.text): # int() is used in case value is a string
 				highest_score = score_count.text
 
 			# exit game if the time is up
 			if int(time_count.text) == -1:
 				scoreboard_state = "inStart"
-				hi_score.text = highest_score
-				get_set_high_score(value = highest_score) # save highest score
+				hiscore.text = highest_score
+				get_set_hiscore(value = highest_score) # save highest score
 				display.show(start_group) # REMOVE AFTER TESTING
 
 	# blink the INSERT COIN title when on the start screen
