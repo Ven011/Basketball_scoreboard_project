@@ -29,6 +29,18 @@ display = framebufferio.FramebufferDisplay(matrix)
 start_group = displayio.Group()
 game_group = displayio.Group()
 
+# game functions
+def get_set_high_score(value = 0):
+    if value:
+        high_score_file = open("/game_files/highscore.txt", "w") # open to read
+        high_score_file.write(str(value))
+        high_score_file.close()
+    else: # default value of zero for score indicated want to fetch high score
+        high_score_file = open("/game_files/highscore.txt", "r") # open to read
+        score = high_score_file.read()
+        high_score_file.close()
+        return score
+
 # setup font
 font_ozone = bitmap_font.load_font("/fonts/ozone.bdf")
 font_virtual_pet_sans = bitmap_font.load_font("/fonts/virtual_pet_sans.bdf")
@@ -50,7 +62,7 @@ hi_score_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0x
 hi_score_title.x = 1
 hi_score_title.y = 29
 
-hi_score = label.Label(font_virtual_pet_sans, text = "000", color = 0xFF4568) 
+hi_score = label.Label(font_virtual_pet_sans, text = get_set_high_score(), color = 0xFF4568) 
 hi_score.x = 46
 hi_score.y = 29
 
@@ -75,9 +87,11 @@ game_hi_score_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color
 game_hi_score_title.x = 1
 game_hi_score_title.y = 27
 
-game_hi_score = label.Label(font_virtual_pet_sans, text = "000", color = 0xFF4568) 
+game_hi_score = label.Label(font_virtual_pet_sans, text = get_set_high_score(), color = 0xFF4568) 
 game_hi_score.x = 46
 game_hi_score.y = 27
+
+
 
 # add graphics to the display groups
 start_group.append(shootout_title)
@@ -140,14 +154,14 @@ while True:
 
 		# start the game
 		scoreboard_state = "inGame"
-		display.show(game_group)
-
-		time.sleep(0.5) # wait half a second
-		time_count.text = str(60)
-		game_start_time = time.time()
 
 		# reset title properties for a new game
 		time_count.color = 0x45FF7F
+		time_count.text = "60"
+		
+		display.show(game_group)
+		time.sleep(0.5) # wait half a second
+		game_start_time = time.time()
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -170,12 +184,12 @@ while True:
 			# update the high score value if the score is greater than the current high score
 			if int(score_count.text) > int(game_hi_score.text): # int() is used in case value is a string
 				game_hi_score.text = score_count.text
+				get_set_high_score(value = score_count.text)
 
 			# exit game if the time is up
 			if int(time_count.text) == -1:
-				time_count.text = "60"
 				scoreboard_state = "inStart"
-				hi_score.text = game_hi_score.text
+				hi_score.text = get_set_high_score()
 				display.show(start_group) # REMOVE AFTER TESTING
 
 	# blink the INSERT COIN title when on the start screen
