@@ -71,6 +71,14 @@ score_count = label.Label(font_ozone, text = "0", color = 0xFFFFFF)
 score_count.x = 37
 score_count.y = 14
 
+game_hi_score_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0xFFDC45)
+hi_score_title.x = 1
+hi_score_title.y = 29
+
+game_hi_score = label.Label(font_virtual_pet_sans, text = "000", color = 0xFF4568) 
+hi_score.x = 46
+hi_score.y = 29
+
 # add graphics to the display groups
 start_group.append(shootout_title)
 start_group.append(insert_title)
@@ -82,8 +90,8 @@ game_group.append(time_title)
 game_group.append(score_title)
 game_group.append(time_count)
 game_group.append(score_count)
-# game_group.append(hi_score_title)
-# game_group.append(hi_score)
+game_group.append(game_hi_score_title)
+game_group.append(game_hi_score)
 
 # show the start_group
 display.show(start_group)
@@ -160,12 +168,13 @@ while True:
 				time_count.color = 0xFF4568
 
 			# update the high score value if the score is greater than the current high score
-			if int(score_count.text) > int(hi_score.text): # int() is used in case value is a string
-				hi_score.text = score_count.text
+			if int(score_count.text) > int(game_hi_score.text): # int() is used in case value is a string
+				game_hi_score.text = score_count.text
 
 			# exit game if the time is up
 			if int(time_count.text) == 0:
 				scoreboard_state = "inStart"
+				hi_score.text = game_hi_score.text
 				display.show(start_group) # REMOVE AFTER TESTING
 
 	# blink the INSERT COIN title when on the start screen
