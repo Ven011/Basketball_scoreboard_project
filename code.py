@@ -166,6 +166,7 @@ while True:
 
 		# game variables
 		highest_score = get_set_hiscore()
+		ball_scored = False
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -175,8 +176,12 @@ while True:
 			voltage = distance_sensor.value*(3.3/65535)
 			distance = int(13 / voltage)
 
-			if distance >= 4 and distance <= 10:
+			if distance >= 4 and distance <= 10 and ball_scored == False:
+				ball_scored = True
 				score_count.text = str(int(score_count.text) + 1)
+
+			elif distance >= 10:
+				ball_scored = False
 
 			# change the time value's color depending on time
 			if int(time_count.text) <= 20 and int(time_count.text) >= 11:
