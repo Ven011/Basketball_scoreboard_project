@@ -4,6 +4,7 @@ import audioio
 import audiomp3
 import board
 import digitalio
+import analogio
 import displayio
 import framebufferio
 import neopixel
@@ -129,6 +130,7 @@ button.pull = digitalio.Pull.UP
 button_state = False
 
 # setup distance sensor
+distance_sensor = analogio.AnalogIn(board.A1)
 
 # setup neopixels
 
@@ -168,13 +170,12 @@ while True:
 		while scoreboard_state == "inGame":
 			# update the time left in the round
 			time_count.text = str(60 - int(time.time() - game_start_time)) # int() to get whole number
+    
+			# get distance value
+			voltage = distance_sensor.value*(3.3/65535)
+			distance = int(13 / voltage)
 
-			# FOR TESTING: increment the score when the button is pressed
-			if not button.value and not button_state:
-				button_state = True
-
-			if button_state:
-				button_state = False
+			if distance >= 4 and distance <= 10:
 				score_count.text = str(int(score_count.text) + 1)
 
 			# change the time value's color depending on time
