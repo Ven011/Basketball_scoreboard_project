@@ -45,9 +45,8 @@ display.show(test_group)
 
 # setup distance sensor
 distance_sensor = analogio.AnalogIn(board.A1)
-# distance_sensor.reference_voltage = 3.3 # AREF of feather M4 board
 
 while True:
-    voltage = distance_sensor.value*(5/1024)
+    voltage = distance_sensor.value*(3.3/1024)
     distance_value.text = str(int(13/voltage))
     time.sleep(0.25)
