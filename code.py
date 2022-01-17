@@ -1,13 +1,13 @@
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
-# import audioio
-# import audiomp3
+import audioio
+import audiomp3
 import board
-# import digitalio
+import digitalio
 import analogio
 import displayio
 import framebufferio
-# import neopixel
+import neopixel
 import rgbmatrix
 import time
 
@@ -44,11 +44,10 @@ test_group.append(distance_value)
 display.show(test_group)
 
 # setup distance sensor
-# distance_sensor = analogio.AnalogIn(board.A1)
-# distance_sensor.reference_voltage = 3.3 # AREF of feather M4 board
+distance_sensor = analogio.AnalogIn(board.A1)
+distance_sensor.reference_voltage = 3.3 # AREF of feather M4 board
 
 while True:
-    pass
-    # voltage = distance_sensor.value*(5/1024)
-    # distance_value.text = str(int(13/voltage))
-    # time.sleep(0.25)
+    voltage = distance_sensor.value*(5/1024)
+    distance_value.text = str(int(13/voltage))
+    time.sleep(0.25)
