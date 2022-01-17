@@ -34,7 +34,7 @@ def get_set_hiscore(value = "_"):
 	if value != "_":
  		hiscore_file = open("/temp/hiscore.txt", "w")
 		hiscore_file.write(value)
-    	hiscore_file.close()
+    		hiscore_file.close()
 	else: # default value of zero for score indicated want to fetch hiscore
 		hiscore_file = open("/temp/hiscore.txt", "r")
 		score = hiscore_file.read()
@@ -157,7 +157,6 @@ while True:
 		time_count.text = "60"
 		time_count.color = 0x00B300
 		score_count.text = "0"
-		game_hiscore.text = highest_score
 
 		display.show(game_group)
 		time.sleep(0.5) # wait half a second
@@ -193,6 +192,7 @@ while True:
 				time.sleep(1)
 				scoreboard_state = "inStart"
 				hiscore.text = highest_score
+				game_hiscore.text = highest_score
 				get_set_hiscore(value = highest_score) # save highest score
 				display.show(start_group) # REMOVE AFTER TESTING
 
