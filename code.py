@@ -47,6 +47,6 @@ display.show(test_group)
 distance_sensor = analogio.AnalogIn(board.A1)
 
 while True:
-    voltage = distance_sensor.value*(3.3/1024)
+    voltage = distance_sensor.value*(3.3/65535)
     distance_value.text = str(int(13/voltage))
     time.sleep(0.25)
