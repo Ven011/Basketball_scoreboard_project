@@ -176,10 +176,10 @@ while True:
 			voltage = distance_sensor.value*(3.3/65535)
 			distance = int(13 / voltage)
 
-			if distance >= 2 and distance <= 6 and ball_scored == False:
+			if distance >= 4 and distance <= 15 and ball_scored == False:
 				ball_scored = True
 				score_count.text = str(int(score_count.text) + 1)
-			elif distance > 6 and distance <= 15:
+			elif distance > 15 and distance <= 25:
 				ball_scored = False
 
 			# change the time value's color depending on time
