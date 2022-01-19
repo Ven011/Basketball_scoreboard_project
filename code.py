@@ -174,6 +174,7 @@ while True:
 		ball_scored = False
 		prev_score_time = 0
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
+		lights_change = False # Tracks the changing of the RGB lights in the countdown
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -193,19 +194,22 @@ while True:
 			# change the time value's color and RGB lights depending on time left in game
 			if int(time_count.text) <= 60 and int(time_count.text) >= 21:
 				time_count.color = 0x00B300 # Green
-				if int(time_count.text) == 60:
+				if int(time_count.text) == 60 and not lights_change:
+					lights_change = True
 					pixels.fill((0, lights_color_intensity, 0))
 					pixels.show()
     
 			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
 				time_count.color = 0xB3B300 # Yellow
-				if int(time_count.text) == 20:
+				lights_have_changed = False
+				if int(time_count.text) == 20 and lights_change:
+					lights_change = False
 					pixels.fill((lights_color_intensity, lights_color_intensity, 0))
 					pixels.show()
 				
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
 				time_count.color = 0xB30000 # Red
-				if int(time_count.text) == 10:
+				if int(time_count.text) == 10 and not lights_change:
 					pixels.fill((lights_color_intensity, 0, 0))
 					pixels.show()
 				
