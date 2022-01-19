@@ -176,7 +176,7 @@ while True:
 		while scoreboard_state == "inGame":
 			# update the time left in the round
 			time_count.text = str(60 - int(time.time() - game_start_time)) # int() to get whole number
-			# time_count text x pos if 1 digit score (if number has a 1 in it should move 1 more pixel)
+			# time_count text x pos if 1 digit time (if number has a 1 in it should move 1 more pixel)
 			if int(time_count.text) <= 9:
 				time_count.x = 12
 
