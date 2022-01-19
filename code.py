@@ -134,6 +134,7 @@ distance_sensor = analogio.AnalogIn(board.A1)
 
 # setup neopixels
 
+
 # variables used in the loop
 scoreboard_state = "inStart" # scoreboard states: inStart, inGame, inGameEnd
 previous_time = time.time()
@@ -167,17 +168,19 @@ while True:
 		# game variables
 		highest_score = get_set_hiscore()
 		ball_scored = False
+		prev_score_time = 0
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
 			time_count.text = str(60 - int(time.time() - game_start_time)) # int() to get whole number
-    
+
 			# get distance value
 			voltage = distance_sensor.value*(3.3/65535)
 			distance = int(13 / voltage)
 
-			if distance >= 4 and distance <= 15 and ball_scored == False:
+			if distance >= 4 and distance <= 15 and ball_scored == False and time.time() >= prev_score_time + 0.5:
 				ball_scored = True
+				prev_score_time = time.time() # Keep track of the time this score was made
 				score_count.text = str(int(score_count.text) + 1)
 			elif distance > 15 and distance <= 25:
 				ball_scored = False
