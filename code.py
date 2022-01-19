@@ -210,6 +210,7 @@ while True:
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
 				time_count.color = 0xB30000 # Red
 				if int(time_count.text) == 10 and not lights_change:
+					lights_change = True
 					pixels.fill((lights_color_intensity, 0, 0))
 					pixels.show()
 				
