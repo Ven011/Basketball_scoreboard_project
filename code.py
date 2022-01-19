@@ -33,14 +33,15 @@ game_group = displayio.Group()
 # game functions
 def get_set_hiscore(value = "_"):
 	if value != "_":
- 		hiscore_file = open("/temp/hiscore.txt", "w")
+		hiscore_file = open("/temp/hiscore.txt", "w")
 		hiscore_file.write(value)
-    		hiscore_file.close()
+		hiscore_file.close()
 	else: # default value of zero for score indicated want to fetch hiscore
 		hiscore_file = open("/temp/hiscore.txt", "r")
 		score = hiscore_file.read()
 		hiscore_file.close()
 		return score
+        
 
 # setup font
 font_ozone = bitmap_font.load_font("/fonts/ozone.bdf")
@@ -133,6 +134,9 @@ button_state = False
 distance_sensor = analogio.AnalogIn(board.A1)
 
 # setup neopixels
+pixel_pin = board.D25
+num_pixels = 54
+pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2)
 
 
 # variables used in the loop
@@ -163,12 +167,13 @@ while True:
 
 		display.show(game_group)
 		time.sleep(0.5) # wait half a second
-		game_start_time = time.time()
+		prev_start_time = time.time()
 
 		# game variables
 		highest_score = get_set_hiscore()
 		ball_scored = False
-		prev_score_time = 0
+		last_score_time = 0
+		lights_color_intensity = 255 # used to fade in and out the RGB colors
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -178,19 +183,41 @@ while True:
 			voltage = distance_sensor.value*(3.3/65535)
 			distance = int(13 / voltage)
 
-			if distance >= 4 and distance <= 15 and ball_scored == False and time.time() >= prev_score_time + 0.5:
+			if distance >= 14 and distance <= 15 and ball_scored == False and time() >= prev_score_time + 1:
 				ball_scored = True
-				prev_score_time = time.time() # Keep track of the time this score was made
+				prev_score_time = time() # Keep track of the time this score was made
 				score_count.text = str(int(score_count.text) + 1)
-			elif distance > 15 and distance <= 25:
+			else:
 				ball_scored = False
 
-			# change the time value's color depending on time
-			if int(time_count.text) <= 20 and int(time_count.text) >= 11:
-				time_count.color = 0xB3B300
+			# change the time value's color and RGB lights depending on time left in game
+			if int(time_count.text) <= 60 and int(time_count.text) >= 21:
+				time_count.color = 0x00B300 # Green
+				if lights_color_intensity > 0:
+					lights_color_intensity -= 1
+				elif lights_color_intensity <= 0:
+					lights_color_intensity = 255
+				pixels.fill((0, lights_color_intensity, 0))
+				pixels.show()
+    
+			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
+				time_count.color = 0xB3B300 # Yellow
+				if lights_color_intensity > 0:
+					lights_color_intensity -= 1
+				elif lights_color_intensity <= 0:
+					lights_color_intensity = 255
+				pixels.fill((lights_color_intensity, lights_color_intensity, 0))
+				pixels.show()
+				
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
-				time_count.color = 0xB30000
-
+				time_count.color = 0xB30000 # Red
+				if lights_color_intensity > 0:
+					lights_color_intensity -= 1
+				elif lights_color_intensity <= 0:
+					lights_color_intensity = 255
+				pixels.fill((lights_color_intensity, 0, 0))
+				pixels.show()
+				
 			# update the high score value if the score is greater than the current high score
 			if int(score_count.text) > int(game_hiscore.text): # int() is used in case value is a string
 				highest_score = score_count.text
