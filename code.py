@@ -183,9 +183,9 @@ while True:
 			voltage = distance_sensor.value*(3.3/65535)
 			distance = int(13 / voltage)
 
-			if distance >= 14 and distance <= 15 and ball_scored == False and time() >= prev_score_time + 1:
+			if distance >= 14 and distance <= 15 and ball_scored == False and time.time() >= prev_score_time + 1:
 				ball_scored = True
-				prev_score_time = time() # Keep track of the time this score was made
+				prev_score_time = time.time() # Keep track of the time this score was made
 				score_count.text = str(int(score_count.text) + 1)
 			else:
 				ball_scored = False
@@ -211,10 +211,10 @@ while True:
 				
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
 				time_count.color = 0xB30000 # Red
-				if lights_color_intensity > 0:
-					lights_color_intensity -= 1
-				elif lights_color_intensity <= 0:
-					lights_color_intensity = 255
+				# if lights_color_intensity > 0:
+				# 	lights_color_intensity -= 1
+				# elif lights_color_intensity <= 0:
+				# 	lights_color_intensity = 255
 				pixels.fill((lights_color_intensity, 0, 0))
 				pixels.show()
 				
