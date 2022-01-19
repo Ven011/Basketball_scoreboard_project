@@ -193,19 +193,19 @@ while True:
 			# change the time value's color and RGB lights depending on time left in game
 			if int(time_count.text) <= 60 and int(time_count.text) >= 21:
 				time_count.color = 0x00B300 # Green
-				if lights_color_intensity > 0:
-					lights_color_intensity -= 1
-				elif lights_color_intensity <= 0:
-					lights_color_intensity = 255
+				# if lights_color_intensity > 0:
+				# 	lights_color_intensity -= 1
+				# elif lights_color_intensity <= 0:
+				# 	lights_color_intensity = 255
 				pixels.fill((0, lights_color_intensity, 0))
 				pixels.show()
     
 			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
 				time_count.color = 0xB3B300 # Yellow
-				if lights_color_intensity > 0:
-					lights_color_intensity -= 1
-				elif lights_color_intensity <= 0:
-					lights_color_intensity = 255
+				# if lights_color_intensity > 0:
+				# 	lights_color_intensity -= 1
+				# elif lights_color_intensity <= 0:
+				# 	lights_color_intensity = 255
 				pixels.fill((lights_color_intensity, lights_color_intensity, 0))
 				pixels.show()
 				
