@@ -200,13 +200,13 @@ while True:
 			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
 				time_count.color = 0xB3B300 # Yellow
 				if int(time_count.text) == 20:
-					pixels.fill((0, lights_color_intensity, 0))
+					pixels.fill((lights_color_intensity, lights_color_intensity, 0))
 					pixels.show()
 				
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
 				time_count.color = 0xB30000 # Red
 				if int(time_count.text) == 10:
-					pixels.fill((0, lights_color_intensity, 0))
+					pixels.fill((lights_color_intensity, 0, 0))
 					pixels.show()
 				
 			# update the high score value if the score is greater than the current high score
