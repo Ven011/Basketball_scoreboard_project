@@ -10,6 +10,7 @@ import framebufferio
 import neopixel
 import rgbmatrix
 import time
+import math
 
 # setup RGBMatrix
 displayio.release_displays()
@@ -138,7 +139,6 @@ pixel_pin = board.D25
 num_pixels = 54
 pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2)
 
-
 # variables used in the loop
 scoreboard_state = "inStart" # scoreboard states: inStart, inGame, inGameEnd
 previous_time = time.time()
@@ -173,8 +173,9 @@ while True:
 		highest_score = get_set_hiscore()
 		ball_scored = False
 		prev_score_time = 0
+  
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
-		lights_change = False # Tracks the changing of the RGB lights in the countdown
+		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -182,37 +183,40 @@ while True:
 
 			# get distance value
 			voltage = distance_sensor.value*(3.3/65535)
-			distance = int(13 / voltage)
+			distance = int(13 / voltage) 
 
-			if distance >= 14 and distance <= 15 and ball_scored == False and time.time() >= prev_score_time + 1:
-				ball_scored = True
+			if distance <= 27 and time.time() >= prev_score_time + 0.2: 
 				prev_score_time = time.time() # Keep track of the time this score was made
 				score_count.text = str(int(score_count.text) + 1)
-			else:
-				ball_scored = False
 
 			# change the time value's color and RGB lights depending on time left in game
 			if int(time_count.text) <= 60 and int(time_count.text) >= 21:
 				time_count.color = 0x00B300 # Green
-				if int(time_count.text) == 60 and not lights_change:
-					lights_change = True
-					pixels.fill((0, lights_color_intensity, 0))
-					pixels.show()
+				if int(time_count.text) == 60:
+					lights_clock = time.time()
+     
+				# Fade the LEDs in and out
+				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
+				pixels[:] = (0, lights_color_intensity, 0)
+                
     
 			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
 				time_count.color = 0xB3B300 # Yellow
-				lights_have_changed = False
-				if int(time_count.text) == 20 and lights_change:
-					lights_change = False
-					pixels.fill((lights_color_intensity, lights_color_intensity, 0))
-					pixels.show()
+				if int(time_count.text) == 20:
+					lights_clock = time.time()
+     
+				# Fade the LEDs in and out
+				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
+				pixels[:] = (lights_color_intensity, lights_color_intensity, 0)
 				
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
 				time_count.color = 0xB30000 # Red
-				if int(time_count.text) == 10 and not lights_change:
-					lights_change = True
-					pixels.fill((lights_color_intensity, 0, 0))
-					pixels.show()
+				if int(time_count.text) == 10:
+					lights_clock = time.time()
+     
+				# Fade the LEDs in and out
+				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
+				pixels[:] = (lights_color_intensity, 0, 0)
 				
 			# update the high score value if the score is greater than the current high score
 			if int(score_count.text) > int(game_hiscore.text): # int() is used in case value is a string
@@ -225,6 +229,7 @@ while True:
 				hiscore.text = highest_score
 				game_hiscore.text = highest_score
 				get_set_hiscore(value = highest_score) # save highest score
+				pixels[:] = (255, 255, 255) # Set all pixels to white
 				display.show(start_group) # REMOVE AFTER TESTING
 
 	# blink the INSERT COIN title when on the start screen
