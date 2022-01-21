@@ -185,7 +185,7 @@ while True:
 			voltage = distance_sensor.value*(3.3/65535)
 			distance = int(13 / voltage) 
 
-			if distance <= 27 and time.time() >= prev_score_time + 0.2: 
+			if distance <= 20 and time.time() >= prev_score_time + 0.2: 
 				prev_score_time = time.time() # Keep track of the time this score was made
 				score_count.text = str(int(score_count.text) + 1)
 
@@ -193,18 +193,18 @@ while True:
 			if int(time_count.text) <= 60 and int(time_count.text) >= 21:
 				time_count.color = 0x00B300 # Green
 				if int(time_count.text) == 60:
+					pixels.fill((0, 255, 0))
 					lights_clock = time.time()
      
 				# Fade the LEDs in and out
 				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
-				pixels.fill((0, lights_color_intensity, 0))
                 
     
 			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
 				time_count.color = 0xB3B300 # Yellow
 				if int(time_count.text) == 20:
 					lights_clock = time.time()
-     
+
 				# Fade the LEDs in and out
 				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
 				pixels.fill((lights_color_intensity, lights_color_intensity, 0))
