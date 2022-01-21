@@ -229,7 +229,7 @@ while True:
 				hiscore.text = highest_score
 				game_hiscore.text = highest_score
 				get_set_hiscore(value = highest_score) # save highest score
-				pixels[:] = (255, 255, 255) # Set all pixels to white
+				pixels.fill((255, 255, 255)) # Set all pixels to white
 				display.show(start_group) # REMOVE AFTER TESTING
 
 	# blink the INSERT COIN title when on the start screen
