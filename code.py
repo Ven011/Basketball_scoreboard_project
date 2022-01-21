@@ -197,7 +197,7 @@ while True:
      
 				# Fade the LEDs in and out
 				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
-				pixels[:] = (0, lights_color_intensity, 0)
+				pixels.fill(0, lights_color_intensity, 0)
                 
     
 			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
@@ -207,7 +207,7 @@ while True:
      
 				# Fade the LEDs in and out
 				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
-				pixels[:] = (lights_color_intensity, lights_color_intensity, 0)
+				pixels.fill(lights_color_intensity, lights_color_intensity, 0)
 				
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
 				time_count.color = 0xB30000 # Red
@@ -216,7 +216,7 @@ while True:
      
 				# Fade the LEDs in and out
 				lights_color_intensity = int(127.5 + 127.5*math.cos(time.time() - lights_clock))
-				pixels[:] = (lights_color_intensity, 0, 0)
+				pixels.fill(lights_color_intensity, 0, 0)
 				
 			# update the high score value if the score is greater than the current high score
 			if int(score_count.text) > int(game_hiscore.text): # int() is used in case value is a string
