@@ -46,7 +46,14 @@ display.show(test_group)
 # setup distance sensor
 distance_sensor = analogio.AnalogIn(board.A1)
 
+highest_distance = 0
+
 while True:
     voltage = distance_sensor.value*(3.3/65535)
-    distance_value.text = str(int(13/voltage))
+    distance = int(13 / voltage)
+    
+    if distance > highest_distance:
+        highest_distance = distance
+
+    distance_value.text = str(highest_distance)
     time.sleep(0.25)
