@@ -170,7 +170,6 @@ while True:
 
 		# game variables
 		highest_score = get_set_hiscore()
-		prev_score_time = 0
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
 		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
 
@@ -182,13 +181,11 @@ while True:
 			if int(time_count.text) <= 9:
 				time_count.x = 12
 
-			time.sleep(0.50)
-
 			# get distance value
 			voltage = distance_sensor.value * (3.3 / 65535)
 			distance = int(13 / voltage)
 
-			if distance <= 15:
+			if distance <= 10:
 				score_count.text = str(int(score_count.text) + 1)
 
 			# score_count text x pos if 3 digit score (if number has a 1 in it should move 1 more pixel)
