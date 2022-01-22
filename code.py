@@ -165,12 +165,11 @@ while True:
 		score_count.text = "0"
 
 		display.show(game_group)
-		time.sleep(0.5) # wait half a second
+		time.sleep(0.50) # wait half a second
 		game_start_time = time.time()
 
 		# game variables
 		highest_score = get_set_hiscore()
-		ball_scored = False
 		prev_score_time = 0
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
 		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
@@ -178,24 +177,18 @@ while True:
 		while scoreboard_state == "inGame":
 			# update the time left in the round
 			time_count.text = str(60 - int(time.time() - game_start_time)) # int() to get whole number
+
 			# time_count text x pos if 1 digit time (if number has a 1 in it should move 1 more pixel)
 			if int(time_count.text) <= 9:
 				time_count.x = 12
+
+			time.sleep(0.50)
 
 			# get distance value
 			voltage = distance_sensor.value * (3.3 / 65535)
 			distance = int(13 / voltage)
 
-			time.sleep(0.15)
-			if distance <= 5 and ball_scored == False:
-				ball_scored = True
-				score_count.text = str(int(score_count.text) + 1)
-			else:
-				ball_scored = False
-			time.sleep(0.15)
-
-			if distance <= 27 and time.time() >= prev_score_time + 0.2:
-				prev_score_time = time.time() # Keep track of the time this score was made
+			if distance <= 15:
 				score_count.text = str(int(score_count.text) + 1)
 
 			# score_count text x pos if 3 digit score (if number has a 1 in it should move 1 more pixel)
