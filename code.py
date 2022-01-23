@@ -133,7 +133,9 @@ button.pull = digitalio.Pull.UP
 # distance_sensor = analogio.AnalogIn(board.A1)
 
 # setup break beam sensor
-break_beam = analogio.AnalogIn(board.A1)
+break_beam = digitalio.DigitalInOut(board.A1)
+break_beam.direction = digitalio.Direction.INPUT
+break_beam.pull = digitalio.Pull.UP
 
 # setup neopixels
 led_pin = board.D25
@@ -193,7 +195,7 @@ while True:
 			# Check if the beam has been broken
 			beam_broken = True if break_beam.value == 0 else False
 			
-			if beam_broken and ball_scored == False:
+			if beam_broken and not ball_scored:
 				ball_scored = True
 				score_count.text = str(int(score_count.text) + 1)
 			elif not beam_broken:
