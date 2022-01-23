@@ -173,7 +173,7 @@ while True:
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
 		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
 		ball_scored = False
-		time_scored = 0
+		time_scored = time.time()
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
