@@ -179,6 +179,7 @@ while True:
 		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
 		ball_scored = False
 		beam_broken = False
+		time_scored = time.time()
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -195,8 +196,9 @@ while True:
 			# Check if the beam has been broken
 			beam_broken = True if break_beam.value == 0 else False
 			
-			if beam_broken and not ball_scored:
+			if beam_broken and not ball_scored and time.time() >= time_scored + 0.2:
 				ball_scored = True
+				time_scored = time.time()
 				score_count.text = str(int(score_count.text) + 1)
 			elif not beam_broken:
 				ball_scored = False
