@@ -173,6 +173,7 @@ while True:
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
 		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
 		ball_scored = False
+		time_scored = 0
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -186,10 +187,11 @@ while True:
 			voltage = distance_sensor.value * (3.3 / 65535)
 			distance = int(13 / voltage)
 
-			if distance <= 10 and not ball_scored:
+			if distance <= 10 and not ball_scored and time_scored >= time.time() + 0.5:
 				score_count.text = str(int(score_count.text) + 1)
+				time_scored = time.time()
 				ball_scored = True
-			elif distance >= 10:
+			elif distance >= 20:
 				ball_scored = False
 
 			# score_count text x pos if 3 digit score (if number has a 1 in it should move 1 more pixel)
