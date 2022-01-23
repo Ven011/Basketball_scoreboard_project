@@ -130,7 +130,10 @@ button.direction = digitalio.Direction.INPUT
 button.pull = digitalio.Pull.UP
 
 # setup distance sensor
-distance_sensor = analogio.AnalogIn(board.A1)
+# distance_sensor = analogio.AnalogIn(board.A1)
+
+# setup break beam sensor
+break_beam = analogio.AnalogIn(board.A1)
 
 # setup neopixels
 led_pin = board.D25
@@ -173,7 +176,7 @@ while True:
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
 		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
 		ball_scored = False
-		time_scored = time.time()
+		beam_broken = False
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -184,14 +187,16 @@ while True:
 				time_count.x = 12
 
 			# get distance value
-			voltage = distance_sensor.value * (3.3 / 65535)
-			distance = int(13 / voltage)
+			# voltage = distance_sensor.value * (3.3 / 65535)
+			# distance = int(13 / voltage)
 
-			if distance <= 10 and not ball_scored and time_scored >= time.time() + 0.5:
-				score_count.text = str(int(score_count.text) + 1)
-				time_scored = time.time()
+			# Check if the beam has been broken
+			beam_broken = True if break_beam.value == 0 else False
+			
+			if beam_broken and ball_scored == False:
 				ball_scored = True
-			elif distance >= 20:
+				score_count.text = str(int(score_count.text) + 1)
+			elif not beam_broken:
 				ball_scored = False
 
 			# score_count text x pos if 3 digit score (if number has a 1 in it should move 1 more pixel)
