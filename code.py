@@ -200,15 +200,11 @@ while True:
 			if beam_broken and not ball_scored:
 				time_scored = time.time()
 				ball_scored = True
-				if time_scored - time_state_changed <= 0.3: # if the time between detection and non-detection is less than 0.3 sec
-															# This is assuming the ball takes more than 0.3 seconds to clear the sensor
-					pass # Don't count a point
-				else:
-					# Count the point
-					score_count.text = str(int(score_count.text) + 1)
 			elif not beam_broken:
-				ball_scored = False
-				time_state_changed = time.time()
+				if time.time() - time_scored <= 0.1: # this is assuming that the ball takes more than 0.1 seconds to clear the sensor
+					pass
+				else:
+					ball_scored = False
 
 			# score_count text x pos if 3 digit score (if number has a 1 in it should move 1 more pixel)
 			if int(score_count.text) >= 100:
