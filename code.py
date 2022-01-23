@@ -180,7 +180,6 @@ while True:
 		ball_scored = False
 		beam_broken = False
 		time_scored = time.time()
-		time_state_changed = 0
 
 		while scoreboard_state == "inGame":
 			# update the time left in the round
@@ -201,9 +200,10 @@ while True:
 				time_scored = time.time()
 				ball_scored = True
 			elif not beam_broken:
-				if time.time() - time_scored <= 0.1: # this is assuming that the ball takes more than 0.1 seconds to clear the sensor
+				if time.time() - time_scored <= 0.3: # this is assuming that the ball takes more than 0.3 seconds to clear the sensor
 					pass
-				else:
+				elif ball_scored:
+					score_count.text = str(int(score_count.text) + 1) # count a point
 					ball_scored = False
 
 			# score_count text x pos if 3 digit score (if number has a 1 in it should move 1 more pixel)
