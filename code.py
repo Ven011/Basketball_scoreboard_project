@@ -198,9 +198,9 @@ while True:
    
 			if beam_broken and not ball_scored:
 				# Increment the score if conditions are met
-				if time.time() - time_beam_restored <= 0.3: # Checking the time between consecutive ball scored.
+				if time.time() - time_beam_restored <= 0.3: # Checking the time between consecutive balls scored.
 															# If the time is less than 0.3, this should indicate an invalid score
-															# Time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or more of each other
+															# Time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
 					pass
 				else: 
 					score_count.text = str(int(score_count.text) + 1)
@@ -209,7 +209,7 @@ while True:
 			elif not beam_broken:
 				if ball_scored:
 					time_break_restored = time.time() # After a ball is scored the beam is restored, get the time the beam was restored
-				ball_scored = False
+					ball_scored = False
 
 			# score_count text x pos if 3 digit score (if number has a 1 in it should move 1 more pixel)
 			if int(score_count.text) >= 100:
