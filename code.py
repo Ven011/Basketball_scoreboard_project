@@ -11,6 +11,7 @@ import neopixel
 import math
 import rgbmatrix
 import time
+import random as rand
 
 # setup RGBMatrix
 displayio.release_displays()
@@ -30,6 +31,7 @@ display = framebufferio.FramebufferDisplay(matrix)
 # display groups
 start_group = displayio.Group()
 game_group = displayio.Group()
+new_hiscore_group = displayio.Group()
 
 # game functions
 def get_set_hiscore(value = "_"):
@@ -61,13 +63,13 @@ coin_title = label.Label(font_virtual_pet_sans, text = "COIN", color = 0xFFFFFF)
 coin_title.x = 40
 coin_title.y = 17
 
-hiscore_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0x00B3B3)
-hiscore_title.x = 1
-hiscore_title.y = 29
+start_hiscore_title = label.Label(font_virtual_pet_sans, text = "HISCORE", color = 0x00B3B3)
+start_hiscore_title.x = 1
+start_hiscore_title.y = 29
 
-hiscore = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), color = 0xB30000)
-hiscore.x = 46
-hiscore.y = 29
+start_hiscore = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), color = 0xB30000)
+start_hiscore.x = 46
+start_hiscore.y = 29
 
 # setup graphics for the game_group
 time_title = label.Label(font_virtual_pet_sans, text = "TIME", color = 0xB35A00)
@@ -94,12 +96,25 @@ game_hiscore = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), colo
 game_hiscore.x = 46
 game_hiscore.y = 29
 
+# Setup graphics for the new hight score group
+new_title = label.Label(font_ozone, text = "NEW", color = "0xFF0000")
+new_title.x = 21
+new_title.y = 5
+
+new_hiscore_title = label.Label(font_virtual_pet_sans, text = "Hi-SCORE", color = "0xFFFF00")
+new_hiscore_title.x = 10
+new_hiscore_title.y = 16
+
+new_hiscore_count = label.Label(font_virtual_pet_sans, text = "0", color = "0xFFFFFF")
+new_hiscore_count.x = 24
+new_hiscore_count.y = 29
+
 # add graphics to the display groups
 start_group.append(shootout_title)
 start_group.append(insert_title)
 start_group.append(coin_title)
-start_group.append(hiscore_title)
-start_group.append(hiscore)
+start_group.append(start_hiscore_title)
+start_group.append(start_hiscore)
 
 game_group.append(time_title)
 game_group.append(time_count)
@@ -107,6 +122,10 @@ game_group.append(score_title)
 game_group.append(score_count)
 game_group.append(game_hiscore_title)
 game_group.append(game_hiscore)
+
+new_hiscore_group.append(new_title)
+new_hiscore_group.append(new_hiscore_title)
+new_hiscore_group.append(new_hiscore_count)
 
 # show the start_group
 display.show(start_group)
@@ -116,7 +135,8 @@ speaker = audioio.AudioOut(board.A0)
 audio_file = {
 	"for_setup": "/audio/shootout.mp3",
 	"shootout": "/audio/shootout.mp3",
-	"insert_coin": "/audio/insert_coin.mp3"
+	"insert_coin": "/audio/insert_coin.mp3",
+	"new_highscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["for_setup"], "rb"))
 
@@ -181,7 +201,7 @@ while True:
 		beam_broken = False
 		time_scored = time.time()
 
-		while scoreboard_state == "inGame":
+		while int(time_count.text) > -1:
 			# update the time left in the round
 			time_count.text = str(60 - int(time.time() - game_start_time)) # int() to get whole number
 
@@ -214,28 +234,28 @@ while True:
 
 			# change the time value's color and RGB lights depending on time left in game
 			if int(time_count.text) <= 60 and int(time_count.text) >= 21:
-				time_count.color = 0x00B300
+				time_count.color = 0x00B300 # Green
 				if int(time_count.text) == 60:
+					leds.fill((lights_color_intensity, 0, 0))
 					lights_clock = time.time()
 				# Fade the LEDs in and out
-				lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
-				leds.fill((0, lights_color_intensity, 0))
+				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
 			elif int(time_count.text) <= 20 and int(time_count.text) >= 11:
-				time_count.color = 0xB3B300
+				time_count.color = 0xB3B300 # Yellow
 				if int(time_count.text) == 20:
 					lights_clock = time.time()
+					leds.fill((lights_color_intensity, 0, 0))
 				# Fade the LEDs in and out
-				lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
-				leds.fill((lights_color_intensity, lights_color_intensity, 0))
+				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
 			elif int(time_count.text) <= 10 and int(time_count.text) >= 0:
-				time_count.color = 0xB30000
+				time_count.color = 0xB30000 # Red
 				if int(time_count.text) == 10:
 					lights_clock = time.time()
+					leds.fill((lights_color_intensity, 0, 0))
 				# Fade the LEDs in and out
-				lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
-				leds.fill((lights_color_intensity, 0, 0))
+				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
 			# update the high score value if the score is greater than the current high score
 			if int(score_count.text) > int(game_hiscore.text): # int() is used in case value is a string
@@ -243,16 +263,57 @@ while True:
 
 			# exit game if the time is up
 			if int(time_count.text) == 0:
-				time.sleep(1)
-				scoreboard_state = "inStart"
-				hiscore.text = highest_score
-				game_hiscore.text = highest_score
-				get_set_hiscore(value = highest_score) # save highest score
-				leds.fill((255, 255, 255)) # Set all pixels to white
-				display.show(start_group) # REMOVE AFTER TESTING
+				time.sleep(1) # allow time value of 0 to be seen
+				if highest_score > int(get_set_hiscore()): # if the player scored higher than the previous highscore
+					# Update the start screen high score
+					start_hiscore.text = highest_score
+					# Update the game screen highscore value
+					game_hiscore.text = highest_score
+					# Save the high score
+					get_set_hiscore(value = highest_score)
+					# Show the new high score screen
+					start_time = time.time()
+     
+					# Format the high score value on the display. Keep value centered
+					if highest_score <= 9:
+						new_hiscore_count.x = 29
+					elif highest_score >= 10 and highest_score <= 99:
+						new_hiscore_count.x = 26
+					elif highest_score >= 100:
+						new_hiscore_count.x = 23
+     
+					display.show(new_hiscore_group)
+					
+					# Play the new high score audio
+					mp3stream.file = open(audio_file["new_highscore"], "rb")
+					speaker.play(mp3stream)
+
+					blink_timer = time.time()
+					labels_are_visible = True
+					while time.time() - start_time <= 5: # While in this screen
+						# Blink the labels
+						if time.time() >= blink_timer + 1:
+							blink_timer = time.time()
+							if labels_are_visible:
+								# Change their color to black
+								new_title.color = 0x000000
+								new_hiscore_title.color = 0x000000
+								new_hiscore_count.color = 0x000000
+								labels_are_visible = False
+							else:
+								# Change their color to their apppropriate colors
+								new_title.color = 0xFF0000
+								new_hiscore_title.color = 0xFFFF00
+								new_hiscore_count.color = 0xFFFFFF
+								labels_are_visible = True
+        
+					leds.fill((255, 255, 255)) # Set all pixels to white
+
+				else: # The player finished the game, no new high score was set
+					leds.fill((255, 255, 255)) # Set all pixels to white
 
 	# blink the INSERT COIN title when on the start screen
-	if time.time() >= previous_time + 1 and scoreboard_state == "inStart":
+	if time.time() >= previous_time + 1:
 		previous_time = time.time()
 		if insert_title_is_visible and coin_title_is_visible:
 			insert_title.color = 0x000000
