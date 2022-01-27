@@ -1,3 +1,4 @@
+from tracemalloc import start
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
 import analogio
@@ -32,6 +33,7 @@ display = framebufferio.FramebufferDisplay(matrix)
 start_group = displayio.Group()
 game_group = displayio.Group()
 new_hiscore_group = displayio.Group()
+game_over_group = displayio.Group()
 
 # game functions
 def get_set_hiscore(value = "_"):
@@ -96,18 +98,31 @@ game_hiscore = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), colo
 game_hiscore.x = 46
 game_hiscore.y = 29
 
-# Setup graphics for the new hight score group
-new_title = label.Label(font_ozone, text = "NEW", color = "0xFF0000")
+# Setup graphics for the new high score group
+new_title = label.Label(font_ozone, text = "NEW", color = 0xFF0000)
 new_title.x = 21
 new_title.y = 5
 
-new_hiscore_title = label.Label(font_virtual_pet_sans, text = "Hi-SCORE", color = "0xFFFF00")
+new_hiscore_title = label.Label(font_virtual_pet_sans, text = "Hi-SCORE", color = 0xFFFF00)
 new_hiscore_title.x = 10
 new_hiscore_title.y = 16
 
-new_hiscore_count = label.Label(font_virtual_pet_sans, text = "0", color = "0xFFFFFF")
+new_hiscore_count = label.Label(font_virtual_pet_sans, text = "0", color = 0xFFFFFF)
 new_hiscore_count.x = 24
 new_hiscore_count.y = 29
+
+# Setup graphics for the game over group
+game_over_title = label.Label(font_ozone, text = "GAME OVER!", color = 0xFFC0CB)
+game_over_title.x = 1
+game_over_title.y = 4
+
+game_over_score_title = label.Label(font_virtual_pet_sans, text = "SCORE", color = 0x0000FF)
+game_hiscore_title.x = 18
+game_hiscore_title.y = 15
+
+game_over_score = label.Label(font_ozone, text = "0", color = 0xFFFFFF)
+game_over_score.x = 24
+game_over_score.y = 25
 
 # add graphics to the display groups
 start_group.append(shootout_title)
@@ -127,6 +142,10 @@ new_hiscore_group.append(new_title)
 new_hiscore_group.append(new_hiscore_title)
 new_hiscore_group.append(new_hiscore_count)
 
+game_over_group.append(game_over_title)
+game_over_group.append(game_over_score_title)
+game_over_group.append(game_over_score)
+
 # show the start_group
 display.show(start_group)
 
@@ -136,7 +155,8 @@ audio_file = {
 	"for_setup": "/audio/shootout.mp3",
 	"shootout": "/audio/shootout.mp3",
 	"insert_coin": "/audio/insert_coin.mp3",
-	"new_highscore": "/audio/hiscore.mp3"
+	"new_highscore": "/audio/hiscore.mp3",
+	"game_over": "/audio/game_over.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["for_setup"], "rb"))
 
@@ -163,12 +183,15 @@ number_of_leds = 54
 leds = neopixel.NeoPixel(led_pin, number_of_leds, brightness = 0.20)
 
 # variables used in the loop
-scoreboard_state = "inStart" # scoreboard states: inStart, inGame, inGameEnd
 insert_title_is_visible = True
 coin_title_is_visible = True
+
 button_state = False
+
 game_start_time = 0
-previous_time = time.time()
+
+blink_timer = time.time()
+labels_are_visible = True # Used to blink labels
 
 while True:
 	# button debouncing
@@ -176,13 +199,11 @@ while True:
 		button_state = True
 
 	# button is pressed while in start screen
-	if button_state and scoreboard_state == "inStart":
+	if button_state:
+		# Setup and start the game
 		button_state = False
 		mp3stream.file = open(audio_file["insert_coin"], "rb")
 		speaker.play(mp3stream)
-
-		# start the game
-		scoreboard_state = "inGame"
 
 		# reset title properties
 		time_count.text = "60"
@@ -236,7 +257,7 @@ while True:
 			if int(time_count.text) <= 60 and int(time_count.text) >= 21:
 				time_count.color = 0x00B300 # Green
 				if int(time_count.text) == 60:
-					leds.fill((lights_color_intensity, 0, 0))
+					leds.fill((255, 0, 0))
 					lights_clock = time.time()
 				# Fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
@@ -245,7 +266,7 @@ while True:
 				time_count.color = 0xB3B300 # Yellow
 				if int(time_count.text) == 20:
 					lights_clock = time.time()
-					leds.fill((lights_color_intensity, 0, 0))
+					leds.fill((255, 0, 0))
 				# Fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
@@ -253,7 +274,7 @@ while True:
 				time_count.color = 0xB30000 # Red
 				if int(time_count.text) == 10:
 					lights_clock = time.time()
-					leds.fill((lights_color_intensity, 0, 0))
+					leds.fill((255, 0, 0))
 				# Fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
@@ -287,10 +308,11 @@ while True:
 					# Play the new high score audio
 					mp3stream.file = open(audio_file["new_highscore"], "rb")
 					speaker.play(mp3stream)
-
-					blink_timer = time.time()
+     
 					labels_are_visible = True
-					while time.time() - start_time <= 5: # While in this screen
+					blink_timer = time.time()
+
+					while time.time() - start_time <= 5: # While in this screen for 5 seconds. 
 						# Blink the labels
 						if time.time() >= blink_timer + 1:
 							blink_timer = time.time()
@@ -304,24 +326,47 @@ while True:
 								# Change their color to their apppropriate colors
 								new_title.color = 0xFF0000
 								new_hiscore_title.color = 0xFFFF00
-								new_hiscore_count.color = 0xFFFFFF
+								new_hiscore_count.coloar = 0xFFFFFF
 								labels_are_visible = True
         
 					leds.fill((255, 255, 255)) # Set all pixels to white
+					display.show(start_group)
 
 				else: # The player finished the game, no new high score was set
+					game_over_score.text = score_count.text		
+
+     				# Play the game over audio
+					mp3stream.file = open(audio_file["game_over"], "rb")
+					speaker.play(mp3stream)
+					
+					labels_are_visible = True
+					blink_timer = time.time()
+					start_time = time.time()
+     
+					while time.time() - start_time <= 5: # While in this screen
+						# Blink the gameover label
+						if time.time() >= blink_timer + 1:
+							blink_timer = time.time()
+							if labels_are_visible:
+								# Change their color to black
+								game_over_title.color = 0x000000
+								labels_are_visible = False
+							else:
+								# Change their color to their apppropriate colors
+								game_over_title.color = 0xFFC0CB
+								labels_are_visible = True
+
 					leds.fill((255, 255, 255)) # Set all pixels to white
+					display.show(start_group)
 
 	# blink the INSERT COIN title when on the start screen
-	if time.time() >= previous_time + 1:
-		previous_time = time.time()
-		if insert_title_is_visible and coin_title_is_visible:
+	if time.time() >= blink_timer + 1:
+		blink_timer = time.time()
+		if labels_are_visible:
 			insert_title.color = 0x000000
-			insert_title_is_visible = False
 			coin_title.color = 0x000000
-			coin_title_is_visible = False
+			labels_are_visible = False
 		else:
 			insert_title.color = 0xFFFFFF
-			insert_title_is_visible = True
 			coin_title.color = 0xFFFFFF
-			coin_title_is_visible = True
+			labels_are_visible = True
