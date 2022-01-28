@@ -166,7 +166,7 @@ button = digitalio.DigitalInOut(board.SCL)
 button.direction = digitalio.Direction.INPUT
 button.pull = digitalio.Pull.UP
 
-# setup distance sensor
+## setup distance sensor
 # distance_sensor = analogio.AnalogIn(board.A1)
 
 # setup break beam sensor
