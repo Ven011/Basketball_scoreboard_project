@@ -117,8 +117,8 @@ game_over_title.x = 1
 game_over_title.y = 4
 
 game_over_score_title = label.Label(font_virtual_pet_sans, text = "SCORE", color = 0x0000FF)
-game_hiscore_title.x = 18
-game_hiscore_title.y = 15
+game_over_score_title.x = 18
+game_over_score_title.y = 15
 
 game_over_score = label.Label(font_ozone, text = "0", color = 0xFFFFFF)
 game_over_score.x = 24
