@@ -1,7 +1,6 @@
 from tracemalloc import start
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
-import analogio
 import audioio
 import audiomp3
 import board
@@ -9,10 +8,8 @@ import digitalio
 import displayio
 import framebufferio
 import neopixel
-import math
 import rgbmatrix
 import time
-import random as rand
 
 # setup RGBMatrix
 displayio.release_displays()
@@ -33,7 +30,7 @@ display = framebufferio.FramebufferDisplay(matrix)
 start_group = displayio.Group()
 game_group = displayio.Group()
 new_hiscore_group = displayio.Group()
-game_over_group = displayio.Group()
+gameover_group = displayio.Group()
 
 # game functions
 def get_set_hiscore(value = "_"):
@@ -112,17 +109,17 @@ new_hiscore_count.x = 24
 new_hiscore_count.y = 29
 
 # Setup graphics for the game over group
-game_over_title = label.Label(font_ozone, text = "GAME OVER!", color = 0xFFC0CB)
-game_over_title.x = 1
-game_over_title.y = 4
+gameover_title = label.Label(font_ozone, text = "GAME OVER!", color = 0xFFC0CB)
+gameover_title.x = 1
+gameover_title.y = 4
 
-game_over_score_title = label.Label(font_virtual_pet_sans, text = "SCORE", color = 0x0000FF)
-game_over_score_title.x = 18
-game_over_score_title.y = 15
+gameover_score_title = label.Label(font_virtual_pet_sans, text = "SCORE", color = 0x0000FF)
+gameover_score_title.x = 18
+gameover_score_title.y = 15
 
-game_over_score = label.Label(font_ozone, text = "0", color = 0xFFFFFF)
-game_over_score.x = 24
-game_over_score.y = 25
+gameover_score = label.Label(font_ozone, text = "0", color = 0xFFFFFF)
+gameover_score.x = 24
+gameover_score.y = 25
 
 # add graphics to the display groups
 start_group.append(shootout_title)
@@ -142,9 +139,9 @@ new_hiscore_group.append(new_title)
 new_hiscore_group.append(new_hiscore_title)
 new_hiscore_group.append(new_hiscore_count)
 
-game_over_group.append(game_over_title)
-game_over_group.append(game_over_score_title)
-game_over_group.append(game_over_score)
+gameover_group.append(gameover_title)
+gameover_group.append(gameover_score_title)
+gameover_group.append(gameover_score)
 
 # show the start_group
 display.show(start_group)
@@ -183,9 +180,6 @@ number_of_leds = 54
 leds = neopixel.NeoPixel(led_pin, number_of_leds, brightness = 0.20)
 
 # variables used in the loop
-insert_title_is_visible = True
-coin_title_is_visible = True
-
 button_state = False
 
 game_start_time = 0
@@ -333,7 +327,7 @@ while True:
 					display.show(start_group)
 
 				else: # The player finished the game, no new high score was set
-					game_over_score.text = score_count.text		
+					gameover_score.text = score_count.text		
 
      				# Play the game over audio
 					mp3stream.file = open(audio_file["game_over"], "rb")
@@ -349,11 +343,11 @@ while True:
 							blink_timer = time.time()
 							if labels_are_visible:
 								# Change their color to black
-								game_over_title.color = 0x000000
+								gameover_title.color = 0x000000
 								labels_are_visible = False
 							else:
 								# Change their color to their apppropriate colors
-								game_over_title.color = 0xFFC0CB
+								gameover_title.color = 0xFFC0CB
 								labels_are_visible = True
 
 					leds.fill((255, 255, 255)) # Set all pixels to white
