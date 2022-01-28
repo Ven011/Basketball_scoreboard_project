@@ -1,4 +1,3 @@
-from tracemalloc import start
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
 import audioio
@@ -290,11 +289,11 @@ while True:
 					start_time = time.time()
      
 					# Format the high score value on the display. Keep value centered
-					if highest_score <= 9:
+					if int(highest_score) <= 9:
 						new_hiscore_count.x = 29
-					elif highest_score >= 10 and highest_score <= 99:
+					elif int(highest_score) >= 10 and int(highest_score) <= 99:
 						new_hiscore_count.x = 26
-					elif highest_score >= 100:
+					elif int(highest_score) >= 100:
 						new_hiscore_count.x = 23
      
 					display.show(new_hiscore_group)
