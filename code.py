@@ -326,6 +326,7 @@ while True:
 					display.show(start_group)
 
 				else: # The player finished the game, no new high score was set
+					display.show(gameover_group) # Show the game over group
 					gameover_score.text = score_count.text		
 
      				# Play the game over audio
