@@ -1,6 +1,5 @@
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
-import analogio
 import audioio
 import audiomp3
 import board
