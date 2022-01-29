@@ -278,13 +278,13 @@ while True:
 			# exit game if the time is up
 			if int(time_count.text) == 0:
 				time.sleep(1) # allow time value of 0 to be seen
-				if highest_score > int(get_set_hiscore()): # if the player scored higher than the previous highscore
+				if int(highest_score) > int(get_set_hiscore()): # if the player scored higher than the previous highscore
 					# Update the start screen high score
 					start_hiscore.text = highest_score
 					# Update the game screen highscore value
 					game_hiscore.text = highest_score
 					# Save the high score
-					get_set_hiscore(value = highest_score)
+					get_set_hiscore(value=highest_score)
 					# Show the new high score screen
 					start_time = time.time()
      
