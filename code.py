@@ -208,7 +208,8 @@ while True:
 		game_start_time = time.time()
 
 		# game variables
-		highest_score = get_set_hiscore()
+		highest_score = 0
+		saved_highscore = get_set_hiscore()
 		lights_color_intensity = 255 # used to fade in and out the RGB colors
 		lights_clock = 0 # Keeps track of the time a color change in LEDs happened
 		ball_scored = False
@@ -278,7 +279,7 @@ while True:
 			# exit game if the time is up
 			if int(time_count.text) == 0:
 				time.sleep(1) # allow time value of 0 to be seen
-				if int(highest_score) > int(get_set_hiscore()): # if the player scored higher than the previous highscore
+				if int(highest_score) > int(saved_highscore): # if the player scored higher than the previous highscore
 					# Update the start screen high score
 					start_hiscore.text = highest_score
 					# Update the game screen highscore value
