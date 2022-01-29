@@ -284,6 +284,8 @@ while True:
 					start_hiscore.text = highest_score
 					# Update the game screen highscore value
 					game_hiscore.text = highest_score
+					# Set new high score score count to the new high score
+					new_hiscore_count.text = highest_score
 					# Save the high score
 					get_set_hiscore(value=highest_score)
 					# Show the new high score screen
