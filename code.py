@@ -303,6 +303,7 @@ button_1_state = False
 button_2_state = False
 game_start_time = 0
 labels_are_visible = True # blink labels
+
 sg_1p_is_visible = True
 sg_arcade_is_visible = True
 sg_2p_is_visible = True
@@ -311,6 +312,8 @@ sg_o_is_visible = True
 sg_r_is_visible = True
 sg_s_is_visible = True
 sg_e_is_visible = True
+
+time_hiscore_beaten = 0
 
 while True:
 	# button_1 debounce
@@ -335,6 +338,7 @@ while True:
 		# game variables
 		ball_scored = False
 		beam_broken = False
+		in_bonus = False
 		highest_score = 0
 		saved_hiscore = get_set_hiscore()
 		time_beam_restored = time.time()
@@ -365,8 +369,51 @@ while True:
 
 			# update the time left in the round
 			ag_time_c.text = str(60 - int(time.time() - game_start_time))
+   
+			# Calculate the difference of the players score and the high score
+			score_diff = int(saved_hiscore) - int(ag_score_c.text)
+   
+			# Bonus time
+			if score_diff <= 5 and score_diff >= 0: # Game score is 5 points or less away from the high score
+				# Blink the high score title and high score count
+				if time.time() >= blink_timer + 1:
+					blink_timer = time.time()
+					if labels_are_visible:
+						ag_hiscore.color = 0x000000
+						ag_hiscore_c.color = 0x000000
+						labels_are_visible = False
+					else:
+						ag_hiscore.color = 0x00B3B3
+						ag_hiscore_c.color = 0xB30000
+						labels_are_visible = True
+			elif score_diff < 0 and not in_bonus: # Set in_bonus boolean to true when high score is beaten.
+       											  # 2nd condition prevents unnecessary entry to the code block 
+                
+				in_bonus = True
+				time_hiscore_beaten = time.time()
+				# Play bonus_time audio
+				mp3stream.file = open(audio_file["hiscore"], "rb")
+				speaker.play(mp3stream)
+				# Display the bonus time text by replacing the 4 & 5 layers of the game group.
+				# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
+				start_group.__setitem__(4, ag_bonus)
+				start_group.__setitem__(5, ag_bonus_t)
+				# Add time to the current time depending on when the high score was beaten
+				if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
+					ag_time_c.text = str(int(ag_time_c.text) + 30)
+				elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
+					ag_time_c.text = str(int(ag_time_c.text) + 20)
+				elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
+					ag_time_c.text = str(int(ag_time_c.text) + 10)
+			
+			# Restore the "HISCORE" text and count labels 5 seconds after the bonus time text was displayed
+			if in_bonus and time.time() == time_hiscore_beaten + 5:
+				start_group.__setitem__(4, ag_hiscore)
+				start_group.__setitem__(5, ag_hiscore_c)
+				# change the score text color to pink
+				ag_score_c.color = 0xFFC0CB
 
-			# check if the beam has been broken
+			# Check if the beam has been broken
 			beam_broken = True if break_beam.value == 0 else False
 
 			if beam_broken and not ball_scored:
