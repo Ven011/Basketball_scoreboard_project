@@ -344,6 +344,7 @@ while True:
 		time_beam_restored = time.time()
 		lights_color_intensity = 255 # fade in and out the RGB colours
 		lights_clock = 0 # keeps track of the time a colour change in LEDs happened
+		can_do_bonus = True if int(saved_hiscore) else False # Used to prevent bonus time when the high score is 0/ The first game.
 
 		# center the hiscore and hiscore text
 		if int(saved_hiscore) <= 9:
@@ -374,39 +375,40 @@ while True:
 			score_diff = int(saved_hiscore) - int(ag_score_c.text)
    
 			# Bonus time
-			if score_diff <= 5 and score_diff >= 0: # Game score is 5 points or less away from the high score
-				# Blink the high score title and high score count
-				if time.time() >= blink_timer + 1:
-					blink_timer = time.time()
-					if labels_are_visible:
-						ag_hiscore.color = 0x000000
-						ag_hiscore_c.color = 0x000000
-						labels_are_visible = False
-					else:
-						ag_hiscore.color = 0x00B3B3
-						ag_hiscore_c.color = 0xB30000
-						labels_are_visible = True
-			elif score_diff < 0 and not in_bonus: # Set in_bonus boolean to true when high score is beaten.
-       											  # 2nd condition prevents unnecessary entry to the code block 
-                
-				in_bonus = True
-				time_hiscore_beaten = time.time()
-				# Play bonus_time audio
-				mp3stream.file = open(audio_file["hiscore"], "rb")
-				speaker.play(mp3stream)
-				# Display the bonus time text by replacing the 4 & 5 layers of the game group.
-				# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
-				start_group.remove(ag_hiscore)
-				start_group.remove(ag_hiscore_c)
-				start_group.append(ag_bonus)
-				start_group.append(ag_bonus_t)
-				# Add time to the current time depending on when the high score was beaten
-				if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
-					ag_time_c.text = str(int(ag_time_c.text) + 30)
-				elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
-					ag_time_c.text = str(int(ag_time_c.text) + 20)
-				elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
-					ag_time_c.text = str(int(ag_time_c.text) + 10)
+			if can_do_bonus:
+				if score_diff <= 5 and score_diff >= 0: # Game score is 5 points or less away from the high score. 
+					# Blink the high score title and high score count
+					if time.time() >= blink_timer + 1:
+						blink_timer = time.time()
+						if labels_are_visible:
+							ag_hiscore.color = 0x000000
+							ag_hiscore_c.color = 0x000000
+							labels_are_visible = False
+						else:
+							ag_hiscore.color = 0x00B3B3
+							ag_hiscore_c.color = 0xB30000
+							labels_are_visible = True
+				elif score_diff < 0 and not in_bonus: # Set in_bonus boolean to true when high score is beaten.
+													# 2nd condition prevents unnecessary entry to the code block 
+					
+					in_bonus = True
+					time_hiscore_beaten = time.time()
+					# Play bonus_time audio
+					mp3stream.file = open(audio_file["hiscore"], "rb")
+					speaker.play(mp3stream)
+					# Display the bonus time text by replacing the 4 & 5 layers of the game group.
+					# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
+					start_group.remove(ag_hiscore)
+					start_group.remove(ag_hiscore_c)
+					start_group.append(ag_bonus)
+					start_group.append(ag_bonus_t)
+					# Add time to the current time depending on when the high score was beaten
+					if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
+						ag_time_c.text = str(int(ag_time_c.text) + 30)
+					elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
+						ag_time_c.text = str(int(ag_time_c.text) + 20)
+					elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
+						ag_time_c.text = str(int(ag_time_c.text) + 10)
 			
 			# Restore the "HISCORE" text and count labels 5 seconds after the bonus time text was displayed
 			if in_bonus and time.time() == time_hiscore_beaten + 5:
