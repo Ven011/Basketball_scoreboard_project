@@ -398,10 +398,10 @@ while True:
 					speaker.play(mp3stream)
 					# Display the bonus time text by replacing the 4 & 5 layers of the game group.
 					# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
-					start_group.remove(ag_hiscore)
-					start_group.remove(ag_hiscore_c)
-					start_group.append(ag_bonus)
-					start_group.append(ag_bonus_t)
+					arcade_group.remove(ag_hiscore)
+					arcade_group.remove(ag_hiscore_c)
+					arcade_group.append(ag_bonus)
+					arcade_group.append(ag_bonus_t)
 					# Add time to the current time depending on when the high score was beaten
 					if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
 						ag_time_c.text = str(int(ag_time_c.text) + 30)
@@ -412,10 +412,10 @@ while True:
 			
 			# Restore the "HISCORE" text and count labels 5 seconds after the bonus time text was displayed
 			if in_bonus and time.time() == time_hiscore_beaten + 5:
-				start_group.remove(ag_bonus)
-				start_group.remove(ag_bonus_t)
-				start_group.append(ag_hiscore)
-				start_group.append(ag_hiscore_c)
+				arcade_group.remove(ag_bonus)
+				arcade_group.remove(ag_bonus_t)
+				arcade_group.append(ag_hiscore)
+				arcade_group.append(ag_hiscore_c)
 				# change the score text color to pink
 				ag_score_c.color = 0xFFC0CB
 
