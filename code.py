@@ -400,8 +400,8 @@ while True:
 					# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
 					_1 = arcade_group.pop(4) # Return value is not useful
 					_2 = arcade_group.pop(4)
-					arcade_group.insert(4, ag_bonus)
-					arcade_group.insert(5, ag_bonus_t)
+					arcade_group.append(ag_bonus)
+					arcade_group.append(ag_bonus_t)
 					# Add time to the current time depending on when the high score was beaten
 					if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
 						ag_time_c.text = str(int(ag_time_c.text) + 30)
@@ -414,8 +414,8 @@ while True:
 			if in_bonus and time.time() == time_hiscore_beaten + 5:
 				_3 = arcade_group.pop(4)
 				_4 = arcade_group.pop(4)
-				arcade_group.append(ag_hiscore)
-				arcade_group.append(ag_hiscore_c)
+				arcade_group.insert(4, ag_hiscore)
+				arcade_group.insert(5, ag_hiscore_c)
 				# change the score text color to pink
 				ag_score_c.color = 0xFFC0CB
 
