@@ -413,8 +413,10 @@ while True:
 			
 			# Restore the "HISCORE" text and count labels 5 seconds after the bonus time text was displayed
 			if in_bonus and time.time() == time_hiscore_beaten + 5:
-				arcade_group.remove(ag_bonus)
-				arcade_group.remove(ag_bonus_t)
+				test = ag_hiscore
+				test_c = ag_hiscore_c
+				# arcade_group.remove(ag_bonus)
+				# arcade_group.remove(ag_bonus_t)
 				arcade_group.append(ag_hiscore)
 				arcade_group.append(ag_hiscore_c)
 				display.show(arcade_group)
