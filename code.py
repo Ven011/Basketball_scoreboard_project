@@ -402,6 +402,7 @@ while True:
 					arcade_group.remove(ag_hiscore_c)
 					arcade_group.append(ag_bonus)
 					arcade_group.append(ag_bonus_t)
+					display.show(arcade_group)
 					# Add time to the current time depending on when the high score was beaten
 					if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
 						ag_time_c.text = str(int(ag_time_c.text) + 30)
@@ -416,6 +417,7 @@ while True:
 				arcade_group.remove(ag_bonus_t)
 				arcade_group.append(ag_hiscore)
 				arcade_group.append(ag_hiscore_c)
+				display.show(arcade_group)
 				# change the score text color to pink
 				ag_score_c.color = 0xFFC0CB
 
