@@ -327,6 +327,7 @@ while True:
 			# Reset the high score in the arcade start screen if the button is held down for 5 seconds
 			if reset_score_t >= 5:
 				ag_hiscore_c.text = "0"
+				get_set_hiscore(value = "0")
 				break
 		button_1_state = True
 
