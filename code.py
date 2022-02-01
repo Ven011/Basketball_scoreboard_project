@@ -410,6 +410,18 @@ while True:
 						ag_time_c.text = str(int(ag_time_c.text) + 20)
 					elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
 						ag_time_c.text = str(int(ag_time_c.text) + 10)
+				elif in_bonus:
+					# Blink the bonus time title
+					if time.time() >= blink_timer + 1:
+						blink_timer = time.time()
+						if labels_are_visible:
+							ag_bonus.color = 0x000000
+							ag_bonus_t.color = 0x000000
+							labels_are_visible = False
+						else:
+							ag_bonus.color = 0x5A00B3
+							ag_bonus_t.color = 0x5A00B3
+							labels_are_visible = True
 			
 			# Restore the "HISCORE" text and count labels 5 seconds after the bonus time text was displayed
 			if in_bonus and time.time() == time_hiscore_beaten + 5:
