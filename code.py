@@ -7,7 +7,6 @@ import digitalio
 import displayio
 import framebufferio
 import neopixel
-# import math
 import rgbmatrix
 import time
 
@@ -300,6 +299,8 @@ leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20)
 
 # variables in the loop
 blink_timer = time.time()
+blink_period= 1
+
 button_1_state = False
 button_2_state = False
 game_start_time = 0
@@ -603,7 +604,7 @@ while True:
 		time.sleep(0.50)
 
 	# blink the 1p arcade and 2p h.o.r.s.e text
-	if time.time() >= blink_timer + 2:
+	if time.time() >= blink_timer + blink_period:
 		blink_timer = time.time()
 		if labels_are_visible:
 			sg_1p.color = 0x000000
@@ -615,6 +616,7 @@ while True:
 			sg_s.color = 0x000000
 			sg_e.color = 0x000000
 			labels_are_visible = False
+			blink_period = 1
 		else:
 			sg_1p.color = 0x00B3B3
 			sg_arcade.color = 0xFFFFFF
@@ -625,3 +627,4 @@ while True:
 			sg_s.color = 0xFFFFFF
 			sg_e.color = 0xFFFFFF
 			labels_are_visible = True
+			blink_period = 2
