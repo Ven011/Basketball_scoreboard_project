@@ -328,6 +328,7 @@ while True:
 			if reset_score_t >= 5:
 				ag_hiscore_c.text = "0"
 				get_set_hiscore(value = "0")
+				button_1_state = False # Allow button state to be changed to true after reset.
 				reset_score_v = -1 # To be used to prevent entry to game after the 5 seconds
 				break
 		button_1_state = True
