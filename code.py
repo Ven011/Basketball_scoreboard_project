@@ -44,6 +44,15 @@ def get_set_hiscore(value = "_"):
 		hiscore_file.close()
 		return score
 
+# Things to do when returning to the start screen
+def game_exit_procedure():
+    # play the start_group audio
+	mp3stream.file = open(audio_file["space_jam"], "rb")
+	speaker.play(mp3stream, loop = True)
+	leds.fill((255, 255, 255)) # set the LEDs to white
+	display.show(start_group)
+	time.sleep(0.50)
+	
 # font
 font_ozone = bitmap_font.load_font("/fonts/ozone.bdf")
 font_virtual_pet_sans = bitmap_font.load_font("/fonts/virtual_pet_sans.bdf")
@@ -540,9 +549,7 @@ while True:
 								nhg_new.color = 0xB30000
 								labels_are_visible = True
 
-					leds.fill((255, 255, 255)) # set leds to white
-					display.show(start_group)
-					time.sleep(0.50)
+					game_exit_procedure()
 
 					# update the arcade_group hiscore value
 					ag_hiscore_c.text = highest_score
@@ -579,9 +586,7 @@ while True:
 								gog_over.color = 0xB30000
 								labels_are_visible = True
 
-					leds.fill((255, 255, 255)) # set the LEDs to white
-					display.show(start_group)
-					time.sleep(0.50)
+					game_exit_procedure()
 
 	# start h.o.r.s.e game
 	if button_2_state:
