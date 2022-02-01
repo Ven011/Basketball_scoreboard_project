@@ -276,7 +276,7 @@ mp3stream = audiomp3.MP3Decoder(open(audio_file["for_setup"], "rb"))
 
 # play the start_group audio
 mp3stream.file = open(audio_file["space_jam"], "rb")
-speaker.play(mp3stream)
+speaker.play(mp3stream, loop = True)
 
 # button_1 pin and state
 button_1 = digitalio.DigitalInOut(board.SCL)
