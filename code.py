@@ -334,6 +334,7 @@ while True:
 		ag_time_c.text = "60"
 		ag_time_c.color = 0x00B300
 		ag_score_c.text = "0"
+		ag_score_c.color = 0xFFFFFF
 
 		# game variables
 		ball_scored = False
