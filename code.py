@@ -345,7 +345,7 @@ while True:
 		time_beam_restored = time.time()
 		lights_color_intensity = 255 # fade in and out the RGB colours
 		lights_clock = 0 # keeps track of the time a colour change in LEDs happened
-		can_do_bonus = True if int(saved_hiscore) else False # Used to prevent bonus time when the high score is 0/ The first game.
+		can_do_bonus = True if int(saved_hiscore) >= 15 else False # Used to prevent bonus time when the high score is 0/ The first game.
 
 		# center the hiscore and hiscore text
 		if int(saved_hiscore) <= 9:
