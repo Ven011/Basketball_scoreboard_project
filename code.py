@@ -269,7 +269,8 @@ audio_file = {
 	"space_jam": "/audio/space_jam.mp3",
 	"whistle": "/audio/whistle.mp3",
 	"hiscore": "/audio/hiscore.mp3",
-	"game_over": "/audio/game_over.mp3"
+	"game_over": "/audio/game_over.mp3",
+	"applause": "/audio/applause.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["for_setup"], "rb"))
 
@@ -395,7 +396,7 @@ while True:
 					in_bonus = True
 					time_hiscore_beaten = time.time()
 					# Play bonus_time audio
-					mp3stream.file = open(audio_file["hiscore"], "rb")
+					mp3stream.file = open(audio_file["applause"], "rb")
 					speaker.play(mp3stream)
 					# Display the bonus time text by replacing the 4 & 5 layers of the game group.
 					# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
