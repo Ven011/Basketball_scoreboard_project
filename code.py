@@ -323,16 +323,17 @@ while True:
 	# button_1 debounce
 	if not button_1.value and not button_1_state:
 		reset_score_v = time.time()
+		button_1_state = True
 		while not button_1.value: # While the button is being pressed
 			reset_score_t = time.time() - reset_score_v
 			# Reset the high score in the arcade start screen if the button is held down for 5 seconds
-			if reset_score_t >= 5:
+			if reset_score_t == 5:
 				ag_hiscore_c.text = "0"
 				get_set_hiscore(value = "0")
 				button_1_state = False # Allow button state to be changed to true after reset.
 				reset_score_v = -1 # To be used to prevent entry to game after the 5 seconds
+				time.sleep(0.5)
 				break
-		button_1_state = True
 
 	# button_2 debounce
 	if not button_2.value and not button_2_state:
