@@ -304,6 +304,8 @@ button_1_state = False
 button_2_state = False
 game_start_time = 0
 labels_are_visible = True # blink labels
+reset_score_t = 0 # Timer used to determine whether to reset the highscore in arcade start screen
+reset_score_v = 0
 
 sg_1p_is_visible = True
 sg_arcade_is_visible = True
@@ -319,6 +321,13 @@ time_hiscore_beaten = 0
 while True:
 	# button_1 debounce
 	if not button_1.value and not button_1_state:
+		reset_score_v = time.time()
+		while not button_1.value: # While the button is being pressed
+			reset_score_t = time.time() - reset_score_v
+			# Reset the high score in the arcade start screen if the button is held down for 5 seconds
+			if reset_score_t >= 5:
+				ag_hiscore_c.text = "0"
+				break
 		button_1_state = True
 
 	# button_2 debounce
