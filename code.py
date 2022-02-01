@@ -328,6 +328,7 @@ while True:
 			if reset_score_t >= 5:
 				ag_hiscore_c.text = "0"
 				get_set_hiscore(value = "0")
+				reset_score_v = -1 # To be used to prevent entry to game after the 5 seconds
 				break
 		button_1_state = True
 
@@ -336,7 +337,7 @@ while True:
 		button_2_state = True
 
 	# start arcade game
-	if button_1_state:
+	if button_1_state and reset_score_v != -1:
 		button_1_state = False
 		mp3stream.file = open(audio_file["whistle"], "rb")
 		speaker.play(mp3stream)
