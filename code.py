@@ -278,7 +278,8 @@ audio_file = {
 	"whistle": "/audio/whistle.mp3",
 	"hiscore": "/audio/hiscore.mp3",
 	"game_over": "/audio/game_over.mp3",
-	"applause": "/audio/applause.mp3"
+	"applause": "/audio/applause.mp3",
+	"countdown": "/audio/countdown.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["for_setup"], "rb"))
 
@@ -502,6 +503,10 @@ while True:
 			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
 				ag_time_c.color = 0xB30000
 				if int(ag_time_c.text) == 10:
+					# Play countdown audio
+					mp3stream.file = open(audio_file["countdown"], "rb")
+					speaker.play(mp3stream)
+
 					lights_clock = time.time()
 					leds.fill((255, 0, 0))
 				# fade the LEDs in and out
