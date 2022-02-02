@@ -46,11 +46,14 @@ def get_set_hiscore(value = "_"):
 
 # Things to do when returning to the start screen
 def game_exit_procedure():
+	global labels_are_visible
     # play the start_group audio
 	mp3stream.file = open(audio_file["space_jam"], "rb")
 	speaker.play(mp3stream, loop = True)
 	leds.fill((255, 255, 255)) # set the LEDs to white
 	display.show(start_group)
+	labels_are_visible = True # Incase its value is False when returning to start game
+							  # Makes sure the blinking labels are visible when returning
 	time.sleep(0.50)
 	
 # font
@@ -416,8 +419,8 @@ while True:
 							labels_are_visible = True
 				elif score_diff < 0 and not in_bonus: # Set in_bonus boolean to true when high score is beaten.
 													# 2nd condition prevents unnecessary entry to the code block 
-					
 					in_bonus = True
+					labels_are_visible = True # Ensures that the bonus time labels are seen when blinking them for the first time
 					time_hiscore_beaten = time.time()
 					# Play bonus_time audio
 					mp3stream.file = open(audio_file["applause"], "rb")
