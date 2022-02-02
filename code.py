@@ -345,7 +345,7 @@ while True:
 				get_set_hiscore(value = "0")
 				button_1_state = False # Allow button state to be changed to true after reset.
 				reset_score_v = -1 # To be used to prevent entry to game after the 5 seconds
-				time.sleep(0.5)
+				time.sleep(1)
 				break
 
 	# button_2 debounce
