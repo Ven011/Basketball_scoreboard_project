@@ -26,11 +26,14 @@ matrix = rgbmatrix.RGBMatrix(
 display = framebufferio.FramebufferDisplay(matrix)
 
 # display groups
+init_group = display.Group() # Empty group to be shown when initializations are being made
 start_group = displayio.Group()
 arcade_group = displayio.Group()
 new_hiscore_group = displayio.Group()
 game_over_group = displayio.Group()
 horse_group = displayio.Group()
+
+display.show(init_group) # Show init_group
 
 # save hiscore to file
 def get_set_hiscore(value = "_"):
