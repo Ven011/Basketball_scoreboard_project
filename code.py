@@ -26,7 +26,7 @@ matrix = rgbmatrix.RGBMatrix(
 display = framebufferio.FramebufferDisplay(matrix)
 
 # display groups
-init_group = display.Group() # Empty group to be shown when initializations are being made
+init_group = displayio.Group() # Empty group to be shown when initializations are being made
 start_group = displayio.Group()
 arcade_group = displayio.Group()
 new_hiscore_group = displayio.Group()
