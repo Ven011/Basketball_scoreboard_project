@@ -505,14 +505,14 @@ while True:
 					leds.fill((255, 0, 0))
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
-
-			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
-				ag_time_c.color = 0xB30000
-				if int(ag_time_c.text) == 10:
+				if int(ag_time_c.text) == 11:
 					# Play countdown audio
 					mp3stream.file = open(audio_file["countdown"], "rb")
 					speaker.play(mp3stream)
 
+			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
+				ag_time_c.color = 0xB30000
+				if int(ag_time_c.text) == 10:
 					lights_clock = time.time()
 					leds.fill((255, 0, 0))
 				# fade the LEDs in and out
