@@ -378,6 +378,7 @@ while True:
 		lights_clock = 0 # keeps track of the time a colour change in LEDs happened
 		can_do_bonus = True if int(saved_hiscore) >= 15 else False # Used to prevent bonus time when the high score is 0/ The first game.
 		game_time = 60
+		changed_LEDs = False
 
 		# center the hiscore and hiscore text
 		if int(saved_hiscore) <= 9:
@@ -494,17 +495,23 @@ while True:
 			# change the time value's color and RGB lights depending on time left in game
 			if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
 				ag_time_c.color = 0x00B300
-				if int(ag_time_c.text) == 60:
+				if int(ag_time_c.text) == 60 and not changed_LEDs:
 					leds.fill((0, 255, 0))
+					changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
+				if int(ag_time_c.text) == 59:
+					changed_LEDs = False # Allow the LEDs to be changed when time gets into the next range.
 					# lights_clock = time.time()
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
 			elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
 				ag_time_c.color = 0xB3B300
-				if int(ag_time_c.text) == 20:
+				if int(ag_time_c.text) == 20 and not changed_LEDs:
 					# lights_clock = time.time()
 					leds.fill((255, 255, 0))
+					changed_LEDs = True
+				if int(ag_time_c.text) == 19:
+					changed_LEDs = False
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 				if int(ag_time_c.text) == 11:
@@ -514,9 +521,12 @@ while True:
 
 			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
 				ag_time_c.color = 0xB30000
-				if int(ag_time_c.text) == 10:
+				if int(ag_time_c.text) == 10 and not changed_LEDs:
 					# lights_clock = time.time()
 					leds.fill((255, 0, 0))
+					changed_LEDs = True
+				if int(ag_time_c.text) == 9:
+					changed_LEDs = False
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
