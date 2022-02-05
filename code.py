@@ -495,8 +495,7 @@ while True:
 			if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
 				ag_time_c.color = 0x00B300
 				if int(ag_time_c.text) == 60:
-					pass # FOR NOW
-					# leds.fill((255, 0, 0))
+					leds.fill((0, 255, 0))
 					# lights_clock = time.time()
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
@@ -504,9 +503,8 @@ while True:
 			elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
 				ag_time_c.color = 0xB3B300
 				if int(ag_time_c.text) == 20:
-					pass # FOR NOW
 					# lights_clock = time.time()
-					# leds.fill((255, 0, 0))
+					leds.fill((255, 255, 0))
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 				if int(ag_time_c.text) == 11:
@@ -517,9 +515,8 @@ while True:
 			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
 				ag_time_c.color = 0xB30000
 				if int(ag_time_c.text) == 10:
-					pass # FOR NOW
 					# lights_clock = time.time()
-					# leds.fill((255, 0, 0))
+					leds.fill((255, 0, 0))
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
