@@ -377,7 +377,7 @@ while True:
 		lights_color_intensity = 255 # fade in and out the RGB colours
 		lights_clock = 0 # keeps track of the time a colour change in LEDs happened
 		can_do_bonus = True if int(saved_hiscore) >= 15 else False # Used to prevent bonus time when the high score is 0/ The first game.
-		time_left = 60
+		game_time = 60
 
 		# center the hiscore and hiscore text
 		if int(saved_hiscore) <= 9:
@@ -394,17 +394,15 @@ while True:
 		time.sleep(0.50)
 		game_start_time = time.time()
 
-		while time_left > -1:
+		while int(ag_time_c.text) > -1:
 			# center the time value text
-			if time_left <= 9:
+			if int(ag_time_c.text) <= 9:
 				ag_time_c.x = 11
-			elif time_left >= 10 and time_left <= 60:
+			elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
 				ag_time_c.x = 8
 
 			# update the time left in the round
-			# ag_time_c.text = str(60 - int(time.time() - game_start_time))
-			time_left = 60 - int(time.time() - game_start_time)
-			ag_time_c.text = str(time_left)
+			ag_time_c.text = str(game_time - int(time.time() - game_start_time))
    
 			# Calculate the difference of the players score and the high score
 			score_diff = int(saved_hiscore) - int(ag_score_c.text)
@@ -438,17 +436,12 @@ while True:
 					arcade_group.append(ag_bonus)
 					arcade_group.append(ag_bonus_t)
 					# Add time to the current time depending on when the high score was beaten
-					if time_left >= 1 and time_left <= 10:
-						# ag_time_c.text = str(time_left + 30)
-						time_left += 30
-					elif time_left >= 11 and time_left <= 20:
-						# ag_time_c.text = str(time_left + 20)
-						time_left += 20
-					elif time_left >= 21 and time_left <= 30:
-						# ag_time_c.text = str(time_left + 10)
-						time_left += 10
-					# update the display's time_left text
-					ag_time_c.text = str(time_left)
+					if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
+						game_time += 30
+					elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
+						game_time += 20
+					elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
+						game_time += 10
      
 				elif in_bonus:
 					# Blink the bonus time title
@@ -499,29 +492,29 @@ while True:
 				ag_score_c.x = 37
 
 			# change the time value's color and RGB lights depending on time left in game
-			if time_left <= 60 and time_left >= 21:
+			if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
 				ag_time_c.color = 0x00B300
-				if time_left == 60:
+				if int(ag_time_c.text) == 60:
 					leds.fill((255, 0, 0))
 					lights_clock = time.time()
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 
-			elif time_left <= 20 and time_left >= 11:
+			elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
 				ag_time_c.color = 0xB3B300
-				if time_left == 20:
+				if int(ag_time_c.text) == 20:
 					lights_clock = time.time()
 					leds.fill((255, 0, 0))
 				# fade the LEDs in and out
 				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
-				if time_left == 11:
+				if int(ag_time_c.text) == 11:
 					# Play countdown audio
 					mp3stream.file = open(audio_file["countdown"], "rb")
 					speaker.play(mp3stream)
 
-			elif time_left <= 10 and time_left >= 0:
+			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
 				ag_time_c.color = 0xB30000
-				if time_left == 10:
+				if int(ag_time_c.text) == 10:
 					lights_clock = time.time()
 					leds.fill((255, 0, 0))
 				# fade the LEDs in and out
@@ -532,7 +525,7 @@ while True:
 				highest_score = ag_score_c.text
 
 			# exit the game when the time is up
-			if time_left == 0:
+			if int(ag_time_c.text) == 0:
 				time.sleep(1) # allows the time value of 0 to be seen
 				if int(highest_score) > int(saved_hiscore): # if the player scored higher than the previous hiscore
 					# set new hiscore score value to the new hiscore
