@@ -311,7 +311,7 @@ break_beam.pull = digitalio.Pull.UP
 # NeoPixels
 led_pin = board.D25
 num_leds = 54
-leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20)
+leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20, auto_write = True)
 
 # variables in the loop
 blink_timer = time.time()
@@ -500,35 +500,41 @@ while True:
 					changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
 				if int(ag_time_c.text) == 59:
 					changed_LEDs = False # Allow the LEDs to be changed when time gets into the next range.
-					# lights_clock = time.time()
-				# fade the LEDs in and out
-				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
+				if not int(ag_time_c.text) % 2: # The time left in the game is even
+					# Do not show the color
+					leds.fill((0, 0, 0))
+				else:
+					leds.fill((0, 255, 0))
 
 			elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
 				ag_time_c.color = 0xB3B300
 				if int(ag_time_c.text) == 20 and not changed_LEDs:
-					# lights_clock = time.time()
 					leds.fill((255, 255, 0))
 					changed_LEDs = True
 				if int(ag_time_c.text) == 19:
 					changed_LEDs = False
-				# fade the LEDs in and out
-				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
 				if int(ag_time_c.text) == 11:
 					# Play countdown audio
 					mp3stream.file = open(audio_file["countdown"], "rb")
 					speaker.play(mp3stream)
+				if not int(ag_time_c.text) % 2: # The time left in the game is even
+					# Do not show the color
+					leds.fill((0, 0, 0))
+				else:
+					leds.fill((255, 255, 0))
 
 			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
 				ag_time_c.color = 0xB30000
 				if int(ag_time_c.text) == 10 and not changed_LEDs:
-					# lights_clock = time.time()
 					leds.fill((255, 0, 0))
 					changed_LEDs = True
 				if int(ag_time_c.text) == 9:
 					changed_LEDs = False
-				# fade the LEDs in and out
-				# lights_color_intensity = int(127.5 + 127.5 * math.cos(time.time() - lights_clock))
+				if not int(ag_time_c.text) % 2: # The time left in the game is even
+					# Do not show the color
+					leds.fill((0, 0, 0))
+				else:
+					leds.fill((255, 0, 0))
 
 			# update the hiscore value if the score is greater than the current hiscore value
 			if int(ag_score_c.text) > int(ag_hiscore_c.text):
