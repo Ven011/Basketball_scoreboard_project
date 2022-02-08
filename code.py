@@ -379,6 +379,7 @@ while True:
 		can_do_bonus = True if int(saved_hiscore) >= 15 else False # Used to prevent bonus time when the high score is 0/ The first game.
 		game_time = 60
 		changed_LEDs = False
+		curr_time = 0
 
 		# center the hiscore and hiscore text
 		if int(saved_hiscore) <= 9:
@@ -397,10 +398,10 @@ while True:
 
 		while int(ag_time_c.text) > -1:
 			# center the time value text
-			# if int(ag_time_c.text) <= 9:
-			# 	ag_time_c.x = 11
-			# elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-			# 	ag_time_c.x = 8
+			if int(ag_time_c.text) <= 9:
+				ag_time_c.x = 11
+			elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
+				ag_time_c.x = 8
 
 			# update the time left in the round
 			ag_time_c.text = str(game_time - int(time.time() - game_start_time))
@@ -485,61 +486,71 @@ while True:
 					ball_scored = False
 
 			# center the score value text
-			# if int(ag_score_c.text) <= 9:
-			# 	ag_score_c.x = 43
-			# elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-			# 	ag_score_c.x = 40
-			# elif int(ag_score_c.text) >= 100:
-			# 	ag_score_c.x = 37
+			if int(ag_score_c.text) <= 9:
+				ag_score_c.x = 43
+			elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
+				ag_score_c.x = 40
+			elif int(ag_score_c.text) >= 100:
+				ag_score_c.x = 37
 
 			# change the time value's color and RGB lights depending on time left in game
 			if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
 				if int(ag_time_c.text) == 60 and not changed_LEDs:
 					ag_time_c.color = 0x00B300
+				# 	leds.fill((0, 255, 0))
+				# 	leds.show()
+				# 	changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
+				# if int(ag_time_c.text) == 59:
+				# 	changed_LEDs = False # Allow the LEDs to be changed when time gets into the next range.
+				if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != curr_time: # The time left in the game is even
+					# Show the LED color
 					leds.fill((0, 255, 0))
 					leds.show()
-					changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
-				if int(ag_time_c.text) == 59:
-					changed_LEDs = False # Allow the LEDs to be changed when time gets into the next range.
-				# if not int(ag_time_c.text) % 2: # The time left in the game is even
-				# 	# Do not show the color
-				# 	leds.fill((0, 0, 0))
-				# else:
-				# 	leds.fill((0, 255, 0))
+					curr_time = int(ag_time_c.text)
+				elif int(ag_time_c.text) != curr_time:
+					leds.fill((0, 0, 0))
+					leds.show()
+					curr_time = int(ag_time_c.text)
 
 			elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
 				if int(ag_time_c.text) == 20 and not changed_LEDs:
 					ag_time_c.color = 0xB3B300
-					# leds.fill((255, 255, 0))
-					leds.fill((255, 255, 0))
-					leds.show()
-					changed_LEDs = True
-				if int(ag_time_c.text) == 19:
-					changed_LEDs = False
+				# 	leds.fill((255, 255, 0))
+				# 	leds.show()
+				# 	changed_LEDs = True
+				# if int(ag_time_c.text) == 19:
+				# 	changed_LEDs = False
 				if int(ag_time_c.text) == 11:
 					# Play countdown audio
 					mp3stream.file = open(audio_file["countdown"], "rb")
 					speaker.play(mp3stream)
-				# if not int(ag_time_c.text) % 2: # The time left in the game is even
-				# 	# Do not show the color
-				# 	leds.fill((0, 0, 0))
-				# else:
-				# 	leds.fill((255, 255, 0))
+				if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != curr_time: # The time left in the game is even
+					# Show the LED color
+					leds.fill((255, 255, 0))
+					leds.show()
+					curr_time = int(ag_time_c.text)
+				elif int(ag_time_c.text) != curr_time:
+					leds.fill((0, 0, 0))
+					leds.show()
+					curr_time = int(ag_time_c.text)
 
 			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
-				if int(ag_time_c.text) == 10 and not changed_LEDs:
+				if int(ag_time_c.text) == 10:
 					ag_time_c.color = 0xB30000
 					# leds.fill((255, 0, 0))
+					# leds.fill((255, 0, 0))
+					# leds.show()
+				# if int(ag_time_c.text) == 9:
+    			# 		changed_LEDs = False
+				if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != curr_time: # The time left in the game is even
+					# Show the LED color
 					leds.fill((255, 0, 0))
 					leds.show()
-					changed_LEDs = True
-				if int(ag_time_c.text) == 9:
-					changed_LEDs = False
-				# if not int(ag_time_c.text) % 2: # The time left in the game is even
-				# 	# Do not show the color
-				# 	leds.fill((0, 0, 0))
-				# else:
-				# 	leds.fill((255, 0, 0))
+					curr_time = int(ag_time_c.text)
+				elif int(ag_time_c.text) != curr_time:
+					leds.fill((0, 0, 0))
+					leds.show()
+					curr_time = int(ag_time_c.text)
 
 			# update the hiscore value if the score is greater than the current hiscore value
 			if int(ag_score_c.text) > int(ag_hiscore_c.text):
