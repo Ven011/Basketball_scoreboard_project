@@ -391,8 +391,8 @@ while True:
 			ag_hiscore.x = 1
 			ag_hiscore_c.x = 46
 
-		display.show(arcade_group)
 		time.sleep(0.50)
+		display.show(arcade_group)
 		game_start_time = time.time()
 
 		while int(ag_time_c.text) > -1:
