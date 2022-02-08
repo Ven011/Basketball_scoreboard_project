@@ -397,10 +397,10 @@ while True:
 
 		while int(ag_time_c.text) > -1:
 			# center the time value text
-			if int(ag_time_c.text) <= 9:
-				ag_time_c.x = 11
-			elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-				ag_time_c.x = 8
+			# if int(ag_time_c.text) <= 9:
+			# 	ag_time_c.x = 11
+			# elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
+			# 	ag_time_c.x = 8
 
 			# update the time left in the round
 			ag_time_c.text = str(game_time - int(time.time() - game_start_time))
@@ -485,17 +485,17 @@ while True:
 					ball_scored = False
 
 			# center the score value text
-			if int(ag_score_c.text) <= 9:
-				ag_score_c.x = 43
-			elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-				ag_score_c.x = 40
-			elif int(ag_score_c.text) >= 100:
-				ag_score_c.x = 37
+			# if int(ag_score_c.text) <= 9:
+			# 	ag_score_c.x = 43
+			# elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
+			# 	ag_score_c.x = 40
+			# elif int(ag_score_c.text) >= 100:
+			# 	ag_score_c.x = 37
 
 			# change the time value's color and RGB lights depending on time left in game
 			if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
-				ag_time_c.color = 0x00B300
 				if int(ag_time_c.text) == 60 and not changed_LEDs:
+					ag_time_c.color = 0x00B300
 					leds.fill((0, 255, 0))
 					changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
 				if int(ag_time_c.text) == 59:
@@ -507,8 +507,8 @@ while True:
 					leds.fill((0, 255, 0))
 
 			elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
-				ag_time_c.color = 0xB3B300
 				if int(ag_time_c.text) == 20 and not changed_LEDs:
+					ag_time_c.color = 0xB3B300
 					leds.fill((255, 255, 0))
 					changed_LEDs = True
 				if int(ag_time_c.text) == 19:
@@ -524,8 +524,8 @@ while True:
 					leds.fill((255, 255, 0))
 
 			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
-				ag_time_c.color = 0xB30000
 				if int(ag_time_c.text) == 10 and not changed_LEDs:
+					ag_time_c.color = 0xB30000
 					leds.fill((255, 0, 0))
 					changed_LEDs = True
 				if int(ag_time_c.text) == 9:
