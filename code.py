@@ -311,7 +311,7 @@ break_beam.pull = digitalio.Pull.UP
 # NeoPixels
 led_pin = board.D25
 num_leds = 54
-leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20, auto_write = True)
+leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20, auto_write = False)
 
 # variables in the loop
 blink_timer = time.time()
@@ -498,6 +498,7 @@ while True:
 					ag_time_c.color = 0x00B300
 					for i in range(54):
 						leds[i] = (0, 255, 0)
+					leds.show()
 					changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
 				if int(ag_time_c.text) == 59:
 					changed_LEDs = False # Allow the LEDs to be changed when time gets into the next range.
@@ -513,6 +514,7 @@ while True:
 					# leds.fill((255, 255, 0))
 					for i in range(54):
 						leds[i] = (255, 255, 0)
+					leds.show()
 					changed_LEDs = True
 				if int(ag_time_c.text) == 19:
 					changed_LEDs = False
@@ -532,6 +534,7 @@ while True:
 					# leds.fill((255, 0, 0))
 					for i in range(54):
 						leds[i] = (255, 0, 0)
+					leds.show()
 					changed_LEDs = True
 				if int(ag_time_c.text) == 9:
 					changed_LEDs = False
