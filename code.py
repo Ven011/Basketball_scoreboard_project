@@ -496,8 +496,7 @@ while True:
 			if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
 				if int(ag_time_c.text) == 60 and not changed_LEDs:
 					ag_time_c.color = 0x00B300
-					for i in range(54):
-						leds[i] = (0, 255, 0)
+					leds.fill((0, 255, 0))
 					leds.show()
 					changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
 				if int(ag_time_c.text) == 59:
@@ -512,8 +511,7 @@ while True:
 				if int(ag_time_c.text) == 20 and not changed_LEDs:
 					ag_time_c.color = 0xB3B300
 					# leds.fill((255, 255, 0))
-					for i in range(54):
-						leds[i] = (255, 255, 0)
+					leds.fill((255, 255, 0))
 					leds.show()
 					changed_LEDs = True
 				if int(ag_time_c.text) == 19:
@@ -532,8 +530,7 @@ while True:
 				if int(ag_time_c.text) == 10 and not changed_LEDs:
 					ag_time_c.color = 0xB30000
 					# leds.fill((255, 0, 0))
-					for i in range(54):
-						leds[i] = (255, 0, 0)
+					leds.fill((255, 0, 0))
 					leds.show()
 					changed_LEDs = True
 				if int(ag_time_c.text) == 9:
