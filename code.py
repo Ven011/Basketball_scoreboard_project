@@ -500,11 +500,11 @@ while True:
 					changed_LEDs = True # Ensures that the fill function is not called repeatedly over the second of 60 seconds
 				if int(ag_time_c.text) == 59:
 					changed_LEDs = False # Allow the LEDs to be changed when time gets into the next range.
-				if not int(ag_time_c.text) % 2: # The time left in the game is even
-					# Do not show the color
-					leds.fill((0, 0, 0))
-				else:
-					leds.fill((0, 255, 0))
+				# if not int(ag_time_c.text) % 2: # The time left in the game is even
+				# 	# Do not show the color
+				# 	leds.fill((0, 0, 0))
+				# else:
+				# 	leds.fill((0, 255, 0))
 
 			elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
 				if int(ag_time_c.text) == 20 and not changed_LEDs:
@@ -517,11 +517,11 @@ while True:
 					# Play countdown audio
 					mp3stream.file = open(audio_file["countdown"], "rb")
 					speaker.play(mp3stream)
-				if not int(ag_time_c.text) % 2: # The time left in the game is even
-					# Do not show the color
-					leds.fill((0, 0, 0))
-				else:
-					leds.fill((255, 255, 0))
+				# if not int(ag_time_c.text) % 2: # The time left in the game is even
+				# 	# Do not show the color
+				# 	leds.fill((0, 0, 0))
+				# else:
+				# 	leds.fill((255, 255, 0))
 
 			elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
 				if int(ag_time_c.text) == 10 and not changed_LEDs:
@@ -530,11 +530,11 @@ while True:
 					changed_LEDs = True
 				if int(ag_time_c.text) == 9:
 					changed_LEDs = False
-				if not int(ag_time_c.text) % 2: # The time left in the game is even
-					# Do not show the color
-					leds.fill((0, 0, 0))
-				else:
-					leds.fill((255, 0, 0))
+				# if not int(ag_time_c.text) % 2: # The time left in the game is even
+				# 	# Do not show the color
+				# 	leds.fill((0, 0, 0))
+				# else:
+				# 	leds.fill((255, 0, 0))
 
 			# update the hiscore value if the score is greater than the current hiscore value
 			if int(ag_score_c.text) > int(ag_hiscore_c.text):
