@@ -461,7 +461,7 @@ while True:
 			# Restore the "HISCORE" text and count labels 5 seconds after the bonus time text was displayed
 			if in_bonus and time.time() == time_hiscore_beaten + 5:
 				_3 = arcade_group.pop(4)
-				_4 = arcade_group.pop(4)
+				_4 = arcade_group.pop(5)
 				arcade_group.insert(4, ag_hiscore)
 				arcade_group.insert(5, ag_hiscore_c)
 				# change the score text color to pink
