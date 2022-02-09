@@ -371,6 +371,7 @@ while True:
 		ball_scored = False
 		beam_broken = False
 		in_bonus = False
+		hiscore_beaten = False
 		highest_score = 0
 		saved_hiscore = get_set_hiscore()
 		time_beam_restored = time.time()
@@ -423,25 +424,34 @@ while True:
 							ag_hiscore.color = 0x00B3B3
 							ag_hiscore_c.color = 0xB30000
 							labels_are_visible = True
-				elif score_diff < 0 and not in_bonus: # Set in_bonus boolean to true when high score is beaten.
-													# 2nd condition prevents unnecessary entry to the code block 
+       
+				elif score_diff < 0 and not in_bonus and int(ag_hiscore_c.text) <= 30: # Set in_bonus boolean to true when high score is beaten.
+													# 2nd condition prevents unnecessary entry to the code block
+													# 3rd condition prevents entry to bonus time if the score is beaten with > 30 seconds left
 					in_bonus = True
 					labels_are_visible = True # Ensures that the bonus time labels are seen when blinking them for the first time
+					hiscore_beaten = True # Prevents entry to elif condition that handles highscore when time left > 30
+										  # Adding bonus time would allow entry to this condition, but this boolean prevents that
 					time_hiscore_beaten = time.time()
      
 					# Play bonus_time audio
 					if speaker.playing: # Check if there's any other audio playing
 						speaker.stop() # If there is, stop the audio.
-						# Load and play the applause
-						mp3stream.file = open(audio_file["applause"], "rb")
+						# Load and play the hiscore audio
+						mp3stream.file = open(audio_file["hiscore"], "rb")
+						speaker.play(mp3stream)
+					else:
+						# Load and play the hiscore audio
+						mp3stream.file = open(audio_file["hiscore"], "rb")
 						speaker.play(mp3stream)
       
 					# Display the bonus time text by replacing the 4 & 5 layers of the game group.
 					# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
 					_1 = arcade_group.pop(4) # Return value is not useful
-					_2 = arcade_group.pop(4)
+					_2 = arcade_group.pop(5)
 					arcade_group.append(ag_bonus)
 					arcade_group.append(ag_bonus_t)
+					
 					# Add time to the current time depending on when the high score was beaten
 					if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
 						game_time += 30
@@ -449,6 +459,19 @@ while True:
 						game_time += 20
 					elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
 						game_time += 10
+      
+				elif score_diff < 0 and not hiscore_beaten and int(ag_hiscore_c.text) > 30:
+					hiscore_beaten = True # Prevent reentry into this block if points are scored right after hiscore is beaten
+					# Play bonus_time audio
+					if speaker.playing: # Check if there's any other audio playing
+						speaker.stop() # If there is, stop the audio.
+						# Load and play the hiscore audio
+						mp3stream.file = open(audio_file["hiscore"], "rb")
+						speaker.play(mp3stream)
+					else:
+						# Load and play the hiscore audio
+						mp3stream.file = open(audio_file["hiscore"], "rb")
+						speaker.play(mp3stream)
      
 				elif in_bonus:
 					# Blink the bonus time title
