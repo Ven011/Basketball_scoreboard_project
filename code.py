@@ -647,6 +647,11 @@ while True:
 					# play the game over audio file
 					mp3stream.file = open(audio_file["game_over"], "rb")
 					speaker.play(mp3stream)
+     
+					# Keep trying to play the audio if it is not playing
+					while not speaker.playing:
+						mp3stream.file = open(audio_file["game_over"], "rb")
+						speaker.play(mp3stream)
 
 					labels_are_visible = True
 					blink_timer = time.time()
@@ -663,7 +668,6 @@ while True:
 								gog_game.color = 0xB30000
 								gog_over.color = 0xB30000
 								labels_are_visible = True
-
 					game_exit_procedure()
 
 	# start h.o.r.s.e game
