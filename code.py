@@ -291,7 +291,7 @@ mp3stream = audiomp3.MP3Decoder(open(audio_file["for_setup"], "rb"))
 
 # play the start_group audio
 mp3stream.file = open(audio_file["space_jam"], "rb")
-speaker.play(mp3stream, loop = True)
+speaker.play(mp3stream)
 
 # button_1 pin and state
 button_1 = digitalio.DigitalInOut(board.SCL)
@@ -354,10 +354,20 @@ while True:
 	# button_2 debounce
 	if not button_2.value and not button_2_state:
 		button_2_state = True
+  
+	# Check if the start group audio is playing
+	# Acts like a loop for the audio - loop = True not working for some reason
+	if not speaker.playing:
+		mp3stream.file = open(audio_file["space_jam"], "rb")
+		speaker.play(mp3stream)
 
 	# start arcade game
 	if button_1_state and reset_score_v != -1:
 		button_1_state = False
+		# Check if the start group audio is still playing
+		if speaker.playing: # It is
+			speaker.stop() # Stop it
+   
 		mp3stream.file = open(audio_file["whistle"], "rb")
 		speaker.play(mp3stream)
 
