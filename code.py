@@ -608,6 +608,11 @@ while True:
 					# play the new hiscore audio
 					mp3stream.file = open(audio_file["hiscore"], "rb")
 					speaker.play(mp3stream)
+     
+					# Keep trying to play the audio if it is not playing
+					while not speaker.playing:
+						mp3stream.file = open(audio_file["hiscore"], "rb")
+						speaker.play(mp3stream)
 
 					labels_are_visible = True
 					blink_timer = time.time()
