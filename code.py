@@ -428,9 +428,14 @@ while True:
 					in_bonus = True
 					labels_are_visible = True # Ensures that the bonus time labels are seen when blinking them for the first time
 					time_hiscore_beaten = time.time()
+     
 					# Play bonus_time audio
-					mp3stream.file = open(audio_file["applause"], "rb")
-					speaker.play(mp3stream)
+					if speaker.playing: # Check if there's any other audio playing
+						speaker.stop() # If there is, stop the audio.
+						# Load and play the applause
+						mp3stream.file = open(audio_file["applause"], "rb")
+						speaker.play(mp3stream)
+      
 					# Display the bonus time text by replacing the 4 & 5 layers of the game group.
 					# 4th and 5th layers contain the "HiSCORE" text and the hiScore count - respectively
 					_1 = arcade_group.pop(4) # Return value is not useful
