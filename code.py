@@ -348,8 +348,14 @@ while True:
 	# start arcade game
 	if button_1_state and reset_score_v != -1:
 		button_1_state = False
+  
 		mp3stream.file = open(audio_file["whistle"], "rb")
 		speaker.play(mp3stream)
+  
+		# make sure whistle audio plays before proceeding
+		while not speaker.playing:
+			mp3stream.file = open(audio_file["whistle"], "rb")
+			speaker.play(mp3stream)
 
 		# reset properties
 		ag_time_c.text = "60"
