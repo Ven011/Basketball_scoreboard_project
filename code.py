@@ -566,7 +566,8 @@ while True:
 							ag_bt_bonus_t.color = 0x5A00B3
 
 			# restore the hiscore text and count labels 10 seconds after the bonus time text was displayed
-			if in_bonus and time.time() == time_hiscore_beaten + 10:
+			if in_bonus and time.time() >= time_hiscore_beaten + 10:
+				leds.fill((255, 0, 0))
 				ag_score_c.text = ag_bt_score_c.text
 				display.show(arcade_group)
 				in_bonus = False
