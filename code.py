@@ -49,7 +49,7 @@ def get_set_hiscore(value = "_"):
 def game_exit_procedure():
 	display.show(start_group)
 	global labels_are_visible
-	labels_are_visible = True # incase its value is False when returning to start game, makes sure the blinking labels are visible when returning
+	labels_are_visible = False # incase its value is true when returning to start game, makes sure the blinking labels are visible when returning
 	leds.fill((255, 255, 255))
 
 # font
@@ -322,7 +322,7 @@ leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20)
 
 # variables in the loop
 leds.fill((255, 255, 255))
-labels_are_visible = True
+labels_are_visible = False
 blink_timer = time.time()
 blink_period = 1
 button_1_state = False
@@ -519,7 +519,7 @@ while True:
 													# 2nd condition prevents unnecessary entry to the code block
 													# 3rd condition prevents entry to bonus time if the score is beaten with > 30 seconds left
 					in_bonus = True
-					labels_are_visible = True # Ensures that the bonus time labels are seen when blinking them for the first time
+					labels_are_visible = False # Ensures that the bonus time labels are seen when blinking them for the first time
 					hiscore_beaten = True # Prevents entry to elif condition that handles highscore when time left > 30
 										  # Adding bonus time would allow entry to this condition, but this boolean prevents that
 					time_hiscore_beaten = time.time()
