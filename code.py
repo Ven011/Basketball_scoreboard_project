@@ -390,6 +390,7 @@ while True:
 		can_do_bonus = True if int(saved_hiscore) >= 15 else False # prevent the bonus time when the hiscore is 0 for the first game
 		game_time = 60
 		curr_time = 0
+		labels_are_visible = False
 
 		# center the hiscore and hiscore text
 		if int(saved_hiscore) <= 9:
