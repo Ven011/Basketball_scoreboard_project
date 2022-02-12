@@ -422,8 +422,12 @@ while True:
 			# center the time value text
 			if int(ag_time_c.text) <= 9:
 				ag_time_c.x = 11
+				if in_bonus:
+					ag_time_c.x = 11
 			elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
 				ag_time_c.x = 8
+				if in_bonus:
+					ag_time_c.x = 8
 
 			# calculate the difference of the players score and the high score
 			score_diff = int(saved_hiscore) - int(ag_score_c.text)
@@ -449,10 +453,16 @@ while True:
 			# center the score value text
 			if int(ag_score_c.text) <= 9:
 				ag_score_c.x = 43
+				if in_bonus:
+					ag_bt_score_c.x = 43
 			elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
 				ag_score_c.x = 40
+				if in_bonus:
+					ag_bt_score_c.x = 40
 			elif int(ag_score_c.text) >= 100:
 				ag_score_c.x = 37
+				if in_bonus:
+					ag_bt_score_c.x = 37
 
 			# change the time value's color and RGB lights depending on time left in game
 			if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
