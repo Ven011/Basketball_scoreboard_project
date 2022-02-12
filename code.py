@@ -1,3 +1,4 @@
+from imp import init_builtin
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
 import audioio
@@ -28,6 +29,7 @@ display = framebufferio.FramebufferDisplay(matrix)
 # display groups
 start_group = displayio.Group()
 arcade_group = displayio.Group()
+arcade_bt_group = display.Group()
 new_hiscore_group = displayio.Group()
 game_over_group = displayio.Group()
 horse_group = displayio.Group()
@@ -119,13 +121,28 @@ ag_hiscore_c = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), colo
 ag_hiscore_c.x = 52
 ag_hiscore_c.y = 28
 
-ag_bonus = label.Label(font_virtual_pet_sans, text = "BONUS", color = 0x5A00B3)
-ag_bonus.x = 4
-ag_bonus.y = 28
+# Bonus time group
+ag_bt_time = label.Label(font_ozone, text = "TIME", color = 0xB35A00)
+ag_bt_time.x = 1
+ag_bt_time.y = 4
 
-ag_bonus_t = label.Label(font_virtual_pet_sans, text = "TIME", color = 0x5A00B3)
-ag_bonus_t.x = 37
-ag_bonus_t.y = 28
+ag_bt_time_c = label.Label(font_virtual_pet_sans, text = "", color = 0x00B300)
+ag_bt_time_c.y = 16
+
+ag_bt_score = label.Label(font_ozone, text = "SCORE", color = 0x0000B3)
+ag_bt_score.x = 29
+ag_bt_score.y = 4
+
+ag_bt_score_c = label.Label(font_virtual_pet_sans, text = "", color = 0xFFFFFF)
+ag_bt_score_c.y = 16
+
+ag_bt_bonus = label.Label(font_virtual_pet_sans, text = "BONUS", color = 0x5A00B3)
+ag_bt_bonus.x = 4
+ag_bt_bonus.y = 28
+
+ag_bt_bonus_t = label.Label(font_virtual_pet_sans, text = "TIME", color = 0x5A00B3)
+ag_bt_bonus_t.x = 37
+ag_bt_bonus_t.y = 28
 
 # game_over_group graphics
 gog_game = label.Label(font_ozone, text = "GAME", color = 0xB30000)
@@ -248,6 +265,13 @@ arcade_group.append(ag_score)
 arcade_group.append(ag_score_c)
 arcade_group.append(ag_hiscore)
 arcade_group.append(ag_hiscore_c)
+
+arcade_bt_group.append(ag_bt_time)
+arcade_bt_group.append(ag_bt_time_c)
+arcade_bt_group.append(ag_bt_score)
+arcade_bt_group.append(ag_bt_score_c)
+arcade_bt_group.append(ag_bt_bonus)
+arcade_bt_group.append(ag_bt_bonus_t)
 
 game_over_group.append(gog_game)
 game_over_group.append(gog_over)
@@ -394,6 +418,7 @@ while True:
 		while int(ag_time_c.text) > -1:
 			# update the time left in the round
 			ag_time_c.text = str(game_time - int(time.time() - game_start_time))
+			ag_bt_time_c.text = ag_time_c.text
 
 			# center the time value text
 			if int(ag_time_c.text) <= 9:
@@ -481,7 +506,7 @@ while True:
 							ag_hiscore.color = 0x00B3B3
 							ag_hiscore_c.color = 0xB30000
 
-				elif score_diff < 0 and not in_bonus and int(ag_hiscore_c.text) <= 30: # Set in_bonus boolean to true when high score is beaten.
+				elif score_diff < 0 and not in_bonus and int(ag_time_c.text) <= 30: # Set in_bonus boolean to true when high score is beaten.
 													# 2nd condition prevents unnecessary entry to the code block
 													# 3rd condition prevents entry to bonus time if the score is beaten with > 30 seconds left
 					in_bonus = True
@@ -499,17 +524,17 @@ while True:
 						mp3stream.file = open(audio_file["hiscore"], "rb")
 						speaker.play(mp3stream)
 
-					arcade_group.pop(4)
-					arcade_group.pop(4)
-					arcade_group.append(ag_bonus)
-					arcade_group.append(ag_bonus_t)
+					# transfer the values of the non-bonus time arcade group to the bonus time arcade group
+					ag_bt_score_c.text = ag_score_c.text
+     
+					display.show(arcade_bt_group)
 
 					# add time to the current time depending on when the hiscore was beaten
-					if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
+					if int(ag_bt_time_c.text) >= 1 and int(ag_bt_time_c.text) <= 10:
 						game_time += 30
-					elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
+					elif int(ag_bt_time_c.text) >= 11 and int(ag_bt_time_c.text) <= 20:
 						game_time += 20
-					elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
+					elif int(ag_bt_time_c.text) >= 21 and int(ag_bt_time_c.text) <= 30:
 						game_time += 10
 
 				elif score_diff < 0 and not hiscore_beaten and int(ag_hiscore_c.text) >= 31:
@@ -523,10 +548,9 @@ while True:
 						mp3stream.file = open(audio_file["hiscore"], "rb")
 						speaker.play(mp3stream)
 
-
 				elif in_bonus:
 					# change the score text color to pink
-					ag_score_c.color = 0xB30000
+					ag_bt_score_c.color = 0xB30000
 
 					# blink the bonus time title
 					if time.time() >= blink_timer + blink_period:
@@ -534,20 +558,20 @@ while True:
 						if labels_are_visible:
 							blink_period = 1
 							labels_are_visible = False
-							ag_bonus.color = 0x000000
-							ag_bonus_t.color = 0x000000
+							ag_bt_bonus.color = 0x000000
+							ag_bt_bonus_t.color = 0x000000
 						else:
 							blink_period = 1
 							labels_are_visible = True
-							ag_bonus.color = 0x5A00B3
-							ag_bonus_t.color = 0x5A00B3
+							ag_bt_bonus.color = 0x5A00B3
+							ag_bt_bonus_t.color = 0x5A00B3
 
 			# restore the hiscore text and count labels 10 seconds after the bonus time text was displayed
 			if in_bonus and time.time() == time_hiscore_beaten + 10:
-				arcade_group.pop(4)
-				arcade_group.pop(4)
-				arcade_group.append(ag_hiscore)
-				arcade_group.append(ag_hiscore_c)
+				ag_score_c.text = ag_bt_score_c.text
+				display.show(arcade_group)
+				in_bonus = False
+				can_do_bonus = False # prevent bonus from happening in the game again
 
 			# update the hiscore value if the score is greater than the current hiscore value
 			if int(ag_score_c.text) > int(ag_hiscore_c.text):
