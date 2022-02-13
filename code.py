@@ -448,6 +448,7 @@ def new_highscore_screen():
     blink_timer = time.time()
     start_time = time.time()
     labels_are_visible = False
+    blink_period = 0
     
     # center the hiscore value text
     if int(highest_score) <= 9:
