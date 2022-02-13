@@ -340,9 +340,9 @@ def arcade_game():
     elif int(saved_hiscore) >= 100:
         ag_hiscore.x = 1
         ag_hiscore_c.x = 46
-        
-    time.sleep(0.5)
+    
     display.show(arcade_group)
+    time.sleep(1)
     game_start_time = time.time()
     
     while screen_state == screen_states[2]:
