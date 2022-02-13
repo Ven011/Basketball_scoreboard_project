@@ -239,8 +239,8 @@ def starting_screen():
     blink_timer = 0
     blink_period = 0
     
-    time.sleep(0.5)
     display.show(start_group)
+    time.sleep(0.5)
     
     while screen_state == screen_states[1]:
         # led animation
