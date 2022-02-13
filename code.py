@@ -1,5 +1,6 @@
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
+from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
 import audioio
 import audiomp3
 import board
@@ -203,6 +204,7 @@ break_beam.pull = digitalio.Pull.UP
 led_pin = board.D25
 num_leds = 54
 leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20)
+rainbow_sparkle = RainbowSparkle(leds, speed = 0.30, period = 5, num_sparkles = 27, precompute_rainbow = True)
 
 # variables
 screen_states = {
@@ -244,6 +246,9 @@ def starting_screen():
     display.show(start_group)
     
     while screen_state == screen_states[1]:
+        # led animation
+        rainbow_sparkle.animate()
+        
         # make sure the space jam audio is playing
         if not speaker.playing:
             mp3stream.file = open(audio_file["space_jam"], "rb")
