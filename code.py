@@ -323,6 +323,7 @@ def arcade_game():
     game_time = 60
     ## labels_are_visible = False
     time_beam_restored = time.time()
+    curr_time = 0
     
     # reset properties
     ag_time_c.text = "60"
