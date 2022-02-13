@@ -232,9 +232,6 @@ def starting_screen():
     mp3stream.file = open(audio_file["space_jam"], "rb")
     speaker.play(mp3stream)
     
-    # set LED color to white
-    leds.fill((255, 255, 255))
-    
     # local variables
     reset_score_v = 0
     reset_score_t = 0
@@ -297,11 +294,12 @@ def starting_screen():
                     break
                 
         # button_2 debounce
-        if not button_2.value and not button_2_state:
-            button_2_state = True
+        if not button_2.value and not button_states[2]:
+            button_states[2] = True
             
         # change the state to arcade_game when button 1 is pressed once
         if button_states[1] and reset_score_v != -1:
+            button_states[1] = False
             screen_state = screen_states[2] # breaks out of the loop
             
 def arcade_game():
