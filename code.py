@@ -424,6 +424,8 @@ def arcade_game():
             
             if int(highest_score) > int(saved_hiscore): # highscore was beaten
                 screen_state = screen_states[3]
+                # save the highest score
+                get_set_hiscore(value = ag_score_c.text)
             elif int(highest_score) <= int(saved_hiscore): # highscore was not beaten
                 screen_state = screen_states[4]
     
@@ -437,9 +439,6 @@ def new_highscore_screen():
     while not speaker.playing:
         mp3stream.file = open(audio_file["hiscore"], "rb")
         speaker.play(mp3stream)
-    
-    # save the highest score
-    get_set_hiscore(value = highest_score)
     
     # set label properties
     nhg_hiscore_c.text = highest_score
