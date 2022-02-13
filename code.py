@@ -136,7 +136,7 @@ leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20)
 # variables
 screen_states = {
     1: "starting_screen",
-    2: "arcade_game",
+    2: "arcade_game"
 }
 
 button_states = {
@@ -147,6 +147,7 @@ button_states = {
 screen_state = "starting_screen"
 
 def starting_screen():
+    global screen_state
     # play the space jam audio
     mp3stream.file = open(audio_file["space_jam"], "rb")
     speaker.play(mp3stream)
