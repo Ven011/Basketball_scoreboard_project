@@ -223,7 +223,7 @@ screen_state = "starting_screen"
 highest_score = "0"
 
 def starting_screen():
-    global screen_state
+    global screen_state, highest_score
     # stop any previously playing audio
     if speaker.playing:
         speaker.stop()
@@ -287,6 +287,7 @@ def starting_screen():
                     # indicate that the score has been reset
                     leds.fill((0, 255, 0))
                     ag_hiscore_c.text = "0"
+                    highest_score = "0"
                     get_set_hiscore(value = "0")
                     button_states[1] = False # allow button state to be changed to true after reset
                     reset_score_v = -1 # to be used to prevent entry to game after the 5 seconds
