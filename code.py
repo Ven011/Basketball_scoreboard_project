@@ -319,7 +319,7 @@ def arcade_game():
     ball_scored = False
     beam_broken = False
     saved_hiscore = get_set_hiscore()
-    ag_hiscore_c = saved_hiscore
+    ag_hiscore_c.text = saved_hiscore
     game_time = 60
     ## labels_are_visible = False
     time_beam_restored = time.time()
