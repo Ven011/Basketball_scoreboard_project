@@ -29,7 +29,7 @@ display = framebufferio.FramebufferDisplay(matrix)
 # display groups
 start_group = displayio.Group()
 arcade_group = displayio.Group()
-arcade_bt_group = display.Group()
+arcade_bt_group = displayio.Group()
 new_hiscore_group = displayio.Group()
 game_over_group = displayio.Group()
 horse_group = displayio.Group()
