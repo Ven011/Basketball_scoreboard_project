@@ -442,7 +442,7 @@ def new_highscore_screen():
     get_set_hiscore(value = highest_score)
     
     # set label properties
-    nhg_hiscore_c = highest_score
+    nhg_hiscore_c.text = highest_score
     
     # local variables
     blink_timer = time.time()
