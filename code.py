@@ -567,7 +567,7 @@ def arcade_screen():
             if int(ag_score_c.text) > int(saved_hiscore): # hiscore was beaten
                 screen_state = screen_states[3]
                 get_set_hiscore(value = ag_score_c.text) # save the hiscore
-            elif int(ag_score_c.text) <= int(saved_hiscore): # hiscore was not beaten
+            else: # hiscore was not beaten
                 screen_state = screen_states[4]
 
 def game_over_screen():
