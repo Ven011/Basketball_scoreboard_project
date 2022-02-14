@@ -480,7 +480,7 @@ def arcade_screen():
                         ag_hiscore.color = 0x00B3B3
                         ag_hiscore_c.color = 0xB30000
                         
-            if score_diff < 0 and not hiscore_beaten: # hiscore has been beaten and was not beaten before in this game
+            if score_diff < 0 and not hiscore_beaten and int(ag_time_c.text) < 31: # hiscore has been beaten and was not beaten before in this game
                 hiscore_beaten = True
                 # stop any previously playing audio
                 if speaker.playing:
@@ -551,6 +551,15 @@ def arcade_screen():
         # update the hiscore value if the score is greater than the current hiscore value
         if int(ag_score_c.text) > int(saved_hiscore):
             highest_score = ag_score_c.text
+            if not hiscore_beaten and int(ag_time_c.text) >= 31:
+                hiscore_beaten = True
+                # stop any previously playing audio
+                if speaker.playing:
+                    speaker.stop
+                # play the hiscore audio
+                while not speaker.playing:
+                    mp3stream.file = open(audio_file["hiscore"], "rb")
+                    speaker.play(mp3stream)
 
         # exit the game when the time is up
         if int(ag_time_c.text) == 0:
