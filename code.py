@@ -390,6 +390,8 @@ def arcade_screen():
     ag_time_c.color = 0x00B300      
     ag_score_c.text = "0"
     ag_score_c.color = 0xFFFFFF
+    ag_hiscore.color = 0x00B3B3
+    ag_hiscore_c.color = 0xB30000
 
     # local variables
     labels_are_visible = False
@@ -495,6 +497,8 @@ def arcade_screen():
                     
                 # change score value color to pink
                 ag_score_c.color = 0xFFC0CB
+                ag_hiscore.color = 0x00B3B3 # in case the color was set to black before after blinking
+                ag_hiscore_c.color = 0xB30000
                 
                 # add time if the score was beaten in set times
                 if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
