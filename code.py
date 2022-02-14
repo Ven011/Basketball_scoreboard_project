@@ -556,6 +556,8 @@ def arcade_screen():
             highest_score = ag_score_c.text
             if not hiscore_beaten and int(ag_time_c.text) >= 31:
                 hiscore_beaten = True
+                ag_hiscore.color = 0x00B3B3 # in case the color was set to black before - after blinking
+                ag_hiscore_c.color = 0xB30000
                 # stop any previously playing audio
                 if speaker.playing:
                     speaker.stop()
