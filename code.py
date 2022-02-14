@@ -463,23 +463,23 @@ def arcade_screen():
                 time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
                 ball_scored = False
 
+        if score_diff <= 5 and score_diff >= 0: # game score is 5 points or less away from the high score.
+            # blink the high score title and high score count
+            if time.time() >= blink_timer + blink_period:
+                blink_timer = time.time()
+                if labels_are_visible:
+                    blink_period = 1
+                    labels_are_visible = False
+                    ag_hiscore.color = 0x000000
+                    ag_hiscore_c.color = 0x000000
+                else:
+                    blink_period = 1
+                    labels_are_visible = True
+                    ag_hiscore.color = 0x00B3B3
+                    ag_hiscore_c.color = 0xB30000
+
         # handle bonus time
         if can_do_bonus:
-            if score_diff <= 5 and score_diff >= 0: # game score is 5 points or less away from the high score.
-                # blink the high score title and high score count
-                if time.time() >= blink_timer + blink_period:
-                    blink_timer = time.time()
-                    if labels_are_visible:
-                        blink_period = 1
-                        labels_are_visible = False
-                        ag_hiscore.color = 0x000000
-                        ag_hiscore_c.color = 0x000000
-                    else:
-                        blink_period = 1
-                        labels_are_visible = True
-                        ag_hiscore.color = 0x00B3B3
-                        ag_hiscore_c.color = 0xB30000
-                        
             if score_diff < 0 and not hiscore_beaten and int(ag_time_c.text) < 31: # hiscore has been beaten and was not beaten before in this game
                 hiscore_beaten = True
                 # stop any previously playing audio
@@ -549,7 +549,7 @@ def arcade_screen():
                 leds.fill((0, 0, 0))
 
         # update the hiscore value if the score is greater than the current hiscore value
-        if int(ag_score_c.text) > int(saved_hiscore):
+        if int(ag_score_c.text) > int(highest_score):
             highest_score = ag_score_c.text
             if not hiscore_beaten and int(ag_time_c.text) >= 31:
                 hiscore_beaten = True
@@ -562,9 +562,9 @@ def arcade_screen():
                     speaker.play(mp3stream)
 
         # exit the game when the time is up
-        if int(ag_time_c.text) == 0:
+        if int(ag_time_c.text) <= 0:
             time.sleep(1) # allows the time value of 0 to be seen
-            if int(ag_score_c.text) > int(saved_hiscore): # hiscore was beaten
+            if int(highest_score) > int(saved_hiscore): # hiscore was beaten
                 screen_state = screen_states[3]
                 get_set_hiscore(value = ag_score_c.text) # save the hiscore
             else: # hiscore was not beaten
