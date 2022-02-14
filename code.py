@@ -393,6 +393,8 @@ def arcade_screen():
 
     # local variables
     ## labels_are_visible = False
+    blink_timer = time.time()
+    blink_period = 0
     ball_scored = False
     beam_broken = False
     time_beam_restored = time.time()
