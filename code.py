@@ -564,10 +564,10 @@ def arcade_screen():
         # exit the game when the time is up
         if int(ag_time_c.text) == 0:
             time.sleep(1) # allows the time value of 0 to be seen
-            if int(highest_score) > int(saved_hiscore): # hiscore was beaten
+            if int(ag_score_c.text) > int(saved_hiscore): # hiscore was beaten
                 screen_state = screen_states[3]
                 get_set_hiscore(value = ag_score_c.text) # save the hiscore
-            elif int(highest_score) <= int(saved_hiscore): # hiscore was not beaten
+            elif int(ag_score_c.text) <= int(saved_hiscore): # hiscore was not beaten
                 screen_state = screen_states[4]
 
 def game_over_screen():
