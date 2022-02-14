@@ -518,8 +518,7 @@ def arcade_screen():
 
         # change the time value's color and RGB lights depending on time left in game
         if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
-            if int(ag_time_c.text) == 60:
-                ag_time_c.color = 0x00B300
+            ag_time_c.color = 0x00B300
             if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
                 current_time = int(ag_time_c.text)
                 leds.fill((0, 255, 0))
@@ -528,8 +527,7 @@ def arcade_screen():
                 leds.fill((0, 0, 0))
 
         elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
-            if int(ag_time_c.text) == 20:
-                ag_time_c.color = 0xB3B300
+            ag_time_c.color = 0xB3B300
             if int(ag_time_c.text) == 11:
                 # stop any previously playing audio
                 if speaker.playing:
@@ -545,8 +543,7 @@ def arcade_screen():
                 leds.fill((0, 0, 0))
 
         elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
-            if int(ag_time_c.text) == 10:
-                ag_time_c.color = 0xB30000
+            ag_time_c.color = 0xB30000
             if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
                 current_time = int(ag_time_c.text)
                 leds.fill((255, 0, 0))
