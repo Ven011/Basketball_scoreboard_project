@@ -116,6 +116,29 @@ ag_hiscore_c = label.Label(font_virtual_pet_sans, text = get_set_hiscore(), colo
 ag_hiscore_c.x = 52
 ag_hiscore_c.y = 28
 
+# Bonus time group
+ag_bt_time = label.Label(font_ozone, text = "TIME", color = 0xB35A00)
+ag_bt_time.x = 1
+ag_bt_time.y = 4
+
+ag_bt_time_c = label.Label(font_virtual_pet_sans, text = "", color = 0x00B300)
+ag_bt_time_c.y = 16
+
+ag_bt_score = label.Label(font_ozone, text = "SCORE", color = 0x0000B3)
+ag_bt_score.x = 29
+ag_bt_score.y = 4
+
+ag_bt_score_c = label.Label(font_virtual_pet_sans, text = "", color = 0xFFFFFF)
+ag_bt_score_c.y = 16
+
+ag_bt_bonus = label.Label(font_virtual_pet_sans, text = "BONUS", color = 0x5A00B3)
+ag_bt_bonus.x = 4
+ag_bt_bonus.y = 28
+
+ag_bt_bonus_t = label.Label(font_virtual_pet_sans, text = "TIME", color = 0x5A00B3)
+ag_bt_bonus_t.x = 37
+ag_bt_bonus_t.y = 28
+
 # game_over_group graphics
 gog_game = label.Label(font_ozone, text = "GAME", color = 0xB30000)
 gog_game.x = 2
@@ -237,6 +260,13 @@ arcade_group.append(ag_score)
 arcade_group.append(ag_score_c)
 arcade_group.append(ag_hiscore)
 arcade_group.append(ag_hiscore_c)
+
+arcade_bt_group.append(ag_bt_time)
+arcade_bt_group.append(ag_bt_time_c)
+arcade_bt_group.append(ag_bt_score)
+arcade_bt_group.append(ag_bt_score_c)
+arcade_bt_group.append(ag_bt_bonus)
+arcade_bt_group.append(ag_bt_bonus_t)
 
 game_over_group.append(gog_game)
 game_over_group.append(gog_over)
@@ -378,6 +408,105 @@ def start_screen():
 		if not button_2.value and not button_states[2]:
 			button_states[2] = True
 
+def arcade_bonus_screen(game_time, game_start_time, score):
+    # set label properties
+    ag_bt_score_c.text = score
+    ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
+    ag_bt_score_c.color = 0xFFC0CB
+    
+    # show the bonus time group
+    display.show(arcade_bt_group)
+    
+    # variables
+    bt_start_time = time.time()
+    bt_stay_time = 10
+    current_time = 0
+    labels_are_visible = False
+    blink_timer = time.time()
+    blink_period = 0
+    ball_scored = False
+    beam_broken = False
+    time_beam_restored = time.time()
+    
+    # stay in bonus time screen for time (seconds) specified in stay_time
+    while time.time() < bt_start_time + bt_stay_time:
+        # update the time
+        ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
+        
+        # center the time value text
+        if int(ag_bt_time_c.text) <= 9:
+            ag_bt_time_c.x = 11
+        elif int(ag_bt_time_c.text) >= 10 and int(ag_bt_time_c.text) <= 60:
+            ag_bt_time_c.x = 8
+            
+        # center the score value text
+        if int(ag_bt_score_c.text) <= 9:
+            ag_bt_score_c.x = 43
+        elif int(ag_bt_score_c.text) >= 10 and int(ag_bt_score_c.text) <= 99:
+            ag_bt_score_c.x = 40
+        elif int(ag_bt_score_c.text) >= 100:
+            ag_bt_score_c.x = 37
+            
+        # check if the beam has been broken, a ball has been scored
+        beam_broken = True if break_beam.value == 0 else False
+
+        if beam_broken and not ball_scored:
+            # increment the score if conditions are met
+            if time.time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
+                # if the time is less than 0.3, this should indicate an invalid score
+                # time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
+                pass
+            else:
+                ag_bt_score_c.text = str(int(ag_bt_score_c.text) + 1)
+                # set score tracker variable to True
+                ball_scored = True
+        elif not beam_broken:
+            if ball_scored:
+                time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
+                ball_scored = False
+                
+        # blink the bonus time text
+        if time.time() >= blink_timer + blink_period:
+            blink_timer = time.time()
+            if labels_are_visible:
+                blink_period = 1
+                labels_are_visible = False
+                ag_bt_bonus.color = 0x000000
+                ag_bt_bonus_t.color = 0x000000
+            else:
+                blink_period = 1
+                labels_are_visible = True
+                ag_bt_bonus.color = 0x5A00B3
+                ag_bt_bonus_t.color = 0x5A00B3
+            
+        # change the time value's color and RGB lights depending on time left in game
+        if int(ag_bt_time_c.text) <= 60 and int(ag_bt_time_c.text) >= 21:
+            ag_bt_time_c.color = 0x00B300
+            if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
+                current_time = int(ag_bt_time_c.text)
+                leds.fill((0, 255, 0))
+            elif int(ag_bt_time_c.text) != current_time:
+                current_time = int(ag_bt_time_c.text)
+                leds.fill((0, 0, 0))
+
+        elif int(ag_bt_time_c.text) <= 20 and int(ag_bt_time_c.text) >= 11:
+            ag_bt_time_c.color = 0xB3B300
+            if int(ag_bt_time_c.text) == 11:
+                # stop any previously playing audio
+                if speaker.playing:
+                    speaker.stop()
+                # play the countdown audio file
+                mp3stream.file = open(audio_file["countdown"], "rb")
+                speaker.play(mp3stream)
+            if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
+                current_time = int(ag_bt_time_c.text)
+                leds.fill((255, 255, 0))
+            elif int(ag_bt_time_c.text) != current_time:
+                current_time = int(ag_bt_time_c.text)
+                leds.fill((0, 0, 0))
+                    
+    return ag_bt_time_c.text, ag_bt_score_c.text
+
 def arcade_screen():
     global screen_state, highest_score
 
@@ -507,6 +636,10 @@ def arcade_screen():
                     game_time += 20
                 elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
                     game_time += 10
+                    
+                # go to the bonus time screen for 10 seconds
+                ag_time_c.text, ag_score_c.text = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
+                display.show(arcade_group) # show arcade group after return
                 
         # center the score value text
         if int(ag_score_c.text) <= 9:
