@@ -486,7 +486,7 @@ def arcade_screen():
                 hiscore_beaten = True
                 # stop any previously playing audio
                 if speaker.playing:
-                    speaker.stop
+                    speaker.stop()
                 
                 # play the hiscore audio
                 while not speaker.playing:
@@ -551,13 +551,13 @@ def arcade_screen():
                 leds.fill((0, 0, 0))
 
         # update the hiscore value if the score is greater than the current hiscore value
-        if int(ag_score_c.text) > int(highest_score):
+        if int(ag_score_c.text) > int(saved_hiscore):
             highest_score = ag_score_c.text
             if not hiscore_beaten and int(ag_time_c.text) >= 31:
                 hiscore_beaten = True
                 # stop any previously playing audio
                 if speaker.playing:
-                    speaker.stop
+                    speaker.stop()
                 # play the hiscore audio
                 while not speaker.playing:
                     mp3stream.file = open(audio_file["hiscore"], "rb")
