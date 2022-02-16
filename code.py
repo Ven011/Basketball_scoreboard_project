@@ -429,7 +429,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     
     # stay in bonus time screen for time (seconds) specified in stay_time
     while time.time() < bt_start_time + bt_stay_time:
-        rainbow_sparkle.animate()
+        # rainbow_sparkle.animate()
         # update the time
         ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
         
@@ -740,7 +740,6 @@ def game_over_screen():
     display.show(game_over_group)
 
     while time.time() - start_time <= 10:
-        rainbow_sparkle.animate()
         if time.time() >= blink_timer + blink_period:
             blink_timer = time.time()
             if labels_are_visible:
@@ -783,7 +782,6 @@ def new_hiscore_screen():
     display.show(new_hiscore_group)
 
     while time.time() - start_time <= 10:  
-        rainbow_sparkle.animate()
         if time.time() >= blink_timer + blink_period:
             blink_timer = time.time()
             if labels_are_visible:
