@@ -645,7 +645,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
 
 	# stay in bonus time screen for time (seconds) specified in stay_time
 	while time.time() < bt_start_time + bt_stay_time:
-		rainbow_sparkle.animate()
+		rainbow.animate()
 		# update the time
 		ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
 
