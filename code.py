@@ -124,7 +124,7 @@ ag_bt_time = label.Label(font_ozone, text = "TIME", color = 0xB35A00)
 ag_bt_time.x = 1
 ag_bt_time.y = 4
 
-ag_bt_time_c = label.Label(font_virtual_pet_sans, text = "", color = 0xB3005A)
+ag_bt_time_c = label.Label(font_virtual_pet_sans, text = "", color = 0x00B300)
 ag_bt_time_c.x = 8
 ag_bt_time_c.y = 16
 
@@ -132,7 +132,7 @@ ag_bt_score = label.Label(font_ozone, text = "SCORE", color = 0x0000B3)
 ag_bt_score.x = 29
 ag_bt_score.y = 4
 
-ag_bt_score_c = label.Label(font_virtual_pet_sans, text = "", color = 0xFFFFFF)
+ag_bt_score_c = label.Label(font_virtual_pet_sans, text = "", color = 0xB3005A)
 ag_bt_score_c.x = 43
 ag_bt_score_c.y = 16
 
@@ -393,7 +393,6 @@ def start_screen():
 		if not button_1.value and not button_states[1]:
 			reset_score_v = time.time()
 			button_states[1] = True
-			rainbow.freeze()
 			while not button_1.value:
 				reset_score_t = time.time() - reset_score_v
 				if reset_score_t == 5:
