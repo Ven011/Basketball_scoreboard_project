@@ -757,31 +757,31 @@ def game_over_screen():
     screen_state = screen_states[1] # return to the start screen    
 
 def new_hiscore_screen():
-	global screen_state, highest_score
-	# stop any previously playing audio
-	if speaker.playing:
-		speaker.stop()
-	# play the hiscore audio file
-	while not speaker.playing:
-		mp3stream.file = open(audio_file["hiscore"], "rb")
-		speaker.play(mp3stream)
-	# set text properties
-	nhg_hiscore_c.text = highest_score
-	# local variables
-	labels_are_visible = False
-	start_time = time.time()
-	blink_timer = time.time()
-	blink_period = 0
-	# center the hiscore value text
-	if int(highest_score) <= 9:
-		nhg_hiscore_c.x = 29
-	elif int(highest_score) >= 10 and int(highest_score) <= 99:
-		nhg_hiscore_c.x = 26
-	elif int(highest_score) >= 100:
-		nhg_hiscore_c.x = 23
-    
+    global screen_state, highest_score
+    # stop any previously playing audio
+    if speaker.playing:
+        speaker.stop()
+    # play the hiscore audio file
+    while not speaker.playing:
+        mp3stream.file = open(audio_file["hiscore"], "rb")
+        speaker.play(mp3stream)
+    # set text properties
+    nhg_hiscore_c.text = highest_score
+    # local variables
+    labels_are_visible = False
+    start_time = time.time()
+    blink_timer = time.time()
+    blink_period = 0
+    # center the hiscore value text
+    if int(highest_score) <= 9:
+        nhg_hiscore_c.x = 29
+    elif int(highest_score) >= 10 and int(highest_score) <= 99:
+        nhg_hiscore_c.x = 26
+    elif int(highest_score) >= 100:
+        nhg_hiscore_c.x = 23
+
     display.show(new_hiscore_group)
-    
+
     while time.time() - start_time <= 10:  
         rainbow_sparkle.animate()
         if time.time() >= blink_timer + blink_period:
