@@ -121,7 +121,7 @@ ag_bt_time = label.Label(font_ozone, text = "TIME", color = 0xB35A00)
 ag_bt_time.x = 1
 ag_bt_time.y = 4
 
-ag_bt_time_c = label.Label(font_virtual_pet_sans, text = "", color = 0x00B300)
+ag_bt_time_c = label.Label(font_virtual_pet_sans, text = "", color = 0xFFC0CB)
 ag_bt_time_c.y = 16
 
 ag_bt_score = label.Label(font_ozone, text = "SCORE", color = 0x0000B3)
@@ -350,7 +350,7 @@ def start_screen():
 
 	while screen_state == screen_states[1]:
 		# LED animation
-		rainbow_sparkle.animate()
+		# rainbow_sparkle.animate()
 
 		# play the space_jam audio file
 		if not speaker.playing:
@@ -422,13 +422,14 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     current_time = 0
     labels_are_visible = False
     blink_timer = time.time()
-    blink_period = 0
+    blink_period = 1
     ball_scored = False
     beam_broken = False
     time_beam_restored = time.time()
     
     # stay in bonus time screen for time (seconds) specified in stay_time
     while time.time() < bt_start_time + bt_stay_time:
+        rainbow_sparkle.animate()
         # update the time
         ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
         
@@ -624,9 +625,9 @@ def arcade_screen():
                     speaker.play(mp3stream)
                     
                 # change score value color to pink
-                ag_score_c.color = 0xFFC0CB
                 ag_hiscore.color = 0x00B3B3 # in case the color was set to black before after blinking
                 ag_hiscore_c.color = 0xB30000
+                ag_score_c.color = 0xFFC0CB
                 
                 # add time if the score was beaten in set times
                 if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
@@ -739,6 +740,7 @@ def game_over_screen():
     display.show(game_over_group)
 
     while time.time() - start_time <= 10:
+        rainbow_sparkle.animate()
         if time.time() >= blink_timer + blink_period:
             blink_timer = time.time()
             if labels_are_visible:
@@ -756,25 +758,20 @@ def game_over_screen():
 
 def new_hiscore_screen():
 	global screen_state, highest_score
-
 	# stop any previously playing audio
 	if speaker.playing:
 		speaker.stop()
-
 	# play the hiscore audio file
 	while not speaker.playing:
 		mp3stream.file = open(audio_file["hiscore"], "rb")
 		speaker.play(mp3stream)
-
 	# set text properties
 	nhg_hiscore_c.text = highest_score
-
 	# local variables
 	labels_are_visible = False
 	start_time = time.time()
 	blink_timer = time.time()
 	blink_period = 0
-
 	# center the hiscore value text
 	if int(highest_score) <= 9:
 		nhg_hiscore_c.x = 29
@@ -782,22 +779,23 @@ def new_hiscore_screen():
 		nhg_hiscore_c.x = 26
 	elif int(highest_score) >= 100:
 		nhg_hiscore_c.x = 23
+    
+    display.show(new_hiscore_group)
+    
+    while time.time() - start_time <= 10:  
+        rainbow_sparkle.animate()
+        if time.time() >= blink_timer + blink_period:
+            blink_timer = time.time()
+            if labels_are_visible:
+                labels_are_visible = False
+                blink_period = 1
+                nhg_new.color = 0x000000
+            else:
+                labels_are_visible = True
+                blink_period = 2
+                nhg_new.color = 0x00B300
 
-	display.show(new_hiscore_group)
-
-	while time.time() - start_time <= 10:
-		if time.time() >= blink_timer + blink_period:
-			blink_timer = time.time()
-			if labels_are_visible:
-				labels_are_visible = False
-				blink_period = 1
-				nhg_new.color = 0x000000
-			else:
-				labels_are_visible = True
-				blink_period = 2
-				nhg_new.color = 0x00B300
-
-	screen_state = screen_states[1] # go back to the start screen
+        screen_state = screen_states[1] # go back to the start screen
 
 def horse_screen():
 	global screen_state
