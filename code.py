@@ -396,7 +396,6 @@ def start_screen():
 					solid.animate() # indicate that the hiscore has been reset
 					button_states[1] = False # allow the button state to be changed to True after reset
 					reset_score_v = -1 # to be used to prevent entry to game after the 5 seconds
-					time.sleep(2)
 					break
 
 		# change the state to arcade_screen when button 1 is pressed
