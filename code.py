@@ -415,312 +415,314 @@ def start_screen():
 			button_states[2] = True
 
 def arcade_screen():
-	global screen_state, highest_score
+    global screen_state, highest_score
 
-	# stop any previously playing audio
-	if speaker.playing:
-		speaker.stop()
+    # stop any previously playing audio
+    if speaker.playing:
+        speaker.stop()
 
-	# reset properties
-	ag_time_c.text = "60"
-	ag_time_c.color = 0x00B300      
-	ag_score_c.text = "0"
-	ag_score_c.color = 0xFFFFFF
-	ag_hiscore.color = 0x00B3B3
-	ag_hiscore_c.color = 0xB30000
+    # reset properties
+    ag_time_c.text = "60"
+    ag_time_c.color = 0x00B300      
+    ag_score_c.text = "0"
+    ag_score_c.color = 0xFFFFFF
+    ag_hiscore.color = 0x00B3B3
+    ag_hiscore_c.color = 0xB30000
 
-	# local variables
-	labels_are_visible = False
-	blink_timer = time.time()
-	blink_period = 0
-	ball_scored = False
-	beam_broken = False
-	time_beam_restored = time.time()
-	saved_hiscore = get_set_hiscore()
-	ag_hiscore_c.text = saved_hiscore
-	game_time = 60
-	current_time = 0
-	can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
-	hiscore_beaten = False
+    # local variables
+    labels_are_visible = False
+    blink_timer = time.time()
+    blink_period = 0
+    ball_scored = False
+    beam_broken = False
+    time_beam_restored = time.time()
+    saved_hiscore = get_set_hiscore()
+    ag_hiscore_c.text = saved_hiscore
+    game_time = 60
+    current_time = 0
+    can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
+    hiscore_beaten = False
 
-	# center the hiscore and hiscore text
-	if int(saved_hiscore) <= 9:
-		ag_hiscore.x = 7
-		ag_hiscore_c.x = 52
-	elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
-		ag_hiscore.x = 4
-		ag_hiscore_c.x = 49
-	elif int(saved_hiscore) >= 100:
-		ag_hiscore.x = 1
-		ag_hiscore_c.x = 46
+    # center the hiscore and hiscore text
+    if int(saved_hiscore) <= 9:
+        ag_hiscore.x = 7
+        ag_hiscore_c.x = 52
+    elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
+        ag_hiscore.x = 4
+        ag_hiscore_c.x = 49
+    elif int(saved_hiscore) >= 100:
+        ag_hiscore.x = 1
+        ag_hiscore_c.x = 46
 
-	# center the time value text
-	if int(ag_time_c.text) <= 9:
-		ag_time_c.x = 11
-	elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-		ag_time_c.x = 8
+    # center the time value text
+    if int(ag_time_c.text) <= 9:
+        ag_time_c.x = 11
+    elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
+        ag_time_c.x = 8
 
-	# center the score value text
-	if int(ag_score_c.text) <= 9:
-		ag_score_c.x = 43
-	elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-		ag_score_c.x = 40
-	elif int(ag_score_c.text) >= 100:
-		ag_score_c.x = 37
+    # center the score value text
+    if int(ag_score_c.text) <= 9:
+        ag_score_c.x = 43
+    elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
+        ag_score_c.x = 40
+    elif int(ag_score_c.text) >= 100:
+        ag_score_c.x = 37
 
-	display.show(arcade_group)
-	time.sleep(1)
+    display.show(arcade_group)
+    time.sleep(1)
 
-	# play the whistle audio file
-	while not speaker.playing:
-		mp3stream.file = open(audio_file["whistle"], "rb")
-		speaker.play(mp3stream)
+    # play the whistle audio file
+    while not speaker.playing:
+        mp3stream.file = open(audio_file["whistle"], "rb")
+        speaker.play(mp3stream)
 
-	game_start_time = time.time()
+    game_start_time = time.time()
 
-	while screen_state == screen_states[2]:
-		# update the time left in the round
-		ag_time_c.text = str(game_time - int(time.time() - game_start_time))
+    while screen_state == screen_states[2]:
+        # update the time left in the round
+        ag_time_c.text = str(game_time - int(time.time() - game_start_time))
 
-		# difference between the saved high score and the game score
-		score_diff = int(saved_hiscore) - int(ag_score_c.text)
+        # difference between the saved high score and the game score
+        score_diff = int(saved_hiscore) - int(ag_score_c.text)
 
-		# center the time value text
-		if int(ag_time_c.text) <= 9:
-			ag_time_c.x = 11
-		elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-			ag_time_c.x = 8
+        # center the time value text
+        if int(ag_time_c.text) <= 9:
+            ag_time_c.x = 11
+        elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
+            ag_time_c.x = 8
 
-		# check if the beam has been broken, a ball has been scored
-		beam_broken = True if break_beam.value == 0 else False
+        # check if the beam has been broken, a ball has been scored
+        beam_broken = True if break_beam.value == 0 else False
 
-		if beam_broken and not ball_scored:
-			# increment the score if conditions are met
-			if time.time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
-				# if the time is less than 0.3, this should indicate an invalid score
-				# time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
-				pass
-			else:
-				ag_score_c.text = str(int(ag_score_c.text) + 1)
-				# set score tracker variable to True
-				ball_scored = True
-		elif not beam_broken:
-			if ball_scored:
-				time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
-				ball_scored = False
+        if beam_broken and not ball_scored:
+            # increment the score if conditions are met
+            if time.time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
+                # if the time is less than 0.3, this should indicate an invalid score
+                # time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
+                pass
+            else:
+                ag_score_c.text = str(int(ag_score_c.text) + 1)
+                # set score tracker variable to True
+                ball_scored = True
+        elif not beam_broken:
+            if ball_scored:
+                time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
+                ball_scored = False
 
-		# center the score value text
-		if int(ag_score_c.text) <= 9:
-			ag_score_c.x = 43
-		elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-			ag_score_c.x = 40
-		elif int(ag_score_c.text) >= 100:
-			ag_score_c.x = 37
+        # center the score value text
+        if int(ag_score_c.text) <= 9:
+            ag_score_c.x = 43
+        elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
+            ag_score_c.x = 40
+        elif int(ag_score_c.text) >= 100:
+            ag_score_c.x = 37
 
-		# bonus time
-		if can_do_bonus:
-			if score_diff <= 5 and score_diff >= 0: # game score is 5 points or less away from the hiscore
-				# blink the hiscore title and hiscore count
-				if time.time() >= blink_timer + blink_period:
-					blink_timer = time.time()
-					if labels_are_visible:
-						labels_are_visible = False
-						blink_period = 1
-						ag_hiscore.color = 0x000000
-						ag_hiscore_c.color = 0x000000
-					else:
-						labels_are_visible = True
-						blink_period = 1
-						ag_hiscore.color = 0x00B3B3
-						ag_hiscore_c.color = 0xB30000
+        # bonus time
+        if can_do_bonus:
+            if score_diff <= 5 and score_diff >= 0: # game score is 5 points or less away from the hiscore
+                # blink the hiscore title and hiscore count
+                if time.time() >= blink_timer + blink_period:
+                    blink_timer = time.time()
+                    if labels_are_visible:
+                        labels_are_visible = False
+                        blink_period = 1
+                        ag_hiscore.color = 0x000000
+                        ag_hiscore_c.color = 0x000000
+                    else:
+                        labels_are_visible = True
+                        blink_period = 1
+                        ag_hiscore.color = 0x00B3B3
+                        ag_hiscore_c.color = 0xB30000
 
-			if score_diff < 0 and not hiscore_beaten and int(ag_time_c.text) < 31: # hiscore has been beaten and was not beaten before in this game
-				hiscore_beaten = True
+            if score_diff < 0 and not hiscore_beaten and int(ag_time_c.text) < 31: # hiscore has been beaten and was not beaten before in this game
+                hiscore_beaten = True
 
-				# stop any previously playing audio
-				if speaker.playing:
-					speaker.stop()
+                # stop any previously playing audio
+                if speaker.playing:
+                    speaker.stop()
 
-				# play the hiscore audio
-				while not speaker.playing:
-					mp3stream.file = open(audio_file["hiscore"], "rb")
-					speaker.play(mp3stream)
+                # play the hiscore audio
+                while not speaker.playing:
+                    mp3stream.file = open(audio_file["hiscore"], "rb")
+                    speaker.play(mp3stream)
 
-				# change score value color to pink
-				ag_hiscore.color = 0x00B3B3 # in case the color was set to black before after blinking
-				ag_hiscore_c.color = 0xB30000
-				ag_score_c.color = 0xB3005A
+                # change score value color to pink
+                ag_hiscore.color = 0x00B3B3 # in case the color was set to black before after blinking
+                ag_hiscore_c.color = 0xB30000
+                ag_score_c.color = 0xB3005A
 
-				# add time if the score was beaten in set times
-				if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
-					game_time += 30
-				elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
-					game_time += 20
-				elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
-					game_time += 10
+                # add time if the score was beaten in set times
+                if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
+                    game_time += 30
+                elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
+                    game_time += 20
+                elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
+                    game_time += 10
 
-				# go to the bonus time screen for 10 seconds
-				ag_time_c.text, ag_score_c.text = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
-				display.show(arcade_group) # show arcade group after return
+                # go to the bonus time screen for 10 seconds
+                ag_time_c.text, ag_score_c.text = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
+                display.show(arcade_group) # show arcade group after return
 
-		# change the time value's color and RGB lights depending on time left in game
-		if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
-			ag_time_c.color = 0x00B300
-			if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
-				current_time = int(ag_time_c.text)
-				leds.fill((0, 255, 0))
-			elif int(ag_time_c.text) != current_time:
-				current_time = int(ag_time_c.text)
-				leds.fill((0, 0, 0))
+        # change the time value's color and RGB lights depending on time left in game
+        if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
+            ag_time_c.color = 0x00B300
+            if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
+                current_time = int(ag_time_c.text)
+                leds.fill((0, 255, 0))
+            elif int(ag_time_c.text) != current_time:
+                current_time = int(ag_time_c.text)
+                leds.fill((0, 0, 0))
 
-		elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
-			ag_time_c.color = 0xB3B300
-			if int(ag_time_c.text) == 11:
-				# stop any previously playing audio
-				if speaker.playing:
-					speaker.stop()
-				# play the countdown audio file
-				mp3stream.file = open(audio_file["countdown"], "rb")
-				speaker.play(mp3stream)
-			if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
-				current_time = int(ag_time_c.text)
-				leds.fill((255, 255, 0))
-			elif int(ag_time_c.text) != current_time:
-				current_time = int(ag_time_c.text)
-				leds.fill((0, 0, 0))
+        elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
+            ag_time_c.color = 0xB3B300
+            if int(ag_time_c.text) == 11:
+                # stop any previously playing audio
+                if speaker.playing:
+                    speaker.stop()
+                # play the countdown audio file
+                mp3stream.file = open(audio_file["countdown"], "rb")
+                speaker.play(mp3stream)
+            if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
+                current_time = int(ag_time_c.text)
+                leds.fill((255, 255, 0))
+            elif int(ag_time_c.text) != current_time:
+                current_time = int(ag_time_c.text)
+                leds.fill((0, 0, 0))
 
-		elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
-			ag_time_c.color = 0xB30000
-			if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
-				current_time = int(ag_time_c.text)
-				leds.fill((255, 0, 0))
-			elif int(ag_time_c.text) != current_time:
-				current_time = int(ag_time_c.text)
-				leds.fill((0, 0, 0))
+        elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
+            ag_time_c.color = 0xB30000
+            if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
+                current_time = int(ag_time_c.text)
+                leds.fill((255, 0, 0))
+            elif int(ag_time_c.text) != current_time:
+                current_time = int(ag_time_c.text)
+                leds.fill((0, 0, 0))
 
-		# update the hiscore value if the score is greater than the current hiscore value
-		if int(ag_score_c.text) > int(saved_hiscore):
-			highest_score = ag_score_c.text
-			if not hiscore_beaten and int(ag_time_c.text) >= 31:
-				hiscore_beaten = True
-				ag_hiscore.color = 0x00B3B3 # in case the color was set to black before - after blinking
-				ag_hiscore_c.color = 0xB30000
-				# stop any previously playing audio
-				if speaker.playing:
-					 speaker.stop()
-				# play the hiscore audio
-				while not speaker.playing:
-					mp3stream.file = open(audio_file["hiscore"], "rb")
-					speaker.play(mp3stream)
+        # update the hiscore value if the score is greater than the current hiscore value
+        if int(ag_score_c.text) > int(saved_hiscore):
+            highest_score = ag_score_c.text
+            if not hiscore_beaten and int(ag_time_c.text) >= 31:
+                hiscore_beaten = True
+                ag_hiscore.color = 0x00B3B3 # in case the color was set to black before - after blinking
+                ag_hiscore_c.color = 0xB30000
+                # stop any previously playing audio
+                if speaker.playing:
+                        speaker.stop()
+                # play the hiscore audio
+                while not speaker.playing:
+                    mp3stream.file = open(audio_file["hiscore"], "rb")
+                    speaker.play(mp3stream)
 
-		# exit the game when the time is up
-		if int(ag_time_c.text) <= 0:
-			time.sleep(1) # allows the time value of 0 to be seen
-			if int(highest_score) > int(saved_hiscore): # hiscore was beaten
-				screen_state = screen_states[3]
-				get_set_hiscore(value = ag_score_c.text) # save the hiscore
-			else: # hiscore was not beaten
-				screen_state = screen_states[4]
+        # exit the game when the time is up
+        if int(ag_time_c.text) <= 0:
+            time.sleep(1) # allows the time value of 0 to be seen
+            if int(highest_score) > int(saved_hiscore): # hiscore was beaten
+                screen_state = screen_states[3]
+                get_set_hiscore(value = ag_score_c.text) # save the hiscore
+            else: # hiscore was not beaten
+                screen_state = screen_states[4]
 
 def arcade_bonus_screen(game_time, game_start_time, score):
-	# set label properties
-	ag_bt_score_c.text = score
-	ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
-	ag_bt_score_c.color = 0xFFC0CB
+    # set label properties
+    ag_bt_score_c.text = score
+    ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
+    ag_bt_score_c.color = 0xFFC0CB
 
-	# show the bonus time group
-	display.show(arcade_bt_group)
+    # show the bonus time group
+    display.show(arcade_bt_group)
 
-	# variables
-	labels_are_visible = False
-	blink_timer = time.time()
-	blink_period = 1
-	bt_start_time = time.time()
-	bt_stay_time = 10
-	current_time = 0
-	ball_scored = False
-	beam_broken = False
-	time_beam_restored = time.time()
+    # variables
+    labels_are_visible = False
+    blink_timer = time.time()
+    blink_period = 1
+    bt_start_time = time.time()
+    bt_stay_time = 10
+    current_time = 0
+    ball_scored = False
+    beam_broken = False
+    time_beam_restored = time.time()
 
-	# stay in bonus time screen for time (seconds) specified in stay_time
-	while time.time() < bt_start_time + bt_stay_time:
-		rainbow.animate()
-		# update the time
-		ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
+    # stay in bonus time screen for time (seconds) specified in stay_time
+    while time.time() < bt_start_time + bt_stay_time:
+        rainbow.animate()
+        # update the time
+        ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
 
-		# center the time value text
-		if int(ag_bt_time_c.text) <= 9:
-			ag_bt_time_c.x = 11
-		elif int(ag_bt_time_c.text) >= 10 and int(ag_bt_time_c.text) <= 60:
-			ag_bt_time_c.x = 8
+        ag_bt_score_c.color = 0xFFC0CB
 
-		# center the score value text
-		if int(ag_bt_score_c.text) <= 9:
-			ag_bt_score_c.x = 43
-		elif int(ag_bt_score_c.text) >= 10 and int(ag_bt_score_c.text) <= 99:
-			ag_bt_score_c.x = 40
-		elif int(ag_bt_score_c.text) >= 100:
-			ag_bt_score_c.x = 37
+        # center the time value text
+        if int(ag_bt_time_c.text) <= 9:
+            ag_bt_time_c.x = 11
+        elif int(ag_bt_time_c.text) >= 10 and int(ag_bt_time_c.text) <= 60:
+            ag_bt_time_c.x = 8
 
-		# check if the beam has been broken, a ball has been scored
-		beam_broken = True if break_beam.value == 0 else False
+        # center the score value text
+        if int(ag_bt_score_c.text) <= 9:
+            ag_bt_score_c.x = 43
+        elif int(ag_bt_score_c.text) >= 10 and int(ag_bt_score_c.text) <= 99:
+            ag_bt_score_c.x = 40
+        elif int(ag_bt_score_c.text) >= 100:
+            ag_bt_score_c.x = 37
 
-		if beam_broken and not ball_scored:
-			# increment the score if conditions are met
-			if time.time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
-				# if the time is less than 0.3, this should indicate an invalid score
-				# time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
- 				pass
-			else:
-				ag_bt_score_c.text = str(int(ag_bt_score_c.text) + 1)
-				# set score tracker variable to True
-				ball_scored = True
-		elif not beam_broken:
-			if ball_scored:
-				time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
-				ball_scored = False
+        # check if the beam has been broken, a ball has been scored
+        beam_broken = True if break_beam.value == 0 else False
 
-		# blink the bonus time text
-		if time.time() >= blink_timer + blink_period:
-			blink_timer = time.time()
-			if labels_are_visible:
-				labels_are_visible = False
-				blink_period = 1
-				ag_bt_bonus.color = 0x000000
-				ag_bt_bonus_t.color = 0x000000
-			else:
-				labels_are_visible = True
-				blink_period = 1
-				ag_bt_bonus.color = 0x5A00B3
-				ag_bt_bonus_t.color = 0x5A00B3
+        if beam_broken and not ball_scored:
+            # increment the score if conditions are met
+            if time.time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
+                # if the time is less than 0.3, this should indicate an invalid score
+                # time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
+                pass
+            else:
+                ag_bt_score_c.text = str(int(ag_bt_score_c.text) + 1)
+                # set score tracker variable to True
+                ball_scored = True
+        elif not beam_broken:
+            if ball_scored:
+                time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
+                ball_scored = False
 
-		# change the time value's color and RGB lights depending on time left in game
-		if int(ag_bt_time_c.text) <= 60 and int(ag_bt_time_c.text) >= 21:
-			ag_bt_time_c.color = 0x00B300
-		if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
-			current_time = int(ag_bt_time_c.text)
-			leds.fill((0, 255, 0))
-		elif int(ag_bt_time_c.text) != current_time:
-			current_time = int(ag_bt_time_c.text)
-			leds.fill((0, 0, 0))
+        # blink the bonus time text
+        if time.time() >= blink_timer + blink_period:
+            blink_timer = time.time()
+            if labels_are_visible:
+                labels_are_visible = False
+                blink_period = 1
+                ag_bt_bonus.color = 0x000000
+                ag_bt_bonus_t.color = 0x000000
+            else:
+                labels_are_visible = True
+                blink_period = 1
+                ag_bt_bonus.color = 0x5A00B3
+                ag_bt_bonus_t.color = 0x5A00B3
 
-		elif int(ag_bt_time_c.text) <= 20 and int(ag_bt_time_c.text) >= 11:
-			ag_bt_time_c.color = 0xB3B300
-		if int(ag_bt_time_c.text) == 11:
-			# stop any previously playing audio
-			if speaker.playing:
-				speaker.stop()
-			# play the countdown audio file
-			mp3stream.file = open(audio_file["countdown"], "rb")
-			speaker.play(mp3stream)
-		if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
-			current_time = int(ag_bt_time_c.text)
-			leds.fill((255, 255, 0))
-		elif int(ag_bt_time_c.text) != current_time:
-			current_time = int(ag_bt_time_c.text)
-			leds.fill((0, 0, 0))
+        # change the time value's color and RGB lights depending on time left in game
+        if int(ag_bt_time_c.text) <= 60 and int(ag_bt_time_c.text) >= 21:
+            ag_bt_time_c.color = 0x00B300
+        if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
+            current_time = int(ag_bt_time_c.text)
+            leds.fill((0, 255, 0))
+        elif int(ag_bt_time_c.text) != current_time:
+            current_time = int(ag_bt_time_c.text)
+            leds.fill((0, 0, 0))
 
-	return ag_bt_time_c.text, ag_bt_score_c.text
+        elif int(ag_bt_time_c.text) <= 20 and int(ag_bt_time_c.text) >= 11:
+            ag_bt_time_c.color = 0xB3B300
+        if int(ag_bt_time_c.text) == 11:
+            # stop any previously playing audio
+            if speaker.playing:
+                speaker.stop()
+            # play the countdown audio file
+            mp3stream.file = open(audio_file["countdown"], "rb")
+            speaker.play(mp3stream)
+        if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
+            current_time = int(ag_bt_time_c.text)
+            leds.fill((255, 255, 0))
+        elif int(ag_bt_time_c.text) != current_time:
+            current_time = int(ag_bt_time_c.text)
+            leds.fill((0, 0, 0))
+
+    return ag_bt_time_c.text, ag_bt_score_c.text
 
 def game_over_screen():
 	global screen_state
