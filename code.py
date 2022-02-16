@@ -312,7 +312,7 @@ break_beam.pull = digitalio.Pull.UP
 led_pin = board.D25
 num_leds = 54
 leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20)
-rainbow_sparkle = RainbowSparkle(leds, speed = 0.15, period = 3, num_sparkles = 27, precompute_rainbow = True)
+rainbow_sparkle = RainbowSparkle(leds, speed = 0.15, period = 3, num_sparkles = 27, precompute_rainbow = False)
 solid = Solid(leds, color = WHITE)
 
 # variables
@@ -350,7 +350,7 @@ def start_screen():
 
 	while screen_state == screen_states[1]:
 		# LED animation
-		# rainbow_sparkle.animate()
+		rainbow_sparkle.animate()
 
 		# play the space_jam audio file
 		if not speaker.playing:
