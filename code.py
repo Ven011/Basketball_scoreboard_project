@@ -332,90 +332,92 @@ screen_state = "start_screen"
 highest_score = "0"
 
 def start_screen():
-	global screen_state, highest_score
+    global screen_state, highest_score
 
-	# stop any previously playing audio
-	if speaker.playing:
-		speaker.stop()
+    # stop any previously playing audio
+    if speaker.playing:
+        speaker.stop()
 
-	# local variables
-	labels_are_visible = False # if False show text, if True hide text
-	reset_score_v = 0
-	reset_score_t = 0
-	blink_timer = 0
-	blink_period = 0
+    # local variables
+    labels_are_visible = False # if False show text, if True hide text
+    reset_score_v = 0
+    reset_score_t = 0
+    blink_timer = 0
+    blink_period = 0
 
-	display.show(start_group)
-	time.sleep(1)
+    # create copy of space jame audio file
+    mp3stream.file = open(audio_file["space_jam"], "rb")
 
-	while screen_state == screen_states[1]:
-		# LED animation
-		rainbow_sparkle.animate()
+    display.show(start_group)
+    time.sleep(1)
 
-		# play the space_jam audio file
-		if not speaker.playing:
-			mp3stream.file = open(audio_file["space_jam"], "rb")
-			speaker.play(mp3stream)
+    while screen_state == screen_states[1]:
+        # LED animation
+        rainbow_sparkle.animate()
 
-		# blink the 1p arcade and 2p h.o.r.s.e text
-		if time.time() >= blink_timer + blink_period:
-			blink_timer = time.time()
-			if labels_are_visible:
-				labels_are_visible = False
-				blink_period = 1
-				sg_1p.color = 0x000000
-				sg_arcade.color = 0x000000
-				sg_2p.color = 0x000000
-				sg_h.color = 0x000000
-				sg_o.color = 0x000000
-				sg_r.color = 0x000000
-				sg_s.color = 0x000000
-				sg_e.color = 0x000000
-			else:
-				labels_are_visible = True
-				blink_period = 2
-				sg_1p.color = 0x00B3B3
-				sg_arcade.color = 0xFFFFFF
-				sg_2p.color = 0xB300B3
-				sg_h.color = 0xFFFFFF
-				sg_o.color = 0xFFFFFF
-				sg_r.color = 0xFFFFFF
-				sg_s.color = 0xFFFFFF
-				sg_e.color = 0xFFFFFF
+        # play the space_jam audio file
+        if not speaker.playing:
+            speaker.play(mp3stream)
 
-		# reset the hiscore if the button is held for 5 seconds
-		if not button_1.value and not button_states[1]:
-			reset_score_v = time.time()
-			button_states[1] = True
-			while not button_1.value:
-				reset_score_t = time.time() - reset_score_v
-				if reset_score_t == 5:
-					ag_hiscore_c.text = "0"
-					highest_score = "0"
-					get_set_hiscore(value = "0")
-					solid.animate() # indicate that the hiscore has been reset
-					button_states[1] = False # allow the button state to be changed to True after reset
-					reset_score_v = -1 # to be used to prevent entry to game after the 5 seconds
-					break
+        # blink the 1p arcade and 2p h.o.r.s.e text
+        if time.time() >= blink_timer + blink_period:
+            blink_timer = time.time()
+            if labels_are_visible:
+                labels_are_visible = False
+                blink_period = 1
+                sg_1p.color = 0x000000
+                sg_arcade.color = 0x000000
+                sg_2p.color = 0x000000
+                sg_h.color = 0x000000
+                sg_o.color = 0x000000
+                sg_r.color = 0x000000
+                sg_s.color = 0x000000
+                sg_e.color = 0x000000
+            else:
+                labels_are_visible = True
+                blink_period = 2
+                sg_1p.color = 0x00B3B3
+                sg_arcade.color = 0xFFFFFF
+                sg_2p.color = 0xB300B3
+                sg_h.color = 0xFFFFFF
+                sg_o.color = 0xFFFFFF
+                sg_r.color = 0xFFFFFF
+                sg_s.color = 0xFFFFFF
+                sg_e.color = 0xFFFFFF
 
-		# change the state to arcade_screen when button 1 is pressed
-		if button_states[1] and reset_score_v != -1:
-			button_states[1] = False
-			screen_state = screen_states[2] # breaks out of the loop
+        # reset the hiscore if the button is held for 5 seconds
+        if not button_1.value and not button_states[1]:
+            reset_score_v = time.time()
+            button_states[1] = True
+            while not button_1.value:
+                reset_score_t = time.time() - reset_score_v
+                if reset_score_t == 5:
+                    ag_hiscore_c.text = "0"
+                    highest_score = "0"
+                    get_set_hiscore(value = "0")
+                    solid.animate() # indicate that the hiscore has been reset
+                    button_states[1] = False # allow the button state to be changed to True after reset
+                    reset_score_v = -1 # to be used to prevent entry to game after the 5 seconds
+                    break
 
-		# button_2 debounce and change the state to horse_screen
-		if not button_2.value and not button_states[2]:
-			button_states[2] = True
+        # change the state to arcade_screen when button 1 is pressed
+        if button_states[1] and reset_score_v != -1:
+            button_states[1] = False
+            screen_state = screen_states[2] # breaks out of the loop
+
+        # button_2 debounce and change the state to horse_screen
+        if not button_2.value and not button_states[2]:
+            button_states[2] = True
 
 def arcade_bonus_screen(game_time, game_start_time, score):
     # set label properties
     ag_bt_score_c.text = score
     ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
     ag_bt_score_c.color = 0xFFC0CB
-    
+
     # show the bonus time group
     display.show(arcade_bt_group)
-    
+
     # variables
     bt_start_time = time.time()
     bt_stay_time = 10
@@ -426,7 +428,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     ball_scored = False
     beam_broken = False
     time_beam_restored = time.time()
-    
+
     # stay in bonus time screen for time (seconds) specified in stay_time
     while time.time() < bt_start_time + bt_stay_time:
         # rainbow_sparkle.animate()
