@@ -451,6 +451,7 @@ def arcade_screen():
     current_time = 0
     can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
     hiscore_beaten = False
+    prev_time = 60
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -489,7 +490,13 @@ def arcade_screen():
 
     while screen_state == screen_states[2]:
         # update the time left in the round
-        ag_time_c.text = str(game_time - int(time.time() - game_start_time))
+        calc = game_time - int(time.time() - game_start_time)
+        # make sure that the time is calculated correctly
+        if calc == prev_time - 1:
+            prev_time = calc
+            ag_time_c.text = str(calc)
+        else:
+            ag_time_c.text = str(prev_time)
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
