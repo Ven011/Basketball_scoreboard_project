@@ -134,7 +134,7 @@ ag_bt_score.y = 4
 
 ag_bt_score_c = label.Label(font_virtual_pet_sans, text = "", color = 0xFFC0CB)
 ag_bt_score_c.x = 43
-ag_bt_score_c.y = 16s
+ag_bt_score_c.y = 16
 
 ag_bt_bonus = label.Label(font_virtual_pet_sans, text = "BONUS", color = 0x5A00B3)
 ag_bt_bonus.x = 4
