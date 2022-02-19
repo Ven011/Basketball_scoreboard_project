@@ -3,7 +3,7 @@ from adafruit_display_text import label
 from adafruit_led_animation.animation.blink import Blink
 from adafruit_led_animation.animation.rainbow import Rainbow
 from adafruit_led_animation.animation.solid import Solid
-from adafruit_led_animation.color import WHITE, JADE
+from adafruit_led_animation.color import WHITE, RED, YELLOW, GREEN, BLACK
 import audioio
 import audiomp3
 import board
@@ -318,7 +318,11 @@ led_pin = board.D25
 num_leds = 54
 leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20, auto_write = True)
 rainbow = Rainbow(leds, speed = 0.1, period = 2, step = 1, precompute_rainbow = True)
-solid = Solid(leds, color = WHITE)
+solid_white = Solid(leds, color = WHITE)
+solid_yellow = Solid(leds, color = YELLOW)
+solid_red = Solid(leds, color = RED)
+solid_green = Solid(leds, color = GREEN)
+solid_black = Solid(leds, color = BLACK)
 #blink = Blink(pixels, speed = 0.5, color = JADE)
 
 # variables
@@ -408,7 +412,7 @@ def start_screen():
                     ag_hiscore_c.text = "0"
                     highest_score = "0"
                     get_set_hiscore(value = "0")
-                    solid.animate() # indicate that the hiscore has been reset
+                    solid_white.animate() # indicate that the hiscore has been reset
                     button_states[1] = False # allow the button state to be changed to True after reset
                     reset_score_v = -1 # to be used to prevent entry to game after the 5 seconds
                     time.sleep(1)
@@ -584,10 +588,10 @@ def arcade_screen():
             ag_time_c.color = 0x00B300
             if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
                 current_time = int(ag_time_c.text)
-                leds.fill((0, 255, 0))
+                solid_green.animate()
             elif int(ag_time_c.text) != current_time:
                 current_time = int(ag_time_c.text)
-                leds.fill((0, 0, 0))
+                solid_green.animate()
 
         elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
             ag_time_c.color = 0xB3B300
@@ -600,19 +604,19 @@ def arcade_screen():
                 speaker.play(mp3stream)
             if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
                 current_time = int(ag_time_c.text)
-                leds.fill((255, 255, 0))
+                solid_yellow.animate()
             elif int(ag_time_c.text) != current_time:
                 current_time = int(ag_time_c.text)
-                leds.fill((0, 0, 0))
+                solid_yellow.animate()
 
         elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
             ag_time_c.color = 0xB30000
             if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
                 current_time = int(ag_time_c.text)
-                leds.fill((255, 0, 0))
+                solid_red.animate()
             elif int(ag_time_c.text) != current_time:
                 current_time = int(ag_time_c.text)
-                leds.fill((0, 0, 0))
+                solid_red.animate()
 
         # update the hiscore value if the score is greater than the current hiscore value
         if int(ag_score_c.text) > int(saved_hiscore):
@@ -717,10 +721,10 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             ag_bt_time_c.color = 0x00B300
         if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
             current_time = int(ag_bt_time_c.text)
-            leds.fill((0, 255, 0))
+            solid_green.animate()
         elif int(ag_bt_time_c.text) != current_time:
             current_time = int(ag_bt_time_c.text)
-            leds.fill((0, 0, 0))
+            solid_green.animate()
 
         elif int(ag_bt_time_c.text) <= 20 and int(ag_bt_time_c.text) >= 11:
             ag_bt_time_c.color = 0xB3B300
@@ -733,10 +737,10 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             speaker.play(mp3stream)
         if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
             current_time = int(ag_bt_time_c.text)
-            leds.fill((255, 255, 0))
+            solid_yellow.animate()
         elif int(ag_bt_time_c.text) != current_time:
             current_time = int(ag_bt_time_c.text)
-            leds.fill((0, 0, 0))
+            solid_yellow.animate()
 
     return ag_bt_time_c.text, ag_bt_score_c.text
 
