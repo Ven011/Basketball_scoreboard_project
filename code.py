@@ -132,7 +132,7 @@ ag_bt_score = label.Label(font_ozone, text = "SCORE", color = 0x0000B3)
 ag_bt_score.x = 29
 ag_bt_score.y = 4
 
-ag_bt_score_c = label.Label(font_virtual_pet_sans, text = "", color = 0xFFC0CB)
+ag_bt_score_c = label.Label(font_virtual_pet_sans, text = "", color = 0xB3005A)
 ag_bt_score_c.x = 43
 ag_bt_score_c.y = 16
 
@@ -656,7 +656,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     # set label properties
     ag_bt_score_c.text = score
     ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
-    ag_bt_score_c.color = 0xFFC0CB
+    ag_bt_score_c.color = 0xB3005A
 
     # show the bonus time group
     display.show(arcade_bt_group)
@@ -678,7 +678,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
         # update the time
         ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
 
-        ag_bt_score_c.color = 0xFFC0CB
+        ag_bt_score_c.color = 0xB3005A
 
         # center the time value text
         if int(ag_bt_time_c.text) <= 9:
