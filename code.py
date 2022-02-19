@@ -637,7 +637,7 @@ def arcade_screen():
                 ag_hiscore_c.color = 0xB30000
                 # stop any previously playing audio
                 if speaker.playing:
-                        speaker.stop()
+                    speaker.stop()
                 # play the hiscore audio
                 while not speaker.playing:
                     mp3stream.file = open(audio_file["hiscore"], "rb")
