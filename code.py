@@ -601,7 +601,7 @@ def arcade_screen():
                 solid_green.animate()
             elif int(ag_time_c.text) != current_time:
                 current_time = int(ag_time_c.text)
-                solid_green.animate()
+                solid_black.animate()
 
         elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
             ag_time_c.color = 0xB3B300
@@ -617,7 +617,7 @@ def arcade_screen():
                 solid_yellow.animate()
             elif int(ag_time_c.text) != current_time:
                 current_time = int(ag_time_c.text)
-                solid_yellow.animate()
+                solid_black.animate()
 
         elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
             ag_time_c.color = 0xB30000
@@ -626,7 +626,7 @@ def arcade_screen():
                 solid_red.animate()
             elif int(ag_time_c.text) != current_time:
                 current_time = int(ag_time_c.text)
-                solid_red.animate()
+                solid_black.animate()
 
         # update the hiscore value if the score is greater than the current hiscore value
         if int(ag_score_c.text) > int(saved_hiscore):
@@ -734,7 +734,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             solid_green.animate()
         elif int(ag_bt_time_c.text) != current_time:
             current_time = int(ag_bt_time_c.text)
-            solid_green.animate()
+            solid_black.animate()
 
         elif int(ag_bt_time_c.text) <= 20 and int(ag_bt_time_c.text) >= 11:
             ag_bt_time_c.color = 0xB3B300
@@ -750,7 +750,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             solid_yellow.animate()
         elif int(ag_bt_time_c.text) != current_time:
             current_time = int(ag_bt_time_c.text)
-            solid_yellow.animate()
+            solid_black.animate()
 
     return ag_bt_time_c.text, ag_bt_score_c.text
 
