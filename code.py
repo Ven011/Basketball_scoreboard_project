@@ -347,6 +347,16 @@ def start_screen():
     # stop any previously playing audio
     if speaker.playing:
         speaker.stop()
+        
+    # set screen properties
+    sg_1p.color = 0x00B3B3
+    sg_arcade.color = 0xFFFFFF
+    sg_2p.color = 0xB300B3
+    sg_h.color = 0xFFFFFF
+    sg_o.color = 0xFFFFFF
+    sg_r.color = 0xFFFFFF
+    sg_s.color = 0xFFFFFF
+    sg_e.color = 0xFFFFFF
 
     # local variables
     labels_are_visible = False # if False show text, if True hide text
