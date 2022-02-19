@@ -671,28 +671,26 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     ball_scored = False
     beam_broken = False
     time_beam_restored = time.time()
+	
+    # center the time value text
+    if int(ag_bt_time_c.text) <= 9:
+        ag_bt_time_c.x = 11
+    elif int(ag_bt_time_c.text) >= 10 and int(ag_bt_time_c.text) <= 60:
+        ag_bt_time_c.x = 8
+
+    # center the score value text
+    if int(ag_bt_score_c.text) <= 9:
+        ag_bt_score_c.x = 43
+    elif int(ag_bt_score_c.text) >= 10 and int(ag_bt_score_c.text) <= 99:
+        ag_bt_score_c.x = 40
+    elif int(ag_bt_score_c.text) >= 100:
+        ag_bt_score_c.x = 37
 
     # stay in bonus time screen for time (seconds) specified in stay_time
     while time.time() < bt_start_time + bt_stay_time:
         rainbow.animate()
         # update the time
         ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
-
-        ag_bt_score_c.color = 0xB3005A
-
-        # center the time value text
-        if int(ag_bt_time_c.text) <= 9:
-            ag_bt_time_c.x = 11
-        elif int(ag_bt_time_c.text) >= 10 and int(ag_bt_time_c.text) <= 60:
-            ag_bt_time_c.x = 8
-
-        # center the score value text
-        if int(ag_bt_score_c.text) <= 9:
-            ag_bt_score_c.x = 43
-        elif int(ag_bt_score_c.text) >= 10 and int(ag_bt_score_c.text) <= 99:
-            ag_bt_score_c.x = 40
-        elif int(ag_bt_score_c.text) >= 100:
-            ag_bt_score_c.x = 37
 
         # check if the beam has been broken, a ball has been scored
         beam_broken = True if break_beam.value == 0 else False
