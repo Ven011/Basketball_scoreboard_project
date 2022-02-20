@@ -92,7 +92,7 @@ start_time = time.time()
 
 while True:
     if time.time() >= start_time + 10:
-        solid.animate()
+        time.sleep(0.5)
         start_time = time.time()
         score += 1
         
