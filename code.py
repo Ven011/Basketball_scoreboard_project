@@ -12,6 +12,7 @@ import framebufferio
 import neopixel
 import rgbmatrix
 import time
+from random import randint
 
 # RGBMatrix
 displayio.release_displays()
@@ -91,8 +92,7 @@ start_time = time.time()
 
 while True:
     if time.time() >= start_time + 10:
-        mp3stream.file = open(audio_file["countdown"], "rb")
-        speaker.play(mp3stream)
+        leds.fill((randint(0, 255), randint(0, 255), randint(0, 255)))
         start_time = time.time()
         score += 1
         
