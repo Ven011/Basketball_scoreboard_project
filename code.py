@@ -2,7 +2,7 @@ from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
 from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
 from adafruit_led_animation.animation.solid import Solid
-from adafruit_led_animation.color import WHITE
+from adafruit_led_animation.color import WHITE, BLACK
 import audioio
 import audiomp3
 import board
@@ -84,6 +84,7 @@ num_leds = 54
 leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20)
 rainbow_sparkle = RainbowSparkle(leds, speed = 0.15, period = 3, num_sparkles = 27, precompute_rainbow = True)
 solid = Solid(leds, color = WHITE)
+solid_black = Solid(leds, color = BLACK)
 
 # main loop, run the approriate screen function given the screen state
 display.show(arcade_group)
@@ -94,6 +95,7 @@ mp3stream.file = open(audio_file["whistle"], "rb")
 
 while True:
     if time.time() >= start_time + 10:
+        solid.animate()
         speaker.play(mp3stream)
         display.show(arcade_group)
         start_time = time.time()
