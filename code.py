@@ -1,3 +1,4 @@
+from numpy import minimum
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
 from adafruit_led_animation.animation.rainbowsparkle import RainbowSparkle
@@ -27,7 +28,7 @@ matrix = rgbmatrix.RGBMatrix(
 	latch_pin = board.D0,
 	output_enable_pin = board.D1
 )
-display = framebufferio.FramebufferDisplay(matrix)
+display = framebufferio.FramebufferDisplay(matrix, auto_refresh = False)
 
 # display groups
 arcade_group = displayio.Group()
@@ -97,10 +98,9 @@ while True:
     if time.time() >= start_time + 10:
         solid.animate()
         speaker.play(mp3stream)
-        display.show(arcade_group)
         start_time = time.time()
-        score += 1
-        
-    ag_score_c.text = str(score)
-    ag_score_c.color = 0xFFFFFF
+        score += 1    
+        ag_score_c.text = str(score)
+        ag_score_c.color = 0xFFFFFF
+        display.refresh(target_frames_per_second = 1, minimum_frames_per_second = 0)
     
