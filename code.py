@@ -90,8 +90,12 @@ score = 0
 start_time = time.time()
 
 while True:
-    if time.time() >= start_time + 2:
+    if time.time() >= start_time + 10:
+        mp3stream.file = open(audio_file["countdown"], "rb")
+        speaker.play(mp3stream)
         start_time = time.time()
         score += 1
+        
     ag_score_c.text = str(score)
     ag_score_c.color = 0xFFFFFF
+    
