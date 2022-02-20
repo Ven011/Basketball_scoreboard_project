@@ -504,7 +504,7 @@ def arcade_screen():
 
     while screen_state == screen_states[2]:
         # update the time left in the round
-        ag_time_c.text = game_time - int(time.time() - game_start_time)
+        ag_time_c.text = str(game_time - int(time.time() - game_start_time))
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
