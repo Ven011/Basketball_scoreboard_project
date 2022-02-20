@@ -93,5 +93,5 @@ while True:
     if time.time() >= start_time + 2:
         start_time = time.time()
         score += 1
-    ag_score_c.text = score
+    ag_score_c.text = str(score)
     ag_score_c.color = 0xFFFFFF
