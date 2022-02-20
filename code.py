@@ -90,9 +90,11 @@ display.show(arcade_group)
 score = 0
 start_time = time.time()
 
+mp3stream.file = open(audio_file["whistle"], "rb")
+
 while True:
     if time.time() >= start_time + 10:
-        time.sleep(0.5)
+        speaker.play(mp3stream)
         start_time = time.time()
         score += 1
         
