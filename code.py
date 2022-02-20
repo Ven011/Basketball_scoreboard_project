@@ -101,5 +101,5 @@ while True:
         score += 1    
         ag_score_c.text = str(score)
         ag_score_c.color = 0xFFFFFF
-        display.refresh(target_frames_per_second = 1, minimum_frames_per_second = 0)
+        display.refresh()
     
