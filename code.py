@@ -92,7 +92,7 @@ start_time = time.time()
 
 while True:
     if time.time() >= start_time + 10:
-        leds.fill((randint(0, 255), randint(0, 255), randint(0, 255)))
+        solid.animate()
         start_time = time.time()
         score += 1
         
