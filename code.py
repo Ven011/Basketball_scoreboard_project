@@ -592,7 +592,7 @@ def arcade_screen():
                     game_time += 10
 
                 # go to the bonus time screen for 10 seconds
-                ag_time_c.text, ag_score_c.text, ag_time_c.x, ag_time_c.x = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
+                ag_time_c.text, ag_score_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
                 display.show(arcade_group) # show arcade group after return
 
         # change the time value's color and RGB lights depending on time left in game
