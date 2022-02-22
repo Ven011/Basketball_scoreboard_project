@@ -33,27 +33,35 @@ test_group = displayio.Group()
 font_ozone = bitmap_font.load_font("/fonts/ozone.bdf")
 
 # setup graphics for the start_group
-distance_value = label.Label(font_ozone, text = "0", color = 0x00B300)
-distance_value.x = 3
-distance_value.y = 3
+score_value = label.Label(font_ozone, text = "0", color = 0x00B300)
+score_value.x = 3
+score_value.y = 3
 
 # add graphics to the display groups
-test_group.append(distance_value)
+test_group.append(score_value)
 
 # show the test_group
 display.show(test_group)
 
 # setup distance sensor
-distance_sensor = analogio.AnalogIn(board.A1)
+sensor_1 = digitalio.digitalInOut(board.MOSI)
+sensor_1.direction = digitalio.Direction.Input
 
-highest_distance = 0
+sensor_2 = digitalio.digitalInOut(board.MISO)
+sensor_2.direction = digitalio.Direction.Input
+
+sensors_triggered = 0
+score = 0
 
 while True:
-    voltage = distance_sensor.value*(3.3/65535)
-    distance = int(13 / voltage)
-    
-    if distance > highest_distance:
-        highest_distance = distance
+	if sensor_1.value:
+		sensors_triggered += 1
+	if sensor_2.value:
+		sensors_triggered += 1
+  
+	if sensors_triggered == 2:
+		sensors_triggered = 0
+		score += 1
 
-    distance_value.text = str(highest_distance)
-    time.sleep(0.25)
+	score_value.text = str(score)
+	time.sleep(0.10)
