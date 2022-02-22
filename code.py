@@ -1,13 +1,9 @@
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
-import audioio
-import audiomp3
 import board
 import digitalio
-import analogio
 import displayio
 import framebufferio
-import neopixel
 import rgbmatrix
 import time
 
@@ -44,12 +40,12 @@ test_group.append(score_value)
 display.show(test_group)
 
 # setup distance sensor
-sensor_1 = digitalio.digitalInOut(board.D24)
-sensor_1.direction = digitalio.Direction.Input
+sensor_1 = digitalio.DigitalInOut(board.D24)
+sensor_1.direction = digitalio.Direction.INPUT
 sensor_1.pull = digitalio.Pull.UP
 
-sensor_2 = digitalio.digitalInOut(board.D23)
-sensor_2.direction = digitalio.Direction.Input
+sensor_2 = digitalio.DigitalInOut(board.D23)
+sensor_2.direction = digitalio.Direction.INPUT
 sensor_2.pull = digitalio.Pull.UP
 
 sensors_triggered = 0
@@ -60,7 +56,7 @@ while True:
 		sensors_triggered += 1
 	if not sensor_2.value:
 		sensors_triggered += 1
-  
+
 	if sensors_triggered == 2:
 		sensors_triggered = 0
 		score += 1
