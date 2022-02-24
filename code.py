@@ -52,7 +52,4 @@ sensors_triggered = 0
 score = 0
 
 while True:
-    if not sensor_1.value:
-        score_value.text = "1"
-    else:
-        score_value.text = "0"
+    score_value.text = str(sensor_1.value)
