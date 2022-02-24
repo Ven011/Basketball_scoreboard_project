@@ -40,7 +40,7 @@ test_group.append(score_value)
 display.show(test_group)
 
 # setup distance sensor
-sensor_1 = digitalio.DigitalInOut(board.SCL)
+sensor_1 = digitalio.DigitalInOut(board.MOSI)
 sensor_1.direction = digitalio.Direction.INPUT
 sensor_1.pull = digitalio.Pull.UP
 
@@ -52,4 +52,13 @@ sensors_triggered = 0
 score = 0
 
 while True:
-    score_value.text = str(sensor_1.value)
+    if not sensor_1.value:
+        sensors_triggered += 1
+    if not sensor_1.value:
+        sensors_triggered += 1
+    
+    if sensors_triggered == 2:
+        sensors_triggered = 0
+        score += 1
+
+    score_value.text = str(score)
