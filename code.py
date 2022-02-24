@@ -40,7 +40,7 @@ test_group.append(score_value)
 display.show(test_group)
 
 # setup distance sensor
-sensor_1 = digitalio.DigitalInOut(board.MOSI)
+sensor_1 = digitalio.DigitalInOut(board.SCL)
 sensor_1.direction = digitalio.Direction.INPUT
 sensor_1.pull = digitalio.Pull.UP
 
