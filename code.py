@@ -53,13 +53,14 @@ score = 0
 
 sensor1_state = False
 sensor2_state = False
+combined_state = True
+
 
 while True:
-    # if not sensor1.value:
-    #     sensors_triggered += 1
-    # if not sensor2.value:
-    #     sensors_triggered += 1
-    if not sensor1.value and not sensor1_state:
+    combined_state = False if not sensor1.value and not sensor2.value else True
+    # No points will be scored if both sensors sense and object at the same time.
+    
+    if not sensor1.value and not sensor1_state and combined_state:
         sensor1_state = True
         sensors_triggered += 1
         
