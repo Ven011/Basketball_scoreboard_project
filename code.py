@@ -63,7 +63,7 @@ while True:
         sensor1_state = True
         sensors_triggered += 1
         
-    if not sensor2.value and not sensor2_state:
+    if not sensor2.value and not sensor2_state and sensors_triggered == 1:
         sensor2_state = True
         sensors_triggered += 1
     
