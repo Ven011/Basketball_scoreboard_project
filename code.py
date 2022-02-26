@@ -349,6 +349,61 @@ button_states = {
 screen_state = "start_screen"
 highest_score = "0"
 
+# format text and values on the display
+def format_label(time_label, score_label):
+    # center the time value text
+    if int(time_label.text) <= 9:
+        time_label.x = 11
+    elif int(time_label.text) >= 10 and int(time_label.text) <= 60:
+        time_label.x = 8
+
+    # center the score value text
+    if int(score_label.text) <= 9:
+        score_label.x = 43
+    elif int(score_label.text) >= 10 and int(score_label.text) <= 99:
+        score_label.x = 40
+    elif int(score_label.text) >= 100:
+        score_label.x = 37
+        
+# LED control in the arcade and bonus time modes
+def handle_LEDs(time_label, current_time, mode):
+    if int(time_label.text) <= 60 and int(time_label.text) >= 21:
+            time_label.color = 0x00B300
+            if not int(time_label.text) % 2 and int(time_label.text) != current_time: # the time left in the game is even
+                current_time = int(time_label.text)
+                solid_green.animate()
+            elif int(time_label.text) != current_time:
+                current_time = int(time_label.text)
+                solid_black.animate()
+
+    elif int(time_label.text) <= 20 and int(time_label.text) >= 11:
+        time_label.color = 0xB3B300
+        if int(time_label.text) == 11:
+            # stop any previously playing audio
+            if speaker.playing:
+                speaker.stop()
+            # play the countdown audio file
+            mp3stream.file = countdown_a
+            speaker.play(mp3stream)
+        if not int(time_label.text) % 2 and int(time_label.text) != current_time: # the time left in the game is even
+            current_time = int(time_label.text)
+            solid_yellow.animate()
+        elif int(time_label.text) != current_time:
+            current_time = int(time_label.text)
+            solid_black.animate()
+
+    if mode == "arcade_screen": # only applies to non bonus time version of arcade screen. time label text never reaches below 10 in bonus time
+        if int(time_label.text) <= 10 and int(time_label.text) >= 0:
+            time_label.color = 0xB30000
+            if not int(time_label.text) % 2 and int(time_label.text) != current_time: # the time left in the game is even
+                current_time = int(time_label.text)
+                solid_red.animate()
+            elif int(time_label.text) != current_time:
+                current_time = int(time_label.text)
+                solid_black.animate()
+            
+    return current_time
+
 def start_screen():
     global screen_state, highest_score
 
@@ -473,7 +528,6 @@ def arcade_screen():
     current_time = 0
     can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
     hiscore_beaten = False
-    prev_time = 60
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -486,19 +540,7 @@ def arcade_screen():
         ag_hiscore.x = 1
         ag_hiscore_c.x = 46
 
-    # center the time value text
-    if int(ag_time_c.text) <= 9:
-        ag_time_c.x = 11
-    elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-        ag_time_c.x = 8
-
-    # center the score value text
-    if int(ag_score_c.text) <= 9:
-        ag_score_c.x = 43
-    elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-        ag_score_c.x = 40
-    elif int(ag_score_c.text) >= 100:
-        ag_score_c.x = 37
+    format_label(ag_time_c, ag_score_c)
 
     display.show(arcade_group)
     time.sleep(1)
@@ -516,12 +558,9 @@ def arcade_screen():
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
-
-        # center the time value text
-        if int(ag_time_c.text) <= 9:
-            ag_time_c.x = 11
-        elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-            ag_time_c.x = 8
+        
+        # format the labels
+        format_label(ag_time_c, ag_score_c)
 
         # check if the beam has been broken, a ball has been scored
         beam_broken = True if break_beam.value == 0 else False
@@ -540,14 +579,6 @@ def arcade_screen():
             if ball_scored:
                 time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
                 ball_scored = False
-
-        # center the score value text
-        if int(ag_score_c.text) <= 9:
-            ag_score_c.x = 43
-        elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-            ag_score_c.x = 40
-        elif int(ag_score_c.text) >= 100:
-            ag_score_c.x = 37
 
         # bonus time
         if can_do_bonus:
@@ -596,39 +627,7 @@ def arcade_screen():
                 display.show(arcade_group) # show arcade group after return
 
         # change the time value's color and RGB lights depending on time left in game
-        if int(ag_time_c.text) <= 60 and int(ag_time_c.text) >= 21:
-            ag_time_c.color = 0x00B300
-            if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
-                current_time = int(ag_time_c.text)
-                solid_green.animate()
-            elif int(ag_time_c.text) != current_time:
-                current_time = int(ag_time_c.text)
-                solid_black.animate()
-
-        elif int(ag_time_c.text) <= 20 and int(ag_time_c.text) >= 11:
-            ag_time_c.color = 0xB3B300
-            if int(ag_time_c.text) == 11:
-                # stop any previously playing audio
-                if speaker.playing:
-                    speaker.stop()
-                # play the countdown audio file
-                mp3stream.file = countdown_a
-                speaker.play(mp3stream)
-            if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
-                current_time = int(ag_time_c.text)
-                solid_yellow.animate()
-            elif int(ag_time_c.text) != current_time:
-                current_time = int(ag_time_c.text)
-                solid_black.animate()
-
-        elif int(ag_time_c.text) <= 10 and int(ag_time_c.text) >= 0:
-            ag_time_c.color = 0xB30000
-            if not int(ag_time_c.text) % 2 and int(ag_time_c.text) != current_time: # the time left in the game is even
-                current_time = int(ag_time_c.text)
-                solid_red.animate()
-            elif int(ag_time_c.text) != current_time:
-                current_time = int(ag_time_c.text)
-                solid_black.animate()
+        current_time = handle_LEDs(ag_time_c, current_time, "arcade_screen")
 
         # update the hiscore value if the score is greater than the current hiscore value
         if int(ag_score_c.text) > int(saved_hiscore):
@@ -657,8 +656,7 @@ def arcade_screen():
 def arcade_bonus_screen(game_time, game_start_time, score):
     # set label properties
     ag_bt_score_c.text = score
-    ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
-    ag_bt_score_c.color = 0xB3005A
+    skip_time = str(game_time - int(time.time() - game_start_time))
 
     # show the bonus time group
     display.show(arcade_bt_group)
@@ -674,25 +672,18 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     beam_broken = False
     time_beam_restored = time.time()
 	
-    # center the time value text
-    if int(ag_bt_time_c.text) <= 9:
-        ag_bt_time_c.x = 11
-    elif int(ag_bt_time_c.text) >= 10 and int(ag_bt_time_c.text) <= 60:
-        ag_bt_time_c.x = 8
-
-    # center the score value text
-    if int(ag_bt_score_c.text) <= 9:
-        ag_bt_score_c.x = 43
-    elif int(ag_bt_score_c.text) >= 10 and int(ag_bt_score_c.text) <= 99:
-        ag_bt_score_c.x = 40
-    elif int(ag_bt_score_c.text) >= 100:
-        ag_bt_score_c.x = 37
+    format_label(ag_bt_time_c, ag_bt_score_c)
 
     # stay in bonus time screen for time (seconds) specified in stay_time
     while time.time() < bt_start_time + bt_stay_time:
         rainbow.animate()
         # update the time
-        ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
+        if str(game_time - int(time.time() - game_start_time)) == skip_time: # don't show the first time value after switch to bonus time
+            ag_bt_time_c.color = 0x000000
+        else:
+            ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
+            ag_bt_time_c.color = 0xB3005A
+            
 
         # check if the beam has been broken, a ball has been scored
         beam_broken = True if break_beam.value == 0 else False
@@ -727,30 +718,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
                 ag_bt_bonus_t.color = 0x5A00B3
 
         # change the time value's color and RGB lights depending on time left in game
-        if int(ag_bt_time_c.text) <= 60 and int(ag_bt_time_c.text) >= 21:
-            ag_bt_time_c.color = 0x00B300
-        if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
-            current_time = int(ag_bt_time_c.text)
-            solid_green.animate()
-        elif int(ag_bt_time_c.text) != current_time:
-            current_time = int(ag_bt_time_c.text)
-            solid_black.animate()
-
-        elif int(ag_bt_time_c.text) <= 20 and int(ag_bt_time_c.text) >= 11:
-            ag_bt_time_c.color = 0xB3B300
-        if int(ag_bt_time_c.text) == 11:
-            # stop any previously playing audio
-            if speaker.playing:
-                speaker.stop()
-            # play the countdown audio file
-            mp3stream.file = countdown_a
-            speaker.play(mp3stream)
-        if not int(ag_bt_time_c.text) % 2 and int(ag_bt_time_c.text) != current_time: # the time left in the game is even
-            current_time = int(ag_bt_time_c.text)
-            solid_yellow.animate()
-        elif int(ag_bt_time_c.text) != current_time:
-            current_time = int(ag_bt_time_c.text)
-            solid_black.animate()
+        current_time = handle_LEDs(ag_bt_time_c, current_time, "arcade_bt_screen")
 
     return ag_bt_time_c.text, ag_bt_score_c.text, ag_bt_time_c.x, ag_bt_time_c.y
 
