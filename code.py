@@ -299,13 +299,13 @@ audio_file = {
 	"hiscore": "/audio/hiscore.mp3"
 }
 
-space_jam_a = open(audio_file["space_jam"], "rb")
-whistle_a = open(audio_file["whistle"], "rb")
-countdown_a = open(audio_file["countdown"], "rb")
-game_over_a = open(audio_file["game_over"], "rb")
-hiscore_a = open(audio_file["hiscore"], "rb")
+# space_jam_a = open(audio_file["space_jam"], "rb")
+# whistle_a = open(audio_file["whistle"], "rb")
+# countdown_a = open(audio_file["countdown"], "rb")
+# game_over_a = open(audio_file["game_over"], "rb")
+# hiscore_a = open(audio_file["hiscore"], "rb")
 
-mp3stream = audiomp3.MP3Decoder(space_jam_a)
+mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
 
 # button_1 pin and state
 button_1 = digitalio.DigitalInOut(board.D11)
@@ -384,7 +384,7 @@ def handle_LEDs(time_label, current_time, mode):
             if speaker.playing:
                 speaker.stop()
             # play the countdown audio file
-            mp3stream.file = countdown_a
+            mp3stream.file = open(audio_file["countdown"], "rb")
             speaker.play(mp3stream)
         if not int(time_label.text) % 2 and int(time_label.text) != current_time: # the time left in the game is even
             current_time = int(time_label.text)
@@ -436,7 +436,7 @@ def start_screen():
         nonlocal labels_are_visible, blink_timer, blink_period
         # play the space_jam audio file
         if not speaker.playing:
-            mp3stream.file = space_jam_a
+            mp3stream.file = open(audio_file["space_jam"], "rb")
             speaker.play(mp3stream)
 
         # blink the 1p arcade and 2p h.o.r.s.e text
@@ -548,7 +548,7 @@ def arcade_screen():
 
     # play the whistle audio file
     while not speaker.playing:
-        mp3stream.file = whistle_a
+        mp3stream.file = open(audio_file["whistle"], "rb")
         speaker.play(mp3stream)
 
     game_start_time = time()
@@ -607,7 +607,7 @@ def arcade_screen():
 
                 # play the hiscore audio
                 while not speaker.playing:
-                    mp3stream.file = hiscore_a
+                    mp3stream.file = open(audio_file["hiscore"], "rb")
                     speaker.play(mp3stream)
 
                 # change score value color to pink
@@ -642,7 +642,7 @@ def arcade_screen():
                     speaker.stop()
                 # play the hiscore audio
                 while not speaker.playing:
-                    mp3stream.file = hiscore_a
+                    mp3stream.file = open(audio_file["hiscore"], "rb")
                     speaker.play(mp3stream)
 
         # exit the game when the time is up
@@ -732,7 +732,7 @@ def game_over_screen():
 
 	# play the game_over audio file
 	while not speaker.playing:
-		mp3stream.file = game_over_a
+		mp3stream.file = open(audio_file["game_over"], "rb")
 		speaker.play(mp3stream)
 
 	# set text properties
@@ -780,7 +780,7 @@ def new_hiscore_screen():
 
 	# play the hiscore audio file
 	while not speaker.playing:
-		mp3stream.file = hiscore_a
+		mp3stream.file = open(audio_file["hiscore"], "rb")
 		speaker.play(mp3stream)
 
 	# set text properties
