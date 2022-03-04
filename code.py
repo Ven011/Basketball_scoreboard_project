@@ -12,7 +12,8 @@ import displayio
 import framebufferio
 import neopixel
 import rgbmatrix
-import time
+from time import sleep, time
+import gc
 
 # RGBMatrix
 displayio.release_displays()
@@ -429,7 +430,7 @@ def start_screen():
     blink_period = 0
 
     display.show(start_group)
-    time.sleep(1)
+    sleep(1)
     
     def checks():
         nonlocal labels_are_visible, blink_timer, blink_period
@@ -439,8 +440,8 @@ def start_screen():
             speaker.play(mp3stream)
 
         # blink the 1p arcade and 2p h.o.r.s.e text
-        if time.time() >= blink_timer + blink_period:
-            blink_timer = time.time()
+        if time() >= blink_timer + blink_period:
+            blink_timer = time()
             if labels_are_visible:
                 labels_are_visible = False
                 blink_period = 1
@@ -473,14 +474,14 @@ def start_screen():
 
         # reset the hiscore if the button is held for 5 seconds
         if not button_1.value and not button_states[1]:
-            reset_score_v = time.time()
+            reset_score_v = time()
             button_states[1] = True
             while not button_1.value:
                 # conduct checks
                 checks()
                 # Keep rainbow animation alive
                 rainbow.animate()
-                reset_score_t = time.time() - reset_score_v
+                reset_score_t = time() - reset_score_v
                 if reset_score_t == 5:
                     ag_hiscore_c.text = "0"
                     highest_score = "0"
@@ -488,7 +489,7 @@ def start_screen():
                     solid_white.animate() # indicate that the hiscore has been reset
                     button_states[1] = False # allow the button state to be changed to True after reset
                     reset_score_v = -1 # to be used to prevent entry to game after the 5 seconds
-                    time.sleep(1)
+                    sleep(1)
                     break
 
         # change the state to arcade_screen when button 1 is pressed
@@ -517,11 +518,11 @@ def arcade_screen():
 
     # local variables
     labels_are_visible = False
-    blink_timer = time.time()
+    blink_timer = time()
     blink_period = 0
     ball_scored = False
     beam_broken = False
-    time_beam_restored = time.time()
+    time_beam_restored = time()
     saved_hiscore = get_set_hiscore()
     ag_hiscore_c.text = saved_hiscore
     game_time = 60
@@ -543,18 +544,18 @@ def arcade_screen():
     format_label(ag_time_c, ag_score_c)
 
     display.show(arcade_group)
-    time.sleep(1)
+    sleep(1)
 
     # play the whistle audio file
     while not speaker.playing:
         mp3stream.file = whistle_a
         speaker.play(mp3stream)
 
-    game_start_time = time.time()
+    game_start_time = time()
 
     while screen_state == screen_states[2]:
         # update the time left in the round
-        ag_time_c.text = str(game_time - int(time.time() - game_start_time))
+        ag_time_c.text = str(game_time - int(time() - game_start_time))
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
@@ -567,7 +568,7 @@ def arcade_screen():
 
         if beam_broken and not ball_scored:
             # increment the score if conditions are met
-            if time.time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
+            if time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
                 # if the time is less than 0.3, this should indicate an invalid score
                 # time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
                 pass
@@ -577,15 +578,15 @@ def arcade_screen():
                 ball_scored = True
         elif not beam_broken:
             if ball_scored:
-                time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
+                time_beam_restored = time() # after a ball is scored the beam is restored, get the time the beam was restored
                 ball_scored = False
 
         # bonus time
         if can_do_bonus:
             if score_diff <= 5 and score_diff >= 0: # game score is 5 points or less away from the hiscore
                 # blink the hiscore title and hiscore count
-                if time.time() >= blink_timer + blink_period:
-                    blink_timer = time.time()
+                if time() >= blink_timer + blink_period:
+                    blink_timer = time()
                     if labels_are_visible:
                         labels_are_visible = False
                         blink_period = 1
@@ -646,7 +647,7 @@ def arcade_screen():
 
         # exit the game when the time is up
         if int(ag_time_c.text) <= 0:
-            time.sleep(1) # allows the time value of 0 to be seen
+            sleep(1) # allows the time value of 0 to be seen
             if int(highest_score) > int(saved_hiscore): # hiscore was beaten
                 screen_state = screen_states[3]
                 get_set_hiscore(value = ag_score_c.text) # save the hiscore
@@ -656,32 +657,32 @@ def arcade_screen():
 def arcade_bonus_screen(game_time, game_start_time, score):
     # set label properties
     ag_bt_score_c.text = score
-    skip_time = str(game_time - int(time.time() - game_start_time))
+    skip_time = str(game_time - int(time() - game_start_time))
 
     # show the bonus time group
     display.show(arcade_bt_group)
 
     # variables
     labels_are_visible = False
-    blink_timer = time.time()
+    blink_timer = time()
     blink_period = 1
-    bt_start_time = time.time()
+    bt_start_time = time()
     bt_stay_time = 10
     current_time = 0
     ball_scored = False
     beam_broken = False
-    time_beam_restored = time.time()
+    time_beam_restored = time()
 	
     format_label(ag_bt_time_c, ag_bt_score_c)
 
     # stay in bonus time screen for time (seconds) specified in stay_time
-    while time.time() < bt_start_time + bt_stay_time:
+    while time() < bt_start_time + bt_stay_time:
         rainbow.animate()
         # update the time
-        if str(game_time - int(time.time() - game_start_time)) == skip_time: # don't show the first time value after switch to bonus time
+        if str(game_time - int(time() - game_start_time)) == skip_time: # don't show the first time value after switch to bonus time
             ag_bt_time_c.color = 0x000000
         else:
-            ag_bt_time_c.text = str(game_time - int(time.time() - game_start_time))
+            ag_bt_time_c.text = str(game_time - int(time() - game_start_time))
             ag_bt_time_c.color = 0xB3005A
             
 
@@ -690,7 +691,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
 
         if beam_broken and not ball_scored:
             # increment the score if conditions are met
-            if time.time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
+            if time() - time_beam_restored <= 0.1: # check the time between consecutive balls scored
                 # if the time is less than 0.3, this should indicate an invalid score
                 # time of 0.3 sec is assuming that two valid scores cannot be made within 0.3 seconds or less of each other
                 pass
@@ -700,12 +701,12 @@ def arcade_bonus_screen(game_time, game_start_time, score):
                 ball_scored = True
         elif not beam_broken:
             if ball_scored:
-                time_beam_restored = time.time() # after a ball is scored the beam is restored, get the time the beam was restored
+                time_beam_restored = time() # after a ball is scored the beam is restored, get the time the beam was restored
                 ball_scored = False
 
         # blink the bonus time text
-        if time.time() >= blink_timer + blink_period:
-            blink_timer = time.time()
+        if time() >= blink_timer + blink_period:
+            blink_timer = time()
             if labels_are_visible:
                 labels_are_visible = False
                 blink_period = 1
@@ -739,8 +740,8 @@ def game_over_screen():
 
 	# local variables
 	labels_are_visible = False
-	start_time = time.time()
-	blink_timer = time.time()
+	start_time = time()
+	blink_timer = time()
 	blink_period = 0
 
 	# center the score value text
@@ -753,10 +754,10 @@ def game_over_screen():
 
 	display.show(game_over_group)
 
-	while time.time() - start_time <= 10:
+	while time() - start_time <= 10:
 		rainbow.animate()
-		if time.time() >= blink_timer + blink_period:
-			blink_timer = time.time()
+		if time() >= blink_timer + blink_period:
+			blink_timer = time()
 			if labels_are_visible:
 				labels_are_visible = False
 				blink_period = 1
@@ -787,8 +788,8 @@ def new_hiscore_screen():
 
 	# local variables
 	labels_are_visible = False
-	start_time = time.time()
-	blink_timer = time.time()
+	start_time = time()
+	blink_timer = time()
 	blink_period = 0
 
 	# center the hiscore value text
@@ -801,10 +802,10 @@ def new_hiscore_screen():
 
 	display.show(new_hiscore_group)
 
-	while time.time() - start_time <= 10:  
+	while time() - start_time <= 10:  
 		rainbow.animate()
-		if time.time() >= blink_timer + blink_period:
-			blink_timer = time.time()
+		if time() >= blink_timer + blink_period:
+			blink_timer = time()
 			if labels_are_visible:
 				labels_are_visible = False
 				blink_period = 1
@@ -834,7 +835,7 @@ def horse_screen():
 		hg_time_c.x = 40
 
 	display.show(horse_group)
-	time.sleep(1)
+	sleep(1)
 
 	screen_state = screen_states[1] # go back to the start screen
 
@@ -849,4 +850,6 @@ screens = {
 
 # main loop, run the approriate screen function given the screen state
 while True:
-	screens[screen_state]()
+    gc.collect()
+    screens[screen_state]()
+    
