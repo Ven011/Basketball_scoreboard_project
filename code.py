@@ -22,11 +22,11 @@ matrix = rgbmatrix.RGBMatrix(
 	width = 64,
 	height = 32,
 	bit_depth = 4,
-	rgb_pins = [board.D6, board.D5, board.D9, board.D11, board.D10, board.D12],
-	addr_pins = [board.A5, board.A4, board.A3, board.A2],
-	clock_pin = board.D13,
-	latch_pin = board.D0,
-	output_enable_pin = board.D1
+	rgb_pins = [board.D2, board.D3, board.D4, board.D5, board.D6, board.D7],
+	addr_pins = [board.A5, board.A1, board.A2, board.A3],
+	clock_pin = board.A4,
+	latch_pin = board.D10,
+	output_enable_pin = board.D9
 )
 display = framebufferio.FramebufferDisplay(matrix)
 
@@ -308,22 +308,22 @@ hiscore_a = open(audio_file["hiscore"], "rb")
 mp3stream = audiomp3.MP3Decoder(space_jam_a)
 
 # button_1 pin and state
-button_1 = digitalio.DigitalInOut(board.SCL)
+button_1 = digitalio.DigitalInOut(board.D11)
 button_1.direction = digitalio.Direction.INPUT
 button_1.pull = digitalio.Pull.UP
 
 # button_2 pin and state
-button_2 = digitalio.DigitalInOut(board.SDA)
+button_2 = digitalio.DigitalInOut(board.D12)
 button_2.direction = digitalio.Direction.INPUT
 button_2.pull = digitalio.Pull.UP
 
 # break beam LED
-break_beam = digitalio.DigitalInOut(board.A1)
+break_beam = digitalio.DigitalInOut(board.D0)
 break_beam.direction = digitalio.Direction.INPUT
 break_beam.pull = digitalio.Pull.UP
 
 # NeoPixels
-led_pin = board.D25
+led_pin = board.D8
 num_leds = 54
 leds = neopixel.NeoPixel(led_pin, num_leds, brightness = 0.20, auto_write = True)
 rainbow = Rainbow(leds, speed = 0.1, period = 2, step = 1, precompute_rainbow = True)
@@ -852,4 +852,3 @@ screens = {
 while True:
     gc.collect()
     screens[screen_state]()
-    
