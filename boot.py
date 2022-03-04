@@ -8,7 +8,7 @@ import storage
 # switch.pull = digitalio.Pull.UP
 
 # Metro M4 Express
-switch = digitalio.DigitalInOut(board.D2)
+switch = digitalio.DigitalInOut(board.D13)
 switch.direction = digitalio.Direction.INPUT
 switch.pull = digitalio.Pull.UP
 
