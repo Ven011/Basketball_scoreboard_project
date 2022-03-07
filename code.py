@@ -324,7 +324,11 @@ button_states = {
 }
 
 screen_state = "start_screen"
+
 highest_score = "0"
+sensor_top_state = False
+sensor_bottom_state = False
+combined_sens_state = True
 
 # format text and values on the display
 def format_label(time_label, score_label):
@@ -473,11 +477,11 @@ def arcade_screen():
     blink_timer = time()
     blink_period = 0
     game_time = 60
-    current_time = 0
     saved_hiscore = get_set_hiscore()
     ag_hiscore_c.text = saved_hiscore
     can_do_bonus = True if int(saved_hiscore) >= 20 else False
     hiscore_beaten = False
+    sensors_triggered = 0
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -509,8 +513,25 @@ def arcade_screen():
         format_label(ag_time_c, ag_score_c)
 
         # IR sensor
-
-        # format_label(ag_time_c, ag_score_c)
+        combined_sens_state = False if not sensor_top.value and not sensor_bottom.value else True
+        # ^ prevents point from being scored if both sensors sense an object at the same time for an extended time
+        
+        # check if the top sensor is triggered
+        if not sensor_top.value and not sensor_top_state and combined_sens_state:
+            sensor_top_state = True
+            sensors_triggered += 1
+            
+        # check if the bottom sensor is triggered
+        if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 1:
+            sensor_bottom_state = True
+            sensors_triggered += 1
+            
+        # add point if both sensors have been triggered consecutively
+        if sensors_triggered == 2:
+            sensor_top_state = False
+            sensor_bottom_state = False
+            sensors_triggered = 0
+            ag_score_c.text = str(int(ag_score_c.text) + 1)
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
@@ -556,8 +577,9 @@ def arcade_screen():
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
                 display.show(ag)
 
-        current_time = handle_LEDs(ag_time_c, "arcade_screen")
+        handle_LEDs(ag_time_c, "arcade_screen")
 
+        # check if the previously set highscore has been beaten
         if int(ag_score_c.text) > int(saved_hiscore):
             highest_score = ag_score_c.text
             if not hiscore_beaten and int(ag_time_c.text) >= 31:
@@ -588,9 +610,10 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     labels_are_visible = False
     blink_timer = time()
     blink_period = 1
-    current_time = 0
     bt_start_time = time()
     bt_stay_time = 10
+    sensors_triggered = 0
+    
 
     format_label(bt_time_c, bt_score_c)
 
@@ -610,8 +633,25 @@ def arcade_bonus_screen(game_time, game_start_time, score):
         format_label(ag_time_c, ag_score_c)
 
         # IR sensor
-
-        # format_label(ag_time_c, ag_score_c)
+        combined_sens_state = False if not sensor_top.value and not sensor_bottom.value else True
+        # ^ prevents point from being scored if both sensors sense an object at the same time for an extended time
+        
+        # check if the top sensor is triggered
+        if not sensor_top.value and not sensor_top_state and combined_sens_state:
+            sensor_top_state = True
+            sensors_triggered += 1
+            
+        # check if the bottom sensor is triggered
+        if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 1:
+            sensor_bottom_state = True
+            sensors_triggered += 1
+            
+        # add point if both sensors have been triggered consecutively
+        if sensors_triggered == 2:
+            sensor_top_state = False
+            sensor_bottom_state = False
+            sensors_triggered = 0
+            bt_score_c.text = str(int(bt_score_c.text) + 1)
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -626,7 +666,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
                 bt_bonus.color = 0x5A00B3
                 bt_bonus_t.color = 0x5A00B3
 
-    current_time = handle_LEDs(bt_time_c, "arcade_bonus_screen")
+    handle_LEDs(bt_time_c, "arcade_bonus_screen")
 
     return bt_score_c.text, bt_time_c.text, bt_time_c.x, bt_time_c.y
 
