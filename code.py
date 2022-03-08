@@ -1,3 +1,4 @@
+from curses import nonl
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
 from adafruit_led_animation.animation.colorcycle import ColorCycle
@@ -326,9 +327,6 @@ button_states = {
 screen_state = "start_screen"
 
 highest_score = "0"
-sensor_top_state = False
-sensor_bottom_state = False
-combined_sens_state = True
 
 # format text and values on the display
 def format_label(time_label, score_label):
@@ -482,6 +480,9 @@ def arcade_screen():
     can_do_bonus = True if int(saved_hiscore) >= 20 else False
     hiscore_beaten = False
     sensors_triggered = 0
+    sensor_top_state = False
+    sensor_bottom_state = False
+    combined_sens_state = True
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -613,7 +614,9 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     bt_start_time = time()
     bt_stay_time = 10
     sensors_triggered = 0
-    
+    sensor_top_state = False
+    sensor_bottom_state = False
+    combined_sens_state = True
 
     format_label(bt_time_c, bt_score_c)
 
@@ -630,7 +633,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             bt_time_c.text = str(game_time - int(time() - game_start_time))
             bt_time_c.color = 0xB3005A
 
-        format_label(ag_time_c, ag_score_c)
+        format_label(bt_time_c, bt_score_c)
 
         # IR sensor
         combined_sens_state = False if not sensor_top.value and not sensor_bottom.value else True
