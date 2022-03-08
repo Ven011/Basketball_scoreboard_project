@@ -522,16 +522,19 @@ def arcade_screen():
             sensor_top_state = True
             sensors_triggered += 1
             
+        if sensor_top.value and sensor_top_state:
+            sensors_triggered += 1
+            
         # check if the bottom sensor is triggered
         if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 1:
-            if not sensor_bottom.value:
-                pass
-            else:
-                sensor_bottom_state = True
-                sensors_triggered += 1
+            sensor_bottom_state = True
+            sensors_triggered += 1
+            
+        if sensor_bottom.value and sensor_bottom_state:
+            sensors_triggered += 1
             
         # add point if both sensors have been triggered consecutively
-        if sensors_triggered == 2:
+        if sensors_triggered == 4:
             sensor_top_state = False
             sensor_bottom_state = False
             sensors_triggered = 0
