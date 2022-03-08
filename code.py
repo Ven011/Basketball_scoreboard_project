@@ -523,7 +523,7 @@ def arcade_screen():
             sensors_triggered += 1
             
         # check if the bottom sensor is triggered
-        if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 1:
+        if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 1 and not sensor_top.value:
             sensor_bottom_state = True
             sensors_triggered += 1
             
