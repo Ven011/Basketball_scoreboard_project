@@ -630,7 +630,12 @@ def arcade_screen():
             sensor_top_state = False
             sensor_bottom_state = False
             sensors_triggered = 0
-            ag_score_c.text = str(int(ag_score_c.text) + 1)
+            # check whether the top sensor detect the ball
+            if not sensor_top.value: # it does
+                pass
+            else: # it does not
+                ag_score_c.text = str(int(ag_score_c.text) + 1)
+                
 
         format_label(ag_time_c, ag_score_c)
 
@@ -763,7 +768,11 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             sensor_top_state = False
             sensor_bottom_state = False
             sensors_triggered = 0
-            ag_score_c.text = str(int(ag_score_c.text) + 1)
+            # check whether the top sensor detect the ball
+            if not sensor_top.value: # it does
+                pass
+            else: # it does not
+                bt_score_c.text = str(int(bt_score_c.text) + 1)
 
         format_label(bt_time_c, bt_score_c)
 
