@@ -30,8 +30,8 @@ display = framebufferio.FramebufferDisplay(matrix)
 
 # display groups
 sg = displayio.Group()
-ag = displayio.Group()
 cdg = displayio.Group()
+ag = displayio.Group()
 btg = displayio.Group()
 gog = displayio.Group()
 nhg = displayio.Group()
