@@ -148,7 +148,7 @@ bt_time = label.Label(ozone, text="TIME", color=0x0000B3)
 bt_time.x = 1
 bt_time.y = 4
 
-bt_time_c = label.Label(virtual_pet_sans, text= " ", color=0x00B300)
+bt_time_c = label.Label(virtual_pet_sans, text= "", color=0x00B300)
 # bt_time_c.x = 8
 bt_time_c.y = 16
 
@@ -156,7 +156,7 @@ bt_score = label.Label(ozone, text="SCORE", color=0xFF8C00)
 bt_score.x = 29
 bt_score.y = 4
 
-bt_score_c = label.Label(virtual_pet_sans, text= " ", color=0xB3005A)
+bt_score_c = label.Label(virtual_pet_sans, text= "", color=0xB3005A)
 # bt_score_c.x = 43
 bt_score_c.y = 16
 
@@ -716,6 +716,8 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     # set properties
     bt_score_c.text = score
     bt_time_c.text = str(game_time - int(time() - game_start_time))
+    bt_time_c.color = 0x000000
+    skip_time = str(game_time - int(time() - game_start_time))
 
     # variables
     labels_are_visible = False
@@ -736,6 +738,12 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     while time() < bt_start_time + bt_stay_time:
         # LED animation
         rainbow.animate()
+
+        # do not show the time right after bonus time starts
+        if str(game_time - int(time() - game_start_time)) == skip_time:
+            bt_time_c.color = 0x000000
+        else:
+            bt_time_c.color = 0xB3005A
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_start_time))
