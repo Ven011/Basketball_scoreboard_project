@@ -716,8 +716,6 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     # set properties
     bt_score_c.text = score
     bt_time_c.text = str(game_time - int(time() - game_start_time))
-    bt_time_c.color = 0x000000
-    skip_time = str(game_time - int(time() - game_start_time))
 
     # variables
     labels_are_visible = False
@@ -738,12 +736,6 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     while time() < bt_start_time + bt_stay_time:
         # LED animation
         rainbow.animate()
-
-        # update the time
-        if str(game_time - int(time() - game_start_time)) == skip_time:
-            bt_time_c.color = 0x000000
-        else:
-            bt_time_c.color = 0xB3005A
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_start_time))
