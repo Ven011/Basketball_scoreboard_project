@@ -771,6 +771,13 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             sensors_triggered += 1
         if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3:
             sensors_triggered += 1
+            
+        # check for the special case where only the bottom sensor detects the ball
+        if not sensor_bottom.value and not sensor_bottom_state and not sensor_top_state:
+            sensor_bottom_state = True
+            sensors_triggered += 2
+        if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 2:
+            sensors_triggered += 2
 
         # add point if both sensors have been triggered consecutively
         if sensors_triggered == 4:
