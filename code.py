@@ -741,7 +741,7 @@ def arcade_bonus_screen(game_time, game_start_time, score):
         rainbow.animate()
 
         # do not show the time right after bonus time starts
-        if str(game_time - int(time() - game_start_time)) < skip_time + 1:
+        if (game_time - int(time() - game_start_time)) == int(skip_time):
             pass
         else:
             # update the time
