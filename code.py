@@ -585,6 +585,7 @@ def arcade_screen():
     sensor_top_state = False
     sensor_bottom_state = False
     combined_sens_state = True
+    special_case = False # allows point to be counted if only the bottom sensor is triggered
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -623,13 +624,15 @@ def arcade_screen():
             sensor_bottom_state = True
             sensors_triggered += 1
         if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3:
+            special_case = True 
             sensors_triggered += 1
 
         # add point if both sensors have been triggered consecutively
-        if sensors_triggered == 4:
+        if sensors_triggered == 4 or special_case:
             sensor_top_state = False
             sensor_bottom_state = False
             sensors_triggered = 0
+            special_case = False
             # check whether the top sensor detect the ball
             if not sensor_top.value: # it does
                 pass
@@ -683,7 +686,7 @@ def arcade_screen():
                     game_time += 10
 
                 # go to the bonus time screen for 10 seconds
-                ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text, ag_time_c.text)
+                ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
                 display.show(ag)
 
         handle_LEDs(ag_time_c, "arcade_screen")
@@ -711,10 +714,10 @@ def arcade_screen():
             else:
                 screen_state = screen_states[5]
 
-def arcade_bonus_screen(game_time, game_start_time, score, prev_time):
+def arcade_bonus_screen(game_time, game_start_time, score):
     # set properties
     bt_score_c.text = score
-    bt_time_c.text = prev_time
+    bt_time_c.text = ag_time_c.text
     skip_time = str(game_time - int(time() - game_start_time))
 
     # variables
@@ -738,7 +741,7 @@ def arcade_bonus_screen(game_time, game_start_time, score, prev_time):
         rainbow.animate()
 
         # do not show the time right after bonus time starts
-        if str(game_time - int(time() - game_start_time)) == skip_time:
+        if str(game_time - int(time() - game_start_time)) < skip_time + 1:
             pass
         else:
             # update the time
