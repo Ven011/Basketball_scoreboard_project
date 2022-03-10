@@ -684,7 +684,7 @@ def arcade_screen():
                     game_time += 10
 
                 # go to the bonus time screen for 10 seconds
-                ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
+                ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text, ag_time_c.text)
                 display.show(ag)
 
         handle_LEDs(ag_time_c, "arcade_screen")
@@ -712,11 +712,10 @@ def arcade_screen():
             else:
                 screen_state = screen_states[5]
 
-def arcade_bonus_screen(game_time, game_start_time, score):
+def arcade_bonus_screen(game_time, game_start_time, score, prev_time):
     # set properties
     bt_score_c.text = score
-    bt_time_c.text = str(game_time - int(time() - game_start_time))
-    bt_time_c.color = 0x000000
+    bt_time_c.text = prev_time
     skip_time = str(game_time - int(time() - game_start_time))
 
     # variables
@@ -741,12 +740,10 @@ def arcade_bonus_screen(game_time, game_start_time, score):
 
         # do not show the time right after bonus time starts
         if str(game_time - int(time() - game_start_time)) == skip_time:
-            bt_time_c.color = 0x000000
+            pass
         else:
-            bt_time_c.color = 0xB3005A
-
-        # update the time
-        bt_time_c.text = str(game_time - int(time() - game_start_time))
+            # update the time
+            bt_time_c.text = str(game_time - int(time() - game_start_time))
 
         # prevent point from being scored if both sensors sense an object at the same time for an extended time
         combined_sens_state = False if not sensor_top.value and not sensor_bottom.value else True
@@ -774,7 +771,9 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             if not sensor_top.value: # it does
                 pass
             else: # it does not
-                bt_score_c.text = str(int(bt_score_c.text) + 1)
+                # bt_score_c.text = str(int(bt_score_c.text) + 1)
+                bt_score_c.text = 0
+                ag_score_c.text = 0
 
         format_label(bt_time_c, bt_score_c)
 
