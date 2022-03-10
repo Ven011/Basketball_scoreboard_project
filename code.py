@@ -730,6 +730,8 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     sensor_bottom_state = False
     combined_sens_state = True
 
+    format_label(bt_time_c, bt_score_c)
+
     display.show(btg)
 
     # stay in bonus time screen for time specified in stay_time
