@@ -623,16 +623,14 @@ def arcade_screen():
         if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 2:
             sensor_bottom_state = True
             sensors_triggered += 1
-        if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3:
-            special_case = True 
+        if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3: 
             sensors_triggered += 1
 
-        # add point if both sensors have been triggered consecutively
-        if sensors_triggered == 4 or special_case:
+        # add point if both sensors have been triggered consecutively or the second sensor detected the ball
+        if sensors_triggered == 4:
             sensor_top_state = False
             sensor_bottom_state = False
             sensors_triggered = 0
-            special_case = False
             # check whether the top sensor detect the ball
             if not sensor_top.value: # it does
                 pass
@@ -717,8 +715,8 @@ def arcade_screen():
 def arcade_bonus_screen(game_time, game_start_time, score):
     # set properties
     bt_score_c.text = score
-    bt_time_c.text = ag_time_c.text
-    skip_time = str(game_time - int(time() - game_start_time))
+    bt_time_c.text = str(game_time - int(time() - game_start_time))
+    skip_time = (game_time - int(time() - game_start_time))
 
     # variables
     labels_are_visible = False
@@ -741,8 +739,8 @@ def arcade_bonus_screen(game_time, game_start_time, score):
         rainbow.animate()
 
         # do not show the time right after bonus time starts
-        if (game_time - int(time() - game_start_time)) == int(skip_time):
-            pass
+        if bt_time_c.text == skip_time:
+            bt_time_c.text = " "
         else:
             # update the time
             bt_time_c.text = str(game_time - int(time() - game_start_time))
