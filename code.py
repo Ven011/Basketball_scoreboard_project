@@ -1,3 +1,4 @@
+from numpy import str0
 import displayio
 import rgbmatrix
 import board
@@ -585,7 +586,6 @@ def arcade_screen():
     sensor_top_state = False
     sensor_bottom_state = False
     combined_sens_state = True
-    special_case = False # allows point to be counted if only the bottom sensor is triggered
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -625,13 +625,6 @@ def arcade_screen():
             sensors_triggered += 1
         if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3: 
             sensors_triggered += 1
-            
-        # check for the special case where only the bottom sensor detects the ball
-        if not sensor_bottom.value and not sensor_bottom_state and not sensor_top_state:
-            sensor_bottom_state = True
-            sensors_triggered += 2
-        if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 2:
-            sensors_triggered += 2
 
         # add point if both sensors have been triggered consecutively or the special case occured
         if sensors_triggered == 4:
@@ -723,7 +716,8 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     # set properties
     bt_score_c.text = score
     bt_time_c.text = str(game_time - int(time() - game_start_time))
-    skip_time = (game_time - int(time() - game_start_time))
+    bt_time_c.color = 0x000000
+    skip_time = str(game_time - int(time() - game_start_time)) # used to hide first time value in bonus time loop
 
     # variables
     labels_are_visible = False
@@ -747,10 +741,10 @@ def arcade_bonus_screen(game_time, game_start_time, score):
 
         # do not show the time right after bonus time starts
         if bt_time_c.text == skip_time:
-            bt_time_c.text = " "
+            bt_time_c.color = 0x000000
         else:
             # update the time
-            bt_time_c.text = str(game_time - int(time() - game_start_time))
+            bt_time_c.color = 0xB30000
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_start_time))
@@ -771,13 +765,6 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             sensors_triggered += 1
         if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3:
             sensors_triggered += 1
-            
-        # check for the special case where only the bottom sensor detects the ball
-        if not sensor_bottom.value and not sensor_bottom_state and not sensor_top_state:
-            sensor_bottom_state = True
-            sensors_triggered += 2
-        if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 2:
-            sensors_triggered += 2
 
         # add point if both sensors have been triggered consecutively
         if sensors_triggered == 4:
