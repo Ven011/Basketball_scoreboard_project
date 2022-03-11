@@ -329,7 +329,6 @@ audio_file = {
     "hiscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
-speaker.play(mp3stream)
 
 # NeoPixel setup
 pixels = neopixel.NeoPixel(board.D8, 54, brightness=0.2)
