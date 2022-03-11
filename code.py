@@ -1,4 +1,3 @@
-from numpy import str0
 import displayio
 import rgbmatrix
 import board
@@ -50,7 +49,7 @@ def get_set_hiscore(value="_"):
         hiscore_file.close()
         return score
 
-# fonts setup
+# font setup
 ozone = bitmap_font.load_font("/fonts/ozone.bdf")
 virtual_pet_sans = bitmap_font.load_font("/fonts/virtual_pet_sans.bdf")
 
@@ -96,76 +95,77 @@ sg_e.x = 53
 sg_e.y = 28
 
 # countdown graphics
-cdg_time = label.Label(virtual_pet_sans, text="TIME", color=0xFFFFFF)
-cdg_time.x = 1
+cdg_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF)
+cdg_time.x = 3
 cdg_time.y = 5
 
-cdg_time_c = label.Label(virtual_pet_sans, text="", color=0xB30000)
-# cdg_time_c.x = 8
+cdg_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000)
+# cdg_time_c.x = 12
 cdg_time_c.y = 15
 
-cdg_score = label.Label(virtual_pet_sans, text="SCORE", color=0xFFFFFF)
-cdg_score.x = 34
+cdg_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF)
+cdg_score.x = 32
 cdg_score.y = 5
 
-cdg_score_c = label.Label(virtual_pet_sans, text="", color=0x00B300)
-# cdg_score_c.x = 43
+cdg_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
+# cdg_score_c.x = 44
 cdg_score_c.y = 15
 
-cdg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00B3B3)
+cdg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF)
 cdg_hiscore.x = 7
 cdg_hiscore.y = 28
 
-cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x93B300)
+cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF)
 cdg_hiscore_c.x = 52
 cdg_hiscore_c.y = 28
 
 # arcade graphics
-ag_time = label.Label(virtual_pet_sans, text="TIME", color=0xFFFFFF)
-ag_time.x = 1
+ag_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF)
+ag_time.x = 3
 ag_time.y = 5
 
-ag_time_c = label.Label(virtual_pet_sans, text="", color=0xB30000)
-# ag_time_c.x = 8
+ag_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000)
+# ag_time_c.x = 9
 ag_time_c.y = 15
 
-ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0xFFFFFF)
-ag_score.x = 34
+ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF)
+ag_score.x = 32
 ag_score.y = 5
 
-ag_score_c = label.Label(virtual_pet_sans, text="", color=0x00B300)
-# ag_score_c.x = 43
+ag_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
+# ag_score_c.x = 44
 ag_score_c.y = 15
 
-ag_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00B3B3)
+ag_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF)
 ag_hiscore.x = 7
 ag_hiscore.y = 28
 
-ag_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x93B300)
+ag_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF)
 ag_hiscore_c.x = 52
 ag_hiscore_c.y = 28
 
-bt_time = label.Label(virtual_pet_sans, text="TIME", color=0xFFFFFF)
-bt_time.x = 1
+# bonus time graphics
+bt_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF)
+bt_time.x = 3
 bt_time.y = 5
 
-bt_time_c = label.Label(virtual_pet_sans, text="", color=0xB30000)
-# bt_time_c.x = 8
+bt_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000)
+# bt_time_c.x = 9
 bt_time_c.y = 15
 
-bt_score = label.Label(virtual_pet_sans, text="SCORE", color=0xFFFFFF)
-bt_score.x = 34
+bt_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF)
+bt_score.x = 32
 bt_score.y = 5
 
-bt_score_c = label.Label(virtual_pet_sans, text="", color=0x00B300)
-# bt_score_c.x = 43
+bt_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
+# bt_score_c.x = 44
 bt_score_c.y = 15
 
-bt_bonus = label.Label(virtual_pet_sans, text="BONUS", color=0x5A00B3)
+bt_bonus = label.Label(virtual_pet_sans, text="BONUS", color=0x00FF00)
 bt_bonus.x = 4
 bt_bonus.y = 28
 
-bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x5A00B3)
+bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x00FF00)
 bt_bonus_t.x = 37
 bt_bonus_t.y = 28
 
@@ -329,6 +329,7 @@ audio_file = {
     "hiscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
+speaker.play(mp3stream)
 
 # NeoPixel setup
 pixels = neopixel.NeoPixel(board.D8, 54, brightness=0.2)
@@ -350,14 +351,14 @@ btn_horse.direction = digitalio.Direction.INPUT
 btn_horse.pull = digitalio.Pull.UP
 
 # top sensor setup
-sensor_top = digitalio.DigitalInOut(board.D0)
-sensor_top.direction = digitalio.Direction.INPUT
-sensor_top.pull = digitalio.Pull.UP
+sen_top = digitalio.DigitalInOut(board.D0)
+sen_top.direction = digitalio.Direction.INPUT
+sen_top.pull = digitalio.Pull.UP
 
 # bottom sensor setup
-sensor_bottom = digitalio.DigitalInOut(board.D1)
-sensor_bottom.direction = digitalio.Direction.INPUT
-sensor_bottom.pull = digitalio.Pull.UP
+sen_btm = digitalio.DigitalInOut(board.D1)
+sen_btm.direction = digitalio.Direction.INPUT
+sen_btm.pull = digitalio.Pull.UP
 
 # variables
 screen_states = {
@@ -377,46 +378,40 @@ button_states = {
 screen_state = "start_screen"
 highest_score = "0"
 
-# control LEDs and time colour in the arcade and bonus time modes
-def handle_LEDs(time_label, mode):
+# centre labels
+def centre_labels(time_label, score_label):
+    # center the time value text
+    if int(time_label.text) <= 9:
+        time_label.x = 12
+    elif int(time_label.text) >= 10 and int(time_label.text) <= 60:
+        time_label.x = 9
+
+    # center the score value text
+    if int(score_label.text) <= 9:
+        score_label.x = 44
+    elif int(score_label.text) >= 10 and int(score_label.text) <= 99:
+        score_label.x = 41
+    elif int(score_label.text) >= 100:
+        score_label.x = 38
+
+# control pixels in the arcade and bonus time modes
+def control_pixels(time_label, mode):
     if int(time_label.text) <= 60 and int(time_label.text) >= 21:
-        # time_label.color = 0x00B300
         solid_green.animate()
     elif int(time_label.text) <= 20 and int(time_label.text) >= 11:
-        # time_label.color = 0xB3B300
         solid_yellow.animate()
     if int(time_label.text) == 11:
-        # stop audio
         if speaker.playing:
             speaker.stop()
-        # play audio
         mp3stream.file = open(audio_file["countdown"], "rb")
         speaker.play(mp3stream)
     if mode == "arcade_screen":
         if int(time_label.text) <= 10 and int(time_label.text) >= 0:
-            # time_label.color = 0xB30000
             solid_red.animate()
-
-# format labels
-def format_label(time_label, score_label):
-    # center the time value text
-    if int(time_label.text) <= 9:
-        time_label.x = 10
-    elif int(time_label.text) >= 10 and int(time_label.text) <= 60:
-        time_label.x = 7
-
-    # center the score value text
-    if int(score_label.text) <= 9:
-        score_label.x = 46
-    elif int(score_label.text) >= 10 and int(score_label.text) <= 99:
-        score_label.x = 43
-    elif int(score_label.text) >= 100:
-        score_label.x = 40
 
 def start_screen():
     global screen_state, highest_score
 
-    # stop audio
     if speaker.playing:
         speaker.stop()
 
@@ -442,12 +437,10 @@ def start_screen():
     def checks():
         nonlocal labels_are_visible, blink_timer, blink_period
 
-        # play audio
         if not speaker.playing:
             mp3stream.file = open(audio_file["space_jam"], "rb")
             speaker.play(mp3stream)
 
-        # blink labels
         if time() >= blink_timer + blink_period:
             blink_timer = time()
             if labels_are_visible:
@@ -474,7 +467,6 @@ def start_screen():
                 sg_e.color = 0xFFFFFF
 
     while screen_state == screen_states[1]:
-        # LED animation
         colorcycle.animate()
 
         checks()
@@ -492,17 +484,19 @@ def start_screen():
                     highest_score = "0"
                     get_set_hiscore(value="0")
                     solid_white.animate()
-                    button_states[1] = False # allow the button state to be changed to True after reset
-                    reset_score_v = -1 # used to prevent entry to game after the 5 seconds
+                    # allow the button state to be changed to True after reset
+                    button_states[1] = False
+                    # used to prevent entry to game after the 5 seconds
+                    reset_score_v = -1
                     sleep(1)
                     break
 
-        # change to the arcade screen
+        # switch to the arcade screen
         if button_states[1] and reset_score_v != -1:
             button_states[1] = False
             screen_state = screen_states[2]
 
-        # change to the h.o.r.s.e screen
+        # switch to the h.o.r.s.e screen
         if not btn_horse.value and not button_states[2]:
             button_states[2] = True
             screen_state = screen_states[6]
@@ -510,22 +504,21 @@ def start_screen():
 def arcade_countdown_screen():
     global screen_state, highest_score
 
-    # stop audio
     if speaker.playing:
         speaker.stop()
 
     # set properties
     cdg_time_c.text = "3"
-    cdg_time_c.color = 0xB30000
+    cdg_time_c.color = 0xFF0000
     cdg_score_c.text = "0"
-    cdg_score_c.color = 0x00B300
-    cdg_hiscore.color = 0x00B3B3
-    cdg_hiscore_c.color = 0x93B300
+    cdg_score_c.color = 0xFFFFFF
+    cdg_hiscore.color = 0x00FFFF
+    cdg_hiscore_c.color = 0x00FFFF
 
     # variables
+    countdown_time = 3
     saved_hiscore = get_set_hiscore()
     cdg_hiscore_c.text = saved_hiscore
-    countdown_time = 3
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -538,28 +531,27 @@ def arcade_countdown_screen():
         cdg_hiscore.x = 1
         cdg_hiscore_c.x = 46
 
-    format_label(cdg_time_c, cdg_score_c)
+    centre_labels(cdg_time_c, cdg_score_c)
 
-    # LED animation
     solid_green.animate()
-
     display.show(cdg)
     sleep(1)
-    game_begin_time = time()
+    game_countdown_time = time()
 
     while screen_state == screen_states[2]:
-        cdg_time_c.text = str(countdown_time - int(time() - game_begin_time))
+        # update the time left in the countdown
+        cdg_time_c.text = str(countdown_time - int(time() - game_countdown_time))
 
-        format_label(cdg_time_c, cdg_score_c)
+        centre_labels(cdg_time_c, cdg_score_c)
 
-        # exit the game when the time is up
-        if int(cdg_time_c.text) <= 0:
+        # switch to the arcade screen when the countdown time is up
+        if int(cdg_time_c.text) <= 1:
+            sleep(1)
             screen_state = screen_states[3]
 
 def arcade_screen():
     global screen_state, highest_score
 
-    # stop audio
     if speaker.playing:
         speaker.stop()
     mp3stream.file = open(audio_file["whistle"], "rb")
@@ -567,11 +559,11 @@ def arcade_screen():
 
     # set properties
     ag_time_c.text = "60"
-    ag_time_c.color = 0xB30000
+    ag_time_c.color = 0xFF0000
     ag_score_c.text = "0"
-    ag_score_c.color = 0x00B300
-    ag_hiscore.color = 0x00B3B3
-    ag_hiscore_c.color = 0x93B300
+    ag_score_c.color = 0xFFFFFF
+    ag_hiscore.color = 0x00FFFF
+    ag_hiscore_c.color = 0x00FFFF
 
     # variables
     labels_are_visible = False
@@ -580,12 +572,13 @@ def arcade_screen():
     game_time = 60
     saved_hiscore = get_set_hiscore()
     ag_hiscore_c.text = saved_hiscore
-    can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
+    # prevent the bonus time when the hiscore is 0 for the first game
+    can_do_bonus = True if int(saved_hiscore) >= 20 else False
     hiscore_beaten = False
-    sensors_triggered = 0
-    sensor_top_state = False
-    sensor_bottom_state = False
-    combined_sens_state = True
+    sen_triggered = 0
+    sen_top_state = False
+    sen_btm_state = False
+    combined_sen_state = True
 
     # center the hiscore and hiscore text
     if int(saved_hiscore) <= 9:
@@ -598,55 +591,53 @@ def arcade_screen():
         ag_hiscore.x = 1
         ag_hiscore_c.x = 46
 
-    format_label(ag_time_c, ag_score_c)
+    centre_labels(ag_time_c, ag_score_c)
 
     display.show(ag)
     game_start_time = time()
 
     while screen_state == screen_states[3]:
-        # update the time left in the round
+        # update the time left in the game
         ag_time_c.text = str(game_time - int(time() - game_start_time))
 
-        format_label(ag_time_c, ag_score_c)
+        centre_labels(ag_time_c, ag_score_c)
 
-        # prevent point from being scored if both sensors sense an object at the same time for an extended time
-        combined_sens_state = False if not sensor_top.value and not sensor_bottom.value else True
+        # prevent point if both sensors detect an object simultaneously
+        combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
         # check if the top sensor is triggered
-        if not sensor_top.value and not sensor_top_state and combined_sens_state:
-            sensor_top_state = True
-            sensors_triggered += 1
-        if sensor_top.value and sensor_top_state and sensors_triggered == 1:
-            sensors_triggered += 1
+        if not sen_top.value and not sen_top_state and combined_sen_state:
+            sen_top_state = True
+            sen_triggered += 1
+        if sen_top.value and sen_top_state and sen_triggered == 1:
+            sen_triggered += 1
 
         # check if the bottom sensor is triggered
-        if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 2:
-            sensor_bottom_state = True
-            sensors_triggered += 1
-        if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3: 
-            sensors_triggered += 1
+        if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
+            sen_btm_state = True
+            sen_triggered += 1
+        if sen_btm.value and sen_btm_state and sen_triggered == 3:
+            sen_triggered += 1
 
-        # add point if both sensors have been triggered consecutively or the special case occured
-        if sensors_triggered == 4:
-            sensor_top_state = False
-            sensor_bottom_state = False
-            sensors_triggered = 0
-            # check whether the top sensor detect the ball
-            if not sensor_top.value: # it does
+        # add point if both sensors have been triggered consecutively
+        if sen_triggered == 4:
+            sen_top_state = False
+            sen_btm_state = False
+            sen_triggered = 0
+            # check whether the top sensor detects the ball
+            if not sen_top.value:  # it does
                 pass
-            else: # it does not
+            else:  # it does not
                 ag_score_c.text = str(int(ag_score_c.text) + 1)
 
-        format_label(ag_time_c, ag_score_c)
+        centre_labels(ag_time_c, ag_score_c)
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
 
         # bonus time
         if can_do_bonus:
-            # score is 5 points or less away from the hiscore
             if score_diff <= 5 and score_diff >= 0:
-                # blink labels
                 if time() >= blink_timer + blink_period:
                     blink_timer = time()
                     if labels_are_visible:
@@ -657,23 +648,20 @@ def arcade_screen():
                     else:
                         labels_are_visible = True
                         blink_period = 1
-                        ag_hiscore.color = 0x00B3B3
-                        ag_hiscore_c.color = 0x93B300
+                        ag_hiscore.color = 0x00FFFF
+                        ag_hiscore_c.color = 0x00FFFF
 
             # hiscore has been beaten and was not beaten before in this game
             if score_diff < 0 and not hiscore_beaten and int(ag_time_c.text) < 31:
                 hiscore_beaten = True
 
-                # stop current audio
                 if speaker.playing:
                     speaker.stop()
-                # play audio
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
 
-                ag_hiscore.color = 0x00B3B3 # in case the color was set to black before after blinking
-                ag_hiscore_c.color = 0x93B300
-                # ag_score_c.color = 0x00B300
+                ag_hiscore.color = 0x00FFFF
+                ag_hiscore_c.color = 0x00FFFF
 
                 # add time when the score is beaten
                 if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
@@ -687,19 +675,17 @@ def arcade_screen():
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_screen(game_time, game_start_time, ag_score_c.text)
                 display.show(ag)
 
-        handle_LEDs(ag_time_c, "arcade_screen")
+        control_pixels(ag_time_c, "arcade_screen")
 
         # check if the previously set hiscore has been beaten
         if int(ag_score_c.text) > int(saved_hiscore):
             highest_score = ag_score_c.text
             if not hiscore_beaten and int(ag_time_c.text) >= 31:
                 hiscore_beaten = True
-                ag_hiscore.color = 0x00B3B3
-                ag_hiscore_c.color = 0x93B300
-                # stop audio
+                ag_hiscore.color = 0x00FFFF
+                ag_hiscore_c.color = 0x00FFFF
                 if speaker.playing:
                     speaker.stop()
-                # play audio
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
 
@@ -716,8 +702,8 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     # set properties
     bt_score_c.text = score
     bt_time_c.text = str(game_time - int(time() - game_start_time))
-    bt_time_c.color = 0x000000
-    skip_time = str(game_time - int(time() - game_start_time)) # used to hide first time value in bonus time loop
+    # used to hide first time value in bonus time loop
+    skip_time = str(game_time - int(time() - game_start_time))
 
     # variables
     labels_are_visible = False
@@ -725,61 +711,59 @@ def arcade_bonus_screen(game_time, game_start_time, score):
     blink_period = 1
     bt_start_time = time()
     bt_stay_time = 10
-    sensors_triggered = 0
-    sensor_top_state = False
-    sensor_bottom_state = False
-    combined_sens_state = True
+    sen_triggered = 0
+    sen_top_state = False
+    sen_btm_state = False
+    combined_sen_state = True
 
-    format_label(bt_time_c, bt_score_c)
+    centre_labels(bt_time_c, bt_score_c)
 
     display.show(btg)
 
-    # stay in bonus time screen for time specified in stay_time
+    # stay in the bonus time screen for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
-        # LED animation
         rainbow.animate()
 
         # do not show the time right after bonus time starts
         if bt_time_c.text == skip_time:
-            bt_time_c.color = 0x000000
+            bt_time_c.color = 0xFF0000
         else:
             # update the time
-            bt_time_c.color = 0xB30000
+            bt_time_c.color = 0xFF0000
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_start_time))
 
-        # prevent point from being scored if both sensors sense an object at the same time for an extended time
-        combined_sens_state = False if not sensor_top.value and not sensor_bottom.value else True
+        # prevent point if both sensors detect an object simultaneously
+        combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
         # check if the top sensor is triggered
-        if not sensor_top.value and not sensor_top_state and combined_sens_state:
-            sensor_top_state = True
-            sensors_triggered += 1
-        if sensor_top.value and sensor_top_state and sensors_triggered == 1:
-            sensors_triggered += 1
+        if not sen_top.value and not sen_top_state and combined_sen_state:
+            sen_top_state = True
+            sen_triggered += 1
+        if sen_top.value and sen_top_state and sen_triggered == 1:
+            sen_triggered += 1
 
         # check if the bottom sensor is triggered
-        if not sensor_bottom.value and not sensor_bottom_state and sensors_triggered == 2:
-            sensor_bottom_state = True
-            sensors_triggered += 1
-        if sensor_bottom.value and sensor_bottom_state and sensors_triggered == 3:
-            sensors_triggered += 1
+        if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
+            sen_btm_state = True
+            sen_triggered += 1
+        if sen_btm.value and sen_btm_state and sen_triggered == 3:
+            sen_triggered += 1
 
         # add point if both sensors have been triggered consecutively
-        if sensors_triggered == 4:
-            sensor_top_state = False
-            sensor_bottom_state = False
-            sensors_triggered = 0
-            # check whether the top sensor detect the ball
-            if not sensor_top.value: # it does
+        if sen_triggered == 4:
+            sen_top_state = False
+            sen_btm_state = False
+            sen_triggered = 0
+            # check whether the top sensor detects the ball
+            if not sen_top.value:  # it does
                 pass
-            else: # it does not
+            else:  # it does not
                 bt_score_c.text = str(int(bt_score_c.text) + 1)
 
-        format_label(bt_time_c, bt_score_c)
+        centre_labels(bt_time_c, bt_score_c)
 
-        # blink labels
         if time() >= blink_timer + blink_period:
             blink_timer = time()
             if labels_are_visible:
@@ -790,17 +774,16 @@ def arcade_bonus_screen(game_time, game_start_time, score):
             else:
                 labels_are_visible = True
                 blink_period = 1
-                bt_bonus.color = 0x5A00B3
-                bt_bonus_t.color = 0x5A00B3
+                bt_bonus.color = 0x00FF00
+                bt_bonus_t.color = 0x00FF00
 
-        handle_LEDs(bt_time_c, "arcade_bonus_screen")
+        control_pixels(bt_time_c, "arcade_bonus_screen")
 
     return bt_score_c.text, bt_time_c.text, bt_time_c.x, bt_time_c.y
 
 def game_over_screen():
     global screen_state
 
-    # stop audio
     if speaker.playing:
         speaker.stop()
 
@@ -823,15 +806,12 @@ def game_over_screen():
 
     display.show(gog)
 
-    # play audio
     mp3stream.file = open(audio_file["game_over"], "rb")
     speaker.play(mp3stream)
 
     while time() - start_time <= 10:
-        # LED animation
         rainbow.animate()
 
-        # blink labels
         if time() >= blink_timer + blink_period:
             blink_timer = time()
             if labels_are_visible:
@@ -850,7 +830,6 @@ def game_over_screen():
 def new_hiscore_screen():
     global screen_state, highest_score
 
-    # stop audio
     if speaker.playing:
         speaker.stop()
 
@@ -873,15 +852,12 @@ def new_hiscore_screen():
 
     display.show(nhg)
 
-    # play audio
     mp3stream.file = open(audio_file["hiscore"], "rb")
     speaker.play(mp3stream)
 
     while time() - start_time <= 10:
-        # LED animation
         rainbow.animate()
 
-        # blink labels
         if time() >= blink_timer + blink_period:
             blink_timer = time()
             if labels_are_visible:
@@ -914,8 +890,6 @@ def horse_screen():
 
     display.show(hg)
     sleep(1)
-
-    screen_state = screen_states[1]
 
 # variables
 screens = {
