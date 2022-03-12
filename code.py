@@ -522,6 +522,10 @@ def arcade_scrn():
 
                 # go to the bonus time scrn for 10 seconds
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
+                
+                ag_hiscore.color = 0x00FFFF
+                ag_hiscore_c.color = 0x00FFFF
+                
                 display.show(ag)
 
         control_pixels(ag_time_c, "arcade_scrn")
