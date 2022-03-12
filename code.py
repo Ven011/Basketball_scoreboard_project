@@ -226,7 +226,12 @@ screen_state = "start_screen"
 highest_score = "0"
 
 # center labels
-def center_labels(time_label, score_c_label):
+def center_labels(time_label, score_c_label, special_case = False):
+    # take care of special case where the centering function is delayed and text glitches
+    if special_case:
+        ag_score_c.x = 41
+        ag_score_c.y = 15
+    
     # center the time value label
     if int(time_label.text) <= 9:
         time_label.x = 12
@@ -466,6 +471,11 @@ def arcade_screen():
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
+                # center the score when it goes from 9 -> 10
+                # take care of special case where the centering function is delayed and text glitches
+                if int(ag_score_c.text) + 1 == 10:
+                    center_labels(ag_time_c, ag_score_c, special_case=True)
+                # increment score
                 ag_score_c.text = str(int(ag_score_c.text) + 1)
 
         center_labels(ag_time_c, ag_score_c)
@@ -598,6 +608,10 @@ def arcade_bonus_screen(game_time, game_timer, score):
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
+                # center the score when it goes from 9 -> 10
+                # take care of special case where the centering function is delayed and text glitches
+                if int(bt_score_c.text) + 1 == 10:
+                    center_labels(bt_time_c, bt_score_c, special_case=True)
                 bt_score_c.text = str(int(bt_score_c.text) + 1)
 
         center_labels(bt_time_c, bt_score_c)
