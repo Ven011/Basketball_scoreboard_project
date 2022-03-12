@@ -506,8 +506,8 @@ def arcade_scrn():
             if score_diff < 0 and not hiscore_beaten and int(ag_time_c.text) <= 30:
                 hiscore_beaten = True
 
-                ag_hiscore.color = 0x00FFFF
-                ag_hiscore_c.color = 0x00FFFF
+                ag_hiscore.color = 0x000000
+                ag_hiscore_c.color = 0x000000
 
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
