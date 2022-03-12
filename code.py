@@ -557,8 +557,12 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # set properties
     bt_score_c.text = score
     start_time = (game_time - int(time() - game_timer)) + 1
+    exception = 0.5
     # don't start bonus time until the remainder of the past second has fully passed
     while (game_time - int(time() - game_timer)) == start_time - 1:
+        # make an exception if the remainder of the past seconds is greater than half a second
+        if start_time - (game_time - (time() - game_timer)) > exception:
+            break
         pass
     
     bt_time_c.text = str(game_time - int(time() - game_timer))
