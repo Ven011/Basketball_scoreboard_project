@@ -54,223 +54,71 @@ ozone = bitmap_font.load_font("/fonts/ozone.bdf")
 virtual_pet_sans = bitmap_font.load_font("/fonts/virtual_pet_sans.bdf")
 
 # start graphics
-sg_space = label.Label(ozone, text="SPACE", color=0x00B300)
-sg_space.x = 2
-sg_space.y = 4
-
-sg_jam = label.Label(ozone, text="JAM", color=0x00B300)
-sg_jam.x = 40
-sg_jam.y = 4
-
-sg_1p = label.Label(virtual_pet_sans, text="1P", color=0x00B3B3)
-sg_1p.x = 6
-sg_1p.y = 18
-
-sg_arcade = label.Label(virtual_pet_sans, text="ARCADE", color=0xFFFFFF)
-sg_arcade.x = 21
-sg_arcade.y = 18
-
-sg_2p = label.Label(virtual_pet_sans, text="2P", color=0xB300B3)
-sg_2p.x = 6
-sg_2p.y = 28
-
-sg_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF)
-sg_h.x = 21
-sg_h.y = 28
-
-sg_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF)
-sg_o.x = 29
-sg_o.y = 28
-
-sg_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF)
-sg_r.x = 37
-sg_r.y = 28
-
-sg_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF)
-sg_s.x = 45
-sg_s.y = 28
-
-sg_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF)
-sg_e.x = 53
-sg_e.y = 28
+sg_space = label.Label(ozone, text="SPACE", color=0x00B300, x=2, y=4)
+sg_jam = label.Label(ozone, text="JAM", color=0x00B300, x=40, y=4)
+sg_1p = label.Label(virtual_pet_sans, text="1P", color=0x00B3B3, x=6, y=18)
+sg_arcade = label.Label(virtual_pet_sans, text="ARCADE", color=0xFFFFFF, x=21, y=18)
+sg_2p = label.Label(virtual_pet_sans, text="2P", color=0xB300B3, x=6, y=28)
+sg_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF, x=21, y=28)
+sg_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF, x=29, y=28)
+sg_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF, x=37, y=28)
+sg_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF, x=45, y=28)
+sg_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF, x=53, y=28)
 
 # countdown graphics
-cdg_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF)
-cdg_time.x = 3
-cdg_time.y = 5
-
-cdg_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000)
-# cdg_time_c.x = 12
-cdg_time_c.y = 15
-
-cdg_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF)
-cdg_score.x = 32
-cdg_score.y = 5
-
-cdg_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
-# cdg_score_c.x = 44
-cdg_score_c.y = 15
-
-cdg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF)
-cdg_hiscore.x = 7
-cdg_hiscore.y = 28
-
-cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF)
-cdg_hiscore_c.x = 52
-cdg_hiscore_c.y = 28
+cdg_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF, x=3, y=5)
+cdg_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000, x=12, y=15)
+cdg_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF, x=32, y=5)
+cdg_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF, x=44, y=15)
+cdg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF, x=7, y=28)
+cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF, x=52, y=28)
 
 # arcade graphics
-ag_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF)
-ag_time.x = 3
-ag_time.y = 5
-
-ag_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000)
-# ag_time_c.x = 9
-ag_time_c.y = 15
-
-ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF)
-ag_score.x = 32
-ag_score.y = 5
-
-ag_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
-# ag_score_c.x = 44
-ag_score_c.y = 15
-
-ag_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF)
-ag_hiscore.x = 7
-ag_hiscore.y = 28
-
-ag_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF)
-ag_hiscore_c.x = 52
-ag_hiscore_c.y = 28
+ag_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF, x=3, y=5)
+ag_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000, x=9, y=15)
+ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF, x=32, y=5)
+ag_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF, x=44, y=15)
+ag_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF, x=7, y=28)
+ag_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF, x=52, y=28)
 
 # bonus time graphics
-bt_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF)
-bt_time.x = 3
-bt_time.y = 5
-
-bt_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000)
-# bt_time_c.x = 9
-bt_time_c.y = 15
-
-bt_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF)
-bt_score.x = 32
-bt_score.y = 5
-
-bt_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
-# bt_score_c.x = 44
-bt_score_c.y = 15
-
-bt_bonus = label.Label(virtual_pet_sans, text="BONUS", color=0x00FF00)
-bt_bonus.x = 4
-bt_bonus.y = 28
-
-bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x00FF00)
-bt_bonus_t.x = 37
-bt_bonus_t.y = 28
+bt_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF, x=3, y=5)
+bt_time_c = label.Label(virtual_pet_sans, text="", color=0xFF0000, x=9, y=15)
+bt_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF, x=32, y=5)
+bt_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF, x=44, y=15)
+bt_bonus = label.Label(virtual_pet_sans, text="BONUS", color=0x00FF00, x=4, y=28)
+bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x00FF00, x=37, y=28)
 
 # game over graphics
-gog_game = label.Label(ozone, text="GAME", color=0xB30000)
-gog_game.x = 2
-gog_game.y = 5
-
-gog_over = label.Label(ozone, text="OVER", color=0xB30000)
-gog_over.x = 35
-gog_over.y = 5
-
-gog_score = label.Label(virtual_pet_sans, text="SCORE", color=0x00B3B3)
-gog_score.x = 17
-gog_score.y = 17
-
-gog_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
-gog_score_c.x = 29
-gog_score_c.y = 27
+gog_game = label.Label(ozone, text="GAME", color=0xB30000, x=2, y=5)
+gog_over = label.Label(ozone, text="OVER", color=0xB30000, x=35, y=5)
+gog_score = label.Label(virtual_pet_sans, text="SCORE", color=0x00B3B3, x=17, y=17)
+gog_score_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF, x=29, y=27)
 
 # new hiscore graphics
-nhg_new = label.Label(ozone, text="NEW", color=0x00B300)
-nhg_new.x = 21
-nhg_new.y = 5
-
-nhg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00B3B3)
-nhg_hiscore.x = 11
-nhg_hiscore.y = 17
-
-nhg_hiscore_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF)
-nhg_hiscore_c.x = 29
-nhg_hiscore_c.y = 27
+nhg_new = label.Label(ozone, text="NEW", color=0x00B300, x=21, y=5)
+nhg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00B3B3, x=11, y=17)
+nhg_hiscore_c = label.Label(virtual_pet_sans, text="", color=0xFFFFFF, x=29, y=27)
 
 # h.o.r.s.e graphics
-hg_time = label.Label(virtual_pet_sans, text="TIME", color=0xB35A00)
-hg_time.x = 13
-hg_time.y = 5
-
-hg_time_c = label.Label(virtual_pet_sans, text="10", color=0x00B300)
-hg_time_c.x = 40
-hg_time_c.y = 5
-
-hg_p1 = label.Label(virtual_pet_sans, text="P1", color=0x00B3B3)
-hg_p1.x = 6
-hg_p1.y = 17
-
-hg_p1_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF)
-hg_p1_h.x = 21
-hg_p1_h.y = 17
-
-hg_p1_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF)
-hg_p1_o.x = 29
-hg_p1_o.y = 17
-
-hg_p1_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF)
-hg_p1_r.x = 37
-hg_p1_r.y = 17
-
-hg_p1_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF)
-hg_p1_s.x = 45
-hg_p1_s.y = 17
-
-hg_p1_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF)
-hg_p1_e.x = 53
-hg_p1_e.y = 17
-
-hg_p2 = label.Label(virtual_pet_sans, text="P2", color=0xB300B3)
-hg_p2.x = 6
-hg_p2.y = 28
-
-hg_p2_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF)
-hg_p2_h.x = 21
-hg_p2_h.y = 28
-
-hg_p2_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF)
-hg_p2_o.x = 29
-hg_p2_o.y = 28
-
-hg_p2_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF)
-hg_p2_r.x = 37
-hg_p2_r.y = 28
-
-hg_p2_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF)
-hg_p2_s.x = 45
-hg_p2_s.y = 28
-
-hg_p2_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF)
-hg_p2_e.x = 53
-hg_p2_e.y = 28
-
-hg_p1_won = label.Label(ozone, text="P1", color=0x00B3B3)
-hg_p1_won.x = 13
-hg_p1_won.y = 4
-
-hg_p1_w = label.Label(ozone, text="WON", color=0x00B3B3)
-hg_p1_w.x = 28
-hg_p1_w.y = 4
-
-hg_p2_won = label.Label(ozone, text="P2", color=0xB300B3)
-hg_p2_won.x = 12
-hg_p2_won.y = 4
-
-hg_p2_w = label.Label(ozone, text="WON", color=0xB300B3)
-hg_p2_w.x = 29
-hg_p2_w.y = 4
+hg_time = label.Label(virtual_pet_sans, text="TIME", color=0xB35A00, x=13, y=5)
+hg_time_c = label.Label(virtual_pet_sans, text="10", color=0x00B300, x=40, y=5)
+hg_p1 = label.Label(virtual_pet_sans, text="P1", color=0x00B3B3, x=6, y=17)
+hg_p1_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF, x=21, y=17)
+hg_p1_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF, x=29, y=17)
+hg_p1_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF, x=37, y=17)
+hg_p1_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF, x=45, y=17)
+hg_p1_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF, x=53, y=17)
+hg_p2 = label.Label(virtual_pet_sans, text="P2", color=0xB300B3, x=6, y=28)
+hg_p2_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF, x=21, y=28)
+hg_p2_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF, x=29, y=28)
+hg_p2_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF, x=37, y=28)
+hg_p2_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF, x=45, y=28)
+hg_p2_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF, x=53, y=28)
+hg_p1_won = label.Label(ozone, text="P1", color=0x00B3B3, x=13, y=4)
+hg_p1_w = label.Label(ozone, text="WON", color=0x00B3B3, x=28, y=4)
+hg_p2_won = label.Label(ozone, text="P2", color=0xB300B3, x=12, y=4)
+hg_p2_w = label.Label(ozone, text="WON", color=0xB300B3, x=29, y=4) 
 
 # add graphics to the display groups
 sg.append(sg_space)
