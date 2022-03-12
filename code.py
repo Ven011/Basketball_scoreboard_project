@@ -50,8 +50,8 @@ def get_set_hiscore(value="_"):
         return score
 
 # font setup
-ozone = bitmap_font.load_font("/fonts/ozone.bdf")
-virtual_pet_sans = bitmap_font.load_font("/fonts/virtual_pet_sans.bdf")
+ozone = bitmap_font.load_font("/fonts/ozone.pcf")
+virtual_pet_sans = bitmap_font.load_font("/fonts/virtual_pet_sans.pcf")
 
 # start graphics
 sg_space = label.Label(ozone, text="SPACE", color=0x00B300, x=2, y=4)
@@ -382,8 +382,8 @@ def arcade_countdown_screen():
 
     solid_green.animate()
     display.show(cdg)
-    sleep(1)
     game_countdown_time = time()
+    sleep(1)
 
     while screen_state == screen_states[2]:
         # update the time left in the countdown
