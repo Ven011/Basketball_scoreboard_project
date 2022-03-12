@@ -574,10 +574,13 @@ def arcade_bonus_screen(game_time, game_timer, score):
 
         # do not show the time right after bonus time starts
         if bt_time_c.text == skip_time:
-            bt_time_c.color = 0xFF0000
+            bt_time_c.color = 0x000000
+            bt_bonus.color = 0x000000
+            bt_bonus_t.color = 0x000000
         else:
-            # update the time
             bt_time_c.color = 0xFF0000
+            bt_bonus.color = 0x00FF00
+            bt_bonus_t.color = 0x00FF00
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_timer))
