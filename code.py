@@ -431,9 +431,6 @@ def arcade_scrn():
     display.show(ag)
 
     game_timer = time()
-    
-    ## REMOVE AFTER TESTING
-    ag_score_c.text = "0"
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
@@ -454,32 +451,26 @@ def arcade_scrn():
         if not sen_top.value and not sen_top_state and combined_sen_state:
             sen_top_state = True
             sen_triggered += 1
-            ag_score_c.text = str(int(ag_score_c.text) + 1)
         if sen_top.value and sen_top_state and sen_triggered == 1:
             sen_triggered += 1
-            ag_score_c.text = str(int(ag_score_c.text) + 1)
 
         # check if the bottom sensor is triggered
-        if not sen_btm.value and not sen_btm_state and sen_triggered == 2: 
+        if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
             sen_btm_state = True
             sen_triggered += 1
-            ag_score_c.text = str(int(ag_score_c.text) + 1)
         if sen_btm.value and sen_btm_state and sen_triggered == 3:
             sen_triggered += 1
-            ag_score_c.text = str(int(ag_score_c.text) + 1)
 
         # add point if both sensors have been triggered consecutively
-        if sen_triggered == 4:
-            sleep(2)
+        if sen_triggered == 4 or sen_triggered == 2:
             sen_top_state = False
             sen_btm_state = False
             sen_triggered = 0
-            ag_score_c.text = "0"
-            # # check whether the top sensor detects the ball
-            # if not sen_top.value:  # it does
-            #     pass
-            # else:  # it does not
-            #     ag_score_c.text = str(int(ag_score_c.text) + 1)
+            # check whether the top sensor detects the ball
+            if not sen_top.value:  # it does
+                pass
+            else:  # it does not
+                ag_score_c.text = str(int(ag_score_c.text) + 1)
 
         # center the score value label
         if int(ag_score_c.text) <= 9:
