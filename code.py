@@ -460,14 +460,10 @@ def arcade_scrn():
             ag_score_c.text = int(ag_score_c.text) + 1
 
         # check if the bottom sensor is triggered
-        if not sen_btm.value and not sen_btm_state and (sen_triggered == 2 or not sen_top_state): # or condition allows score to be counted if only the botton sensor detects the ball
+        if not sen_btm.value and not sen_btm_state and sen_triggered == 2: 
             sen_btm_state = True
-            if not sen_top_state:
-                sen_triggered += 3
-                ag_score_c.text = int(ag_score_c.text) + 1
-            else:
-                sen_triggered += 1
-                ag_score_c.text = int(ag_score_c.text) + 1
+            sen_triggered += 1
+            ag_score_c.text = int(ag_score_c.text) + 1
         if sen_btm.value and sen_btm_state and sen_triggered == 3:
             sen_triggered += 1
             ag_score_c.text = int(ag_score_c.text) + 1
