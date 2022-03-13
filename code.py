@@ -455,9 +455,12 @@ def arcade_scrn():
             sen_triggered += 1
 
         # check if the bottom sensor is triggered
-        if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
+        if not sen_btm.value and not sen_btm_state and (sen_triggered == 2 or not sen_top_state): # or condition allows score to be counted if only the botton sensor detects the ball
             sen_btm_state = True
-            sen_triggered += 1
+            if not sen_top_state:
+                sen_triggered += 3
+            else:
+                sen_triggered += 1
         if sen_btm.value and sen_btm_state and sen_triggered == 3:
             sen_triggered += 1
 
@@ -560,7 +563,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     exception = 0.5
     # don't start bonus time until the remainder of the past second has fully passed
     while (game_time - int(time() - game_timer)) == start_time - 1:
-        # make an exception if the remainder of the past seconds is greater than half a second
+        # make an exception if the remainder of the past seconds is greater than the exception time
         if start_time - (game_time - (time() - game_timer)) > exception:
             break
         pass
