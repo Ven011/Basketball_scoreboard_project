@@ -225,6 +225,27 @@ button_states = {
 scrn_state = "start_scrn"
 highest_score = "0"
 
+# center labels
+def center_labels(time_c_label, score_c_label):
+    # center the time value label
+    if int(time_c_label.text) >= 10 and int(time_c_label.text) <= 60:
+        time_c_label.x = 9
+        time_c_label.y = 15
+    elif int(time_c_label.text) >= 0:
+        time_c_label.x = 12
+        time_c_label.y = 15
+
+    # center the score value label
+    if int(score_c_label.text) >= 100:
+        score_c_label.x = 38
+        score_c_label.y = 15
+    elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
+        score_c_label.x = 41
+        score_c_label.y = 15
+    elif int(score_c_label.text) >= 0:
+        score_c_label.x = 44
+        score_c_label.y = 15
+
 # control pixels in the arcade and bonus time modes
 def control_pixels(time_c_label, mode):
     if int(time_c_label.text) <= 60 and int(time_c_label.text) >= 21:
@@ -322,7 +343,7 @@ def start_scrn():
             scrn_state = scrn_states[6]
 
 def countdown_scrn():
-    global scrn_state, highest_score
+    global scrn_state
 
     # set properties
     cdg_time_c.text = "3"
@@ -334,27 +355,26 @@ def countdown_scrn():
     cdg_hiscore_c.text = saved_hiscore
 
     # center the hiscore labels
-    if int(saved_hiscore) <= 9:
-        cdg_hiscore.x = 7
+    if int(saved_hiscore) >= 100:
+        cdg_hiscore.x = 1
         cdg_hiscore.y = 28
-        cdg_hiscore_c.x = 52
+        cdg_hiscore_c.x = 46
         cdg_hiscore_c.y = 28
     elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
         cdg_hiscore.x = 4
         cdg_hiscore.y = 28
         cdg_hiscore_c.x = 49
         cdg_hiscore_c.y = 28
-    elif int(saved_hiscore) >= 100:
-        cdg_hiscore.x = 1
+    elif int(saved_hiscore) >= 0:
+        cdg_hiscore.x = 7
         cdg_hiscore.y = 28
-        cdg_hiscore_c.x = 46
+        cdg_hiscore_c.x = 52
         cdg_hiscore_c.y = 28
 
     solid_green.animate()
 
     display.show(cdg)
     sleep(1)
-
     countdown_timer = time()
 
     while scrn_state == scrn_states[2]:
@@ -392,60 +412,33 @@ def arcade_scrn():
     sen_btm_state = False
     combined_sen_state = True
 
-    # center the time value label
-    if int(ag_time_c.text) <= 9:
-        ag_time_c.x = 12
-        ag_time_c.y = 15
-    elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-        ag_time_c.x = 9
-        ag_time_c.y = 15
-
-    # center the score value label
-    if int(ag_score_c.text) <= 9:
-        ag_score_c.x = 44
-        ag_score_c.y = 15
-    elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-        ag_score_c.x = 41
-        ag_score_c.y = 15
-    elif int(ag_score_c.text) >= 100:
-        ag_score_c.x = 38
-        ag_score_c.y = 15
+    # center the time and score value
+    center_labels(ag_time_c, ag_score_c)
 
     # center the hiscore labels
-    if int(saved_hiscore) <= 9:
-        ag_hiscore.x = 7
+    if int(saved_hiscore) >= 100:
+        ag_hiscore.x = 1
         ag_hiscore.y = 28
-        ag_hiscore_c.x = 52
+        ag_hiscore_c.x = 46
         ag_hiscore_c.y = 28
     elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
         ag_hiscore.x = 4
         ag_hiscore.y = 28
         ag_hiscore_c.x = 49
         ag_hiscore_c.y = 28
-    elif int(saved_hiscore) >= 100:
-        ag_hiscore.x = 1
+    elif int(saved_hiscore) >= 0:
+        ag_hiscore.x = 7
         ag_hiscore.y = 28
-        ag_hiscore_c.x = 46
+        ag_hiscore_c.x = 52
         ag_hiscore_c.y = 28
 
     display.show(ag)
-
     game_timer = time()
-    
-    ag_score_c.text = "0"
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
         ag_time_c.text = str(game_time - int(time() - game_timer))
 
-        # center the time value label
-        if int(ag_time_c.text) <= 9:
-            ag_time_c.x = 12
-            ag_time_c.y = 15
-        elif int(ag_time_c.text) >= 10 and int(ag_time_c.text) <= 60:
-            ag_time_c.x = 9
-            ag_time_c.y = 15
-        
         # prevent point if both sensors detect an object simultaneously
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
@@ -472,18 +465,10 @@ def arcade_scrn():
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
-                ag_score_c.text = str(int(ag_score_c.text) + 1)
+                ag_score_c.text = str(int(ag_score_c.text) + 2)
 
-        # center the score value label
-        if int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
-            ag_score_c.x = 41
-            ag_score_c.y = 15
-        elif int(ag_score_c.text) <= 9:
-            ag_score_c.x = 44
-            ag_score_c.y = 15
-        elif int(ag_score_c.text) >= 100:
-            ag_score_c.x = 38
-            ag_score_c.y = 15
+        # center the time and score value
+        center_labels(ag_time_c, ag_score_c)
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
@@ -524,10 +509,10 @@ def arcade_scrn():
 
                 # go to the bonus time scrn for 10 seconds
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
-                
+
                 ag_hiscore.color = 0x00FFFF
                 ag_hiscore_c.color = 0x00FFFF
-                
+
                 display.show(ag)
 
         control_pixels(ag_time_c, "arcade_scrn")
@@ -583,31 +568,15 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     sen_btm_state = False
     combined_sen_state = True
 
-    # center the time value label
-    if int(bt_time_c.text) <= 9:
-        bt_time_c.x = 12
-        bt_time_c.y = 15
-    elif int(bt_time_c.text) >= 10 and int(bt_time_c.text) <= 60:
-        bt_time_c.x = 9
-        bt_time_c.y = 15
-
-    # center the score value label
-    if int(bt_score_c.text) <= 9:
-        bt_score_c.x = 44
-        bt_score_c.y = 15
-    elif int(bt_score_c.text) >= 10 and int(bt_score_c.text) <= 99:
-        bt_score_c.x = 41
-        bt_score_c.y = 15
-    elif int(bt_score_c.text) >= 100:
-        bt_score_c.x = 38
-        bt_score_c.y = 15
+    # center the time and score value
+    center_labels(ag_time_c, ag_score_c)
 
     display.show(btg)
 
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
         rainbow.animate()
-        
+
         # delay showing the bt text
         if time() - bt_start_time >= 1:
             bt_bonus.color = 0x00FF00
@@ -615,14 +584,6 @@ def arcade_bonus_scrn(game_time, game_timer, score):
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_timer))
-
-        # center the time value label
-        if int(bt_time_c.text) <= 9:
-            bt_time_c.x = 12
-            bt_time_c.y = 15
-        elif int(bt_time_c.text) >= 10 and int(bt_time_c.text) <= 60:
-            bt_time_c.x = 9
-            bt_time_c.y = 15
 
         # prevent point if both sensors detect an object simultaneously
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
@@ -646,22 +607,14 @@ def arcade_bonus_scrn(game_time, game_timer, score):
             sen_top_state = False
             sen_btm_state = False
             sen_triggered = 0
-            # check whether the top sensor detects the ball
+            # # check whether the top sensor detects the ball
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
-                bt_score_c.text = str(int(bt_score_c.text) + 1)
+                bt_score_c.text = str(int(bt_score_c.text) + 2)
 
-        # center the score value label
-        if int(bt_score_c.text) <= 9:
-            bt_score_c.x = 44
-            bt_score_c.y = 15
-        elif int(bt_score_c.text) >= 10 and int(bt_score_c.text) <= 99:
-            bt_score_c.x = 41
-            bt_score_c.y = 15
-        elif int(bt_score_c.text) >= 100:
-            bt_score_c.x = 38
-            bt_score_c.y = 15
+        # center the time and score value
+        center_labels(bt_time_c, bt_score_c)
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
