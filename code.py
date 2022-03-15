@@ -455,7 +455,6 @@ def arcade_scrn():
             sen_triggered += 1
         if sen_top.value and sen_top_state and sen_triggered == 1:
             sen_triggered += 1
-            ag_score_c.text = "1"
 
         # check if the bottom sensor is triggered
         if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
@@ -471,16 +470,14 @@ def arcade_scrn():
 
         # add point if both sensors have been triggered consecutively
         if sen_triggered == 4:
-            sleep(0.5)
             sen_top_state = False
             sen_btm_state = False
             sen_triggered = 0
-            ag_score_c.text = "0"
             # # check whether the top sensor detects the ball
-            # if not sen_top.value:  # it does
-            #     pass
-            # else:  # it does not
-            #     ag_score_c.text = str(int(ag_score_c.text) + 1)
+            if not sen_top.value:  # it does
+                pass
+            else:  # it does not
+                ag_score_c.text = str(int(ag_score_c.text) + 1)
 
         # center the score value label
         if int(ag_score_c.text) <= 9:
