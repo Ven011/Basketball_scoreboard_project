@@ -460,11 +460,6 @@ def arcade_scrn():
         if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
             sen_btm_state = True
             sen_triggered += 1
-        else:
-            sleep(0.0001)
-            if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
-                sen_btm_state = True
-                sen_triggered += 1
         if sen_btm.value and sen_btm_state and sen_triggered == 3:
             sen_triggered += 1
 
