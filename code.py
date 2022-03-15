@@ -480,10 +480,10 @@ def arcade_scrn():
                 ag_score_c.text = str(int(ag_score_c.text) + 1)
 
         # center the score value label
-        if int(ag_score_c.text) <= 9:
+        if int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
             ag_score_c.x = 44
             ag_score_c.y = 15
-        elif int(ag_score_c.text) >= 10 and int(ag_score_c.text) <= 99:
+        elif int(ag_score_c.text) <= 9:
             ag_score_c.x = 41
             ag_score_c.y = 15
         elif int(ag_score_c.text) >= 100:
