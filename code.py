@@ -562,7 +562,10 @@ def arcade_scrn():
 
 def arcade_bonus_scrn(game_time, game_timer, score):
     # set properties
+    bt_bonus.color = 0x000000
+    bt_bonus_t.color = 0x000000
     bt_score_c.text = score
+    
     start_time = (game_time - int(time() - game_timer)) + 1
     exception = 0.5
     # don't start bonus time until the remainder of the past second has fully passed
@@ -572,7 +575,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
             break
         pass
     
-    bt_time_c.text = str(game_time - int(time() - game_timer))
+    bt_time_c.text = str(game_time - int(time() - game_timer)) # needs to come after the loop above
 
     # variables
     labels_are_visible = False
@@ -609,6 +612,11 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
         rainbow.animate()
+        
+        # delay showing the bt text
+        if time() - bt_start_time >= 1:
+            bt_bonus.color = 0x00FF00
+            bt_bonus_t.color = 0x00FF00
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_timer))
