@@ -354,7 +354,7 @@ def countdown_scrn():
     countdown_time = 3
     saved_hiscore = get_set_hiscore()
     cdg_hiscore_c.text = saved_hiscore
-    prev_time = 3
+    prev_time = countdown_time
 
     # center the hiscore labels
     if int(saved_hiscore) >= 100:
@@ -417,7 +417,7 @@ def arcade_scrn():
     sen_top_state = False
     sen_btm_state = False
     combined_sen_state = True
-    prev_time = 60
+    prev_time = game_time
 
     # center the time and score value
     center_labels(ag_time_c, ag_score_c)
@@ -444,7 +444,6 @@ def arcade_scrn():
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
-        # ag_time_c.text = str(game_time - int(time() - game_timer))
         if (game_time - int(time() - game_timer)) == prev_time - 1:
             ag_time_c.text = str(prev_time - 1)
             prev_time = prev_time - 1
@@ -577,6 +576,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     sen_top_state = False
     sen_btm_state = False
     combined_sen_state = True
+    prev_time = int(bt_time_c.text)
 
     # center the time and score value
     center_labels(ag_time_c, ag_score_c)
@@ -588,7 +588,10 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         rainbow.animate()
 
         # update the time
-        bt_time_c.text = str(game_time - int(time() - game_timer))
+        # bt_time_c.text = str(game_time - int(time() - game_timer))
+        if (game_time - int(time() - game_timer)) == prev_time - 1:
+            bt_time_c.text = str(prev_time - 1)
+            prev_time = prev_time - 1
 
         # prevent point if both sensors detect an object simultaneously
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
