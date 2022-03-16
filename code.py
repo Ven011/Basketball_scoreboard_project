@@ -379,7 +379,7 @@ def countdown_scrn():
     sleep(1)
     countdown_timer = time()
     
-    cdg_time_c.text = str(countdown_time - int(time() - countdown_timer))
+    cdg_time_c.text = str(3)
 
     while scrn_state == scrn_states[2]:
         # update the time left in the countdown
