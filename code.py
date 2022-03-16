@@ -4,6 +4,7 @@ import board
 import framebufferio
 import audioio
 import audiomp3
+import gpiozero
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import bitmap_label as label
 from time import sleep, time
@@ -560,7 +561,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # variables
     labels_are_visible = False
     blink_timer = time()
-    blink_period = 1
+    blink_period = 5
     bt_start_time = time()
     bt_stay_time = 10
     sen_triggered = 0
@@ -576,11 +577,6 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
         rainbow.animate()
-
-        # delay showing the bt text
-        if time() - bt_start_time >= 1:
-            bt_bonus.color = 0x00FF00
-            bt_bonus_t.color = 0x00FF00
 
         # update the time
         bt_time_c.text = str(game_time - int(time() - game_timer))
