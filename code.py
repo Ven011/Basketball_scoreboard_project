@@ -561,7 +561,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # variables
     labels_are_visible = False
     blink_timer = time()
-    blink_period = 5
+    blink_period = 2
     bt_start_time = time()
     bt_stay_time = 10
     sen_triggered = 0
