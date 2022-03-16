@@ -379,11 +379,11 @@ def countdown_scrn():
     sleep(1)
     countdown_timer = time()
     
+    # set the initial text of the countdown time counter
     cdg_time_c.text = str(3)
 
     while scrn_state == scrn_states[2]:
         # update the time left in the countdown
-        # cdg_time_c.text = str(countdown_time - int(time() - countdown_timer))
         if (countdown_time - int(time() - countdown_timer)) == prev_time - 1:
             cdg_time_c.text = str(prev_time - 1)
             prev_time = prev_time - 1
@@ -411,13 +411,13 @@ def arcade_scrn():
     game_time = 60
     saved_hiscore = get_set_hiscore()
     ag_hiscore_c.text = saved_hiscore
-    # prevent the bonus time when the hiscore is 0 for the first game
-    can_do_bonus = True if int(saved_hiscore) >= 20 else False
+    can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
     hiscore_beaten = False
     sen_triggered = 0
     sen_top_state = False
     sen_btm_state = False
     combined_sen_state = True
+    prev_time = 60
 
     # center the time and score value
     center_labels(ag_time_c, ag_score_c)
@@ -444,7 +444,10 @@ def arcade_scrn():
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
-        ag_time_c.text = str(game_time - int(time() - game_timer))
+        # ag_time_c.text = str(game_time - int(time() - game_timer))
+        if (game_time - int(time() - game_timer)) == prev_time - 1:
+            ag_time_c.text = str(prev_time - 1)
+            prev_time = prev_time - 1
 
         # prevent point if both sensors detect an object simultaneously
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
