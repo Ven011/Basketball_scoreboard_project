@@ -7,7 +7,7 @@ import audiomp3
 import gpiozero
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import bitmap_label as label
-from time import sleep, time
+from time import sleep, time, monotonic
 import digitalio
 import neopixel
 from adafruit_led_animation.animation.colorcycle import ColorCycle
@@ -279,8 +279,8 @@ def start_scrn():
             mp3stream.file = open(audio_file["space_jam"], "rb")
             speaker.play(mp3stream)
 
-        if time() >= blink_timer + blink_period:
-            blink_timer = time()
+        if monotonic() >= blink_timer + blink_period:
+            blink_timer = monotonic()
             if labels_are_visible:
                 labels_are_visible = False
                 blink_period = 1
@@ -311,12 +311,12 @@ def start_scrn():
 
         # reset the hiscore if the arcade button is held for 5 seconds
         if not btn_arcade.value and not button_states[1]:
-            reset_score_v = time()
+            reset_score_v = monotonic()
             button_states[1] = True
             while not btn_arcade.value:
                 checks()
                 colorcycle.animate()
-                reset_score_t = time() - reset_score_v
+                reset_score_t = monotonic() - reset_score_v
                 if reset_score_t == 5:
                     ag_hiscore_c.text = "0"
                     highest_score = "0"
@@ -376,11 +376,11 @@ def countdown_scrn():
 
     display.show(cdg)
     sleep(1)
-    countdown_timer = time()
+    countdown_timer = monotonic()
 
     while scrn_state == scrn_states[2]:
         # update the time left in the countdown
-        cdg_time_c.text = str(countdown_time - int(time() - countdown_timer))
+        cdg_time_c.text = str(countdown_time - int(monotonic() - countdown_timer))
 
         # switch to the arcade scrn
         if int(cdg_time_c.text) == 1:
@@ -400,7 +400,7 @@ def arcade_scrn():
 
     # variables
     labels_are_visible = False
-    blink_timer = time()
+    blink_timer = monotonic()
     blink_period = 0
     game_time = 60
     saved_hiscore = get_set_hiscore()
@@ -434,11 +434,11 @@ def arcade_scrn():
         ag_hiscore_c.y = 28
 
     display.show(ag)
-    game_timer = time()
+    game_timer = monotonic()
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
-        ag_time_c.text = str(game_time - int(time() - game_timer))
+        ag_time_c.text = str(game_time - int(monotonic() - game_timer))
 
         # prevent point if both sensors detect an object simultaneously
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
@@ -477,8 +477,8 @@ def arcade_scrn():
         # bonus time
         if can_do_bonus:
             if score_diff <= 5 and score_diff >= 0:
-                if time() >= blink_timer + blink_period:
-                    blink_timer = time()
+                if monotonic() >= blink_timer + blink_period:
+                    blink_timer = monotonic()
                     if labels_are_visible:
                         labels_are_visible = False
                         blink_period = 1
@@ -547,22 +547,22 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     bt_bonus_t.color = 0x000000
     bt_score_c.text = score
     
-    start_time = (game_time - int(time() - game_timer)) + 1
+    start_time = (game_time - int(monotonic() - game_timer)) + 1
     exception = 0.5
     # don't start bonus time until the remainder of the past second has fully passed
-    while (game_time - int(time() - game_timer)) == start_time - 1:
+    while (game_time - int(monotonic() - game_timer)) == start_time - 1:
         # make an exception if the remainder of the past seconds is greater than the exception time
-        if start_time - (game_time - (time() - game_timer)) > exception:
+        if start_time - (game_time - (monotonic() - game_timer)) > exception:
             break
         pass
     
-    bt_time_c.text = str(game_time - int(time() - game_timer)) # needs to come after the loop above
+    bt_time_c.text = str(game_time - int(monotonic() - game_timer)) # needs to come after the loop above
 
     # variables
     labels_are_visible = False
-    blink_timer = time()
+    blink_timer = monotonic()
     blink_period = 2
-    bt_start_time = time()
+    bt_start_time = monotonic()
     bt_stay_time = 10
     sen_triggered = 0
     sen_top_state = False
@@ -575,11 +575,11 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     display.show(btg)
 
     # stay in the bonus time scrn for the time specified in stay_time
-    while time() < bt_start_time + bt_stay_time:
+    while monotonic() < bt_start_time + bt_stay_time:
         rainbow.animate()
 
         # update the time
-        bt_time_c.text = str(game_time - int(time() - game_timer))
+        bt_time_c.text = str(game_time - int(monotonic() - game_timer))
 
         # prevent point if both sensors detect an object simultaneously
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
@@ -612,8 +612,8 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         # center the time and score value
         center_labels(bt_time_c, bt_score_c)
 
-        if time() >= blink_timer + blink_period:
-            blink_timer = time()
+        if monotonic() >= blink_timer + blink_period:
+            blink_timer = monotonic()
             if labels_are_visible:
                 labels_are_visible = False
                 blink_period = 1
@@ -637,9 +637,9 @@ def game_over_scrn():
 
     # variables
     labels_are_visible = False
-    blink_timer = time()
+    blink_timer = monotonic()
     blink_period = 0
-    start_time = time()
+    start_time = monotonic()
 
     # center the score value label
     if int(gog_score_c.text) <= 9:
@@ -654,11 +654,11 @@ def game_over_scrn():
 
     display.show(gog)
 
-    while time() - start_time <= 10:
+    while monotonic() - start_time <= 10:
         rainbow.animate()
 
-        if time() >= blink_timer + blink_period:
-            blink_timer = time()
+        if monotonic() >= blink_timer + blink_period:
+            blink_timer = monotonic()
             if labels_are_visible:
                 labels_are_visible = False
                 blink_period = 1
@@ -680,9 +680,9 @@ def new_hiscore_scrn():
 
     # variables
     labels_are_visible = False
-    blink_timer = time()
+    blink_timer = monotonic()
     blink_period = 0
-    start_time = time()
+    start_time = monotonic()
 
     # center the hiscore value label
     if int(highest_score) <= 9:
@@ -697,11 +697,11 @@ def new_hiscore_scrn():
 
     display.show(nhg)
 
-    while time() - start_time <= 10:
+    while monotonic() - start_time <= 10:
         rainbow.animate()
 
-        if time() >= blink_timer + blink_period:
-            blink_timer = time()
+        if monotonic() >= blink_timer + blink_period:
+            blink_timer = monotonic()
             if labels_are_visible:
                 labels_are_visible = False
                 blink_period = 1
