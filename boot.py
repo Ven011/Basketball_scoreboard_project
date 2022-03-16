@@ -2,13 +2,8 @@ import board
 import digitalio
 import storage
 
-# Feather M4 Express
-# switch = digitalio.DigitalInOut(board.D4)
-# switch.direction = digitalio.Direction.INPUT
-# switch.pull = digitalio.Pull.UP
-
 # Metro M4 Express
-switch = digitalio.DigitalInOut(board.D13)
+switch = digitalio.DigitalInOut(board.D12)
 switch.direction = digitalio.Direction.INPUT
 switch.pull = digitalio.Pull.UP
 
