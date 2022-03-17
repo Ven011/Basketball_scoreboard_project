@@ -4,7 +4,6 @@ import board
 import framebufferio
 import audioio
 import audiomp3
-import gpiozero
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import bitmap_label as label
 from time import sleep, time, monotonic
@@ -189,12 +188,12 @@ solid_yellow = Solid(pixels, color=0xB3B300)
 solid_red = Solid(pixels, color=0xB30000)
 
 # arcade button setup
-btn_arcade = digitalio.DigitalInOut(board.D11)
+btn_arcade = digitalio.DigitalInOut(board.SCK)
 btn_arcade.direction = digitalio.Direction.INPUT
 btn_arcade.pull = digitalio.Pull.UP
 
 # h.o.r.s.e button setup
-btn_horse = digitalio.DigitalInOut(board.D12)
+btn_horse = digitalio.DigitalInOut(board.MISO)
 btn_horse.direction = digitalio.Direction.INPUT
 btn_horse.pull = digitalio.Pull.UP
 
@@ -547,14 +546,14 @@ def arcade_scrn():
         # exit the game when the time is up
         if int(ag_time_c.text) <= 0:
             sleep(1)
-            if int(highest_score) < int(saved_hiscore):
+            if int(highest_score) > int(saved_hiscore): # hiscore was beaten
+                scrn_state = scrn_states[5]
+                get_set_hiscore(value=ag_score_c.text) # save the hiscore
+                mp3stream.file = open(audio_file["hiscore"], "rb")
+                speaker.play(mp3stream)
+            else: # hiscore was not beaten
                 scrn_state = scrn_states[4]
                 mp3stream.file = open(audio_file["game_over"], "rb")
-                speaker.play(mp3stream)
-            else:
-                scrn_state = scrn_states[5]
-                get_set_hiscore(value=ag_score_c.text)
-                mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
 
 def arcade_bonus_scrn(game_time, game_timer, score):
