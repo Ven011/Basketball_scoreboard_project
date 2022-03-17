@@ -260,9 +260,9 @@ def control_pixels(time_c_label, mode):
         solid_green.animate()
     elif int(time_c_label.text) <= 20 and int(time_c_label.text) >= 11:
         solid_yellow.animate()
-    if int(time_c_label.text) == 11:
-        mp3stream.file = open(audio_file["countdown"], "rb")
-        speaker.play(mp3stream)
+        if int(time_c_label.text) == 11:
+            mp3stream.file = open(audio_file["countdown"], "rb")
+            speaker.play(mp3stream)
     if mode == "arcade_scrn":
         if int(time_c_label.text) <= 10 and int(time_c_label.text) >= 0:
             solid_red.animate()
@@ -481,7 +481,7 @@ def arcade_scrn():
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
-                ag_score_c.text = str(int(ag_score_c.text) + 2)
+                ag_score_c.text = str(int(ag_score_c.text) + 4)
 
         # center the time and score value
         center_labels(ag_time_c, ag_score_c)
@@ -576,7 +576,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # variables
     labels_are_visible = False
     blink_timer = time()
-    blink_period = 2
+    blink_period = 1
     bt_start_time = time()
     bt_stay_time = 10
     sen_triggered = 0
@@ -625,7 +625,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
-                bt_score_c.text = str(int(bt_score_c.text) + 2)
+                bt_score_c.text = str(int(bt_score_c.text) + 4)
 
         # center the time and score value
         center_labels(bt_time_c, bt_score_c)
