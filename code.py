@@ -524,9 +524,9 @@ def arcade_scrn():
                 # go to the bonus time scrn for 10 seconds
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
                 
-                prev_time = int(ag_score_c.text) + 1 # update the previous time to make sure that the time keeps updating in game
+                prev_time = (game_time - int(time() - game_timer)) + 1 # update the previous time to make sure that the time keeps updating in game
                 
-                hiscoretext_delay = time() 
+                # hiscoretext_delay = time() 
 
                 display.show(ag)
 
