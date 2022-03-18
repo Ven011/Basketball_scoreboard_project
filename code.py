@@ -462,7 +462,7 @@ def arcade_scrn():
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
         # check if the top sensor is triggered
-        if not sen_top.value and not sen_top_state and combined_sen_state:
+        if not sen_top.value and not sen_top_state:
             sen_top_state = True
             sen_triggered += 1
         if sen_top.value and sen_top_state and sen_triggered == 1:
