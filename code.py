@@ -476,7 +476,7 @@ def arcade_scrn():
             sen_triggered += 1
 
         # add point if both sensors have been triggered consecutively
-        if sen_triggered == 4:
+        if sen_triggered == 3:
             sen_top_state = False
             sen_btm_state = False
             sen_triggered = 0
