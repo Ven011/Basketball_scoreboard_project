@@ -231,20 +231,25 @@ def center_labels(time_c_label, score_c_label):
     if int(time_c_label.text) >= 10 and int(time_c_label.text) <= 60:
         time_c_label.x = 9
         time_c_label.y = 15
+        display.refresh()
     elif int(time_c_label.text) >= 0:
         time_c_label.x = 12
         time_c_label.y = 15
+        display.refresh()
 
     # center the score value label
     if int(score_c_label.text) >= 100:
         score_c_label.x = 38
         score_c_label.y = 15
+        display.refresh()
     elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
         score_c_label.x = 41
         score_c_label.y = 15
+        display.refresh()
     elif int(score_c_label.text) >= 0:
         score_c_label.x = 44
         score_c_label.y = 15
+        display.refresh()
 
 # control pixels in the arcade and bonus time modes
 def control_pixels(time_c_label, mode):
@@ -475,7 +480,7 @@ def arcade_scrn():
             sen_top_state = False
             sen_btm_state = False
             sen_triggered = 0
-            # # check whether the top sensor detects the ball
+            # check whether the top sensor detects the ball
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
