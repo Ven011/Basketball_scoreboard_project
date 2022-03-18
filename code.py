@@ -473,7 +473,7 @@ def arcade_scrn():
             sen_btm_state = True
             sen_triggered += 1
             ag_score_c.text = "1"
-        if sen_btm.value and sen_btm_state and sen_triggered == 3:
+        if sen_btm.value and sen_btm_state:
             sen_triggered += 1
             sleep(0.5)
             ag_score_c.text = "0"
