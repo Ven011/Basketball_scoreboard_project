@@ -585,7 +585,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     prev_time = int(bt_time_c.text)
 
     # center the time and score value
-    center_labels(ag_time_c, ag_score_c)
+    center_labels(bt_time_c, bt_score_c)
 
     display.show(btg)
 
