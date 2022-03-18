@@ -465,14 +465,14 @@ def arcade_scrn():
         if not sen_top.value and not sen_top_state:
             sen_top_state = True
             sen_triggered += 1
-        if sen_top.value and sen_top_state and sen_triggered == 1:
-            sen_triggered += 1
+        # if sen_top.value and sen_top_state:
+        #     sen_triggered += 1
 
         # check if the bottom sensor is triggered
         if not sen_btm.value and not sen_btm_state:
             sen_btm_state = True
             sen_triggered += 1
-        if sen_btm.value and sen_btm_state and sen_triggered == 3:
+        if sen_btm.value and sen_btm_state and sen_triggered == 2:
             sen_triggered += 1
 
         # add point if both sensors have been triggered consecutively
