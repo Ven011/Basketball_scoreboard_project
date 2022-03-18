@@ -6,7 +6,7 @@ import audioio
 import audiomp3
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import bitmap_label as label
-from time import sleep, time, monotonic
+from time import sleep, time
 import digitalio
 import neopixel
 from adafruit_led_animation.animation.colorcycle import ColorCycle
@@ -231,25 +231,20 @@ def center_labels(time_c_label, score_c_label):
     if int(time_c_label.text) >= 10 and int(time_c_label.text) <= 60:
         time_c_label.x = 9
         time_c_label.y = 15
-        display.refresh()
     elif int(time_c_label.text) >= 0:
         time_c_label.x = 12
         time_c_label.y = 15
-        display.refresh()
 
     # center the score value label
     if int(score_c_label.text) >= 100:
         score_c_label.x = 38
         score_c_label.y = 15
-        display.refresh()
     elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
         score_c_label.x = 41
         score_c_label.y = 15
-        display.refresh()
     elif int(score_c_label.text) >= 0:
         score_c_label.x = 44
         score_c_label.y = 15
-        display.refresh()
 
 # control pixels in the arcade and bonus time modes
 def control_pixels(time_c_label, mode):
@@ -529,7 +524,7 @@ def arcade_scrn():
                 # go to the bonus time scrn for 10 seconds
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
                 
-                prev_time = int(ag_score_c.text) # update the previous time to make sure that the time keeps updating in game
+                prev_time = int(ag_score_c.text) + 1 # update the previous time to make sure that the time keeps updating in game
                 
                 hiscoretext_delay = time() 
 
