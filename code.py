@@ -227,14 +227,6 @@ highest_score = "0"
 
 # center labels
 def center_labels(time_c_label, score_c_label):
-    # FOR TESTING
-    if int(score_c_label.text) == 10:
-        score_c_label.x = 41
-        score_c_label.y = 15
-    if int(score_c_label.text) == 100:
-        score_c_label.x = 38
-        score_c_label.y = 15
-    
     # center the time value label
     if int(time_c_label.text) >= 10 and int(time_c_label.text) <= 60:
         time_c_label.x = 9
@@ -525,6 +517,8 @@ def arcade_scrn():
 
                 # go to the bonus time scrn for 10 seconds
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
+                
+                prev_time = int(ag_score_c.text) # update the previous time to make sure that the time keeps updating in game
 
                 ag_hiscore.color = 0x00FFFF
                 ag_hiscore_c.color = 0x00FFFF
