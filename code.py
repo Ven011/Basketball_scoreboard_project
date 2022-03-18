@@ -406,6 +406,7 @@ def arcade_scrn():
     # variables
     labels_are_visible = False
     blink_timer = time()
+    hiscoretext_delay = 0
     blink_period = 0
     game_time = 60
     saved_hiscore = get_set_hiscore()
@@ -442,6 +443,11 @@ def arcade_scrn():
     game_timer = time()
 
     while scrn_state == scrn_states[3]:
+        # delay showing hiscore text after bonus time
+        if time() - hiscoretext_delay is not time() and time() - hiscoretext_delay > 1:
+            ag_hiscore.color = 0x00FFFF
+            ag_hiscore_c.color = 0x00FFFF
+        
         # update the time left in the game
         if (game_time - int(time() - game_timer)) == prev_time - 1:
             ag_time_c.text = str(prev_time - 1)
@@ -519,9 +525,8 @@ def arcade_scrn():
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
                 
                 prev_time = int(ag_score_c.text) # update the previous time to make sure that the time keeps updating in game
-
-                ag_hiscore.color = 0x00FFFF
-                ag_hiscore_c.color = 0x00FFFF
+                
+                hiscoretext_delay = time() 
 
                 display.show(ag)
 
