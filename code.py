@@ -475,7 +475,13 @@ def arcade_scrn():
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
-                ag_score_c.text = str(int(ag_score_c.text) + 4)
+                # ag_score_c.text = str(int(ag_score_c.text) + 4)
+                score += 4
+                
+        # update the score if it changed
+        if prev_score != score:
+            ag_score_c.text = str(score)
+            prev_score = score
 
         # center the time and score value
         center_labels(ag_time_c, ag_score_c)
