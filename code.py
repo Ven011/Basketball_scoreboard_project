@@ -406,7 +406,6 @@ def arcade_scrn():
     # variables
     labels_are_visible = False
     blink_timer = time()
-    hiscoretext_delay = 0
     blink_period = 0
     game_time = 60
     saved_hiscore = get_set_hiscore()
@@ -418,6 +417,8 @@ def arcade_scrn():
     sen_btm_state = False
     combined_sen_state = True
     prev_time = game_time
+    prev_score = 0
+    score = 0
 
     # center the time and score value
     center_labels(ag_time_c, ag_score_c)
