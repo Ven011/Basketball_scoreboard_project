@@ -423,6 +423,8 @@ def arcade_scrn():
     sen_btm_state = False
     combined_sen_state = True
     prev_time = game_time
+    prev_score = 0
+    score = 0
 
     # center the time and score value
     center_labels(ag_time_c, ag_score_c)
@@ -462,21 +464,21 @@ def arcade_scrn():
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
         # check if the top sensor is triggered
-        if not sen_top.value and not sen_top_state:
+        if not sen_top.value and not sen_top_state and combined_sen_state:
             sen_top_state = True
             sen_triggered += 1
-        # if sen_top.value and sen_top_state:
-        #     sen_triggered += 1
+        if sen_top.value and sen_top_state and sen_triggered == 1:
+            sen_triggered += 1
 
         # check if the bottom sensor is triggered
-        if not sen_btm.value and not sen_btm_state:
+        if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
             sen_btm_state = True
             sen_triggered += 1
-        if sen_btm.value and sen_btm_state and sen_triggered == 2:
+        if sen_btm.value and sen_btm_state and sen_triggered == 3:
             sen_triggered += 1
 
         # add point if both sensors have been triggered consecutively
-        if sen_triggered == 3:
+        if sen_triggered == 4:
             sen_top_state = False
             sen_btm_state = False
             sen_triggered = 0
@@ -484,7 +486,13 @@ def arcade_scrn():
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
-                ag_score_c.text = str(int(ag_score_c.text) + 4)
+                # ag_score_c.text = str(int(ag_score_c.text) + 4)
+                score += 1
+                
+        # update the score if it changed
+        if prev_score != score:
+            ag_score_c.text = str(score)
+            prev_score = score
 
         # center the time and score value
         center_labels(ag_time_c, ag_score_c)
