@@ -8,10 +8,10 @@ from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import bitmap_label as label
 from time import sleep, time
 import digitalio
-import neopixel
-from adafruit_led_animation.animation.colorcycle import ColorCycle
-from adafruit_led_animation.animation.rainbow import Rainbow
-from adafruit_led_animation.animation.solid import Solid
+#import neopixel
+#from adafruit_led_animation.animation.colorcycle import ColorCycle
+#from adafruit_led_animation.animation.rainbow import Rainbow
+#from adafruit_led_animation.animation.solid import Solid
 
 # RGBMatrix setup
 displayio.release_displays()
@@ -177,8 +177,8 @@ audio_file = {
     "hiscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
-countdown_file = open(audio_file["countdown"], "rb")
 
+'''
 # NeoPixel setup
 pixels = neopixel.NeoPixel(board.D8, 54, brightness=0.2)
 rainbow = Rainbow(pixels, speed=0.1, period=2, step=1)
@@ -187,6 +187,7 @@ solid_white = Solid(pixels, color=0xFFFFFF)
 solid_green = Solid(pixels, color=0x00B300)
 solid_yellow = Solid(pixels, color=0xB3B300)
 solid_red = Solid(pixels, color=0xB30000)
+'''
 
 # arcade button setup
 btn_arcade = digitalio.DigitalInOut(board.SCK)
@@ -249,16 +250,21 @@ def center_labels(time_c_label, score_c_label):
 
 # control pixels in the arcade and bonus time modes
 def control_pixels(time_c_label, mode):
-    if int(time_c_label.text) <= 60 and int(time_c_label.text) >= 21:
-        solid_green.animate()
-    elif int(time_c_label.text) <= 20 and int(time_c_label.text) >= 11:
-        solid_yellow.animate()
-        if int(time_c_label.text) == 11:
-            mp3stream.file = countdown_file
-            speaker.play(mp3stream)
+    if int(time_c_label.text) >= 21 and int(time_c_label.text) <= 60:
+        #solid_green.animate()
+        if int(time_c_label.text) == 60:
+            if not speaker.playing:
+                mp3stream.file = open(audio_file["whistle"], "rb")
+                speaker.play(mp3stream)
+    # if int(time_c_label.text) >= 11 and int(time_c_label.text) <= 20:
+        # solid_yellow.animate()
     if mode == "arcade_scrn":
-        if int(time_c_label.text) <= 10 and int(time_c_label.text) >= 0:
-            solid_red.animate()
+        if int(time_c_label.text) >= 0 and int(time_c_label.text) <= 10:
+            #solid_red.animate()
+            if int(time_c_label.text) == 10:
+                if not speaker.playing:
+                    mp3stream.file = open(audio_file["countdown"], "rb")
+                    speaker.play(mp3stream)
 
 def start_scrn():
     global scrn_state, highest_score
@@ -305,7 +311,7 @@ def start_scrn():
                 sg_e.color = 0xFFFFFF
 
     while scrn_state == scrn_states[1]:
-        colorcycle.animate()
+        # colorcycle.animate()
 
         checks()
 
@@ -315,13 +321,13 @@ def start_scrn():
             button_states[1] = True
             while not btn_arcade.value:
                 checks()
-                colorcycle.animate()
+                #colorcycle.animate()
                 reset_score_t = time() - reset_score_v
                 if reset_score_t == 5:
                     ag_hiscore_c.text = "0"
                     highest_score = "0"
                     get_set_hiscore(value="0")
-                    solid_white.animate()
+                    # solid_white.animate()
                     # allow the button state to be changed to True after reset
                     button_states[1] = False
                     # used to prevent entry to game after the 5 seconds
@@ -373,7 +379,7 @@ def countdown_scrn():
         cdg_hiscore_c.x = 52
         cdg_hiscore_c.y = 28
 
-    solid_green.animate()
+    # solid_green.animate()
 
     display.show(cdg)
     sleep(1)
@@ -392,8 +398,6 @@ def countdown_scrn():
         if int(cdg_time_c.text) == 1:
             sleep(1)
             scrn_state = scrn_states[3]
-            mp3stream.file = open(audio_file["whistle"], "rb")
-            speaker.play(mp3stream)
 
 def arcade_scrn():
     global scrn_state, highest_score
@@ -445,7 +449,6 @@ def arcade_scrn():
     game_timer = time()
 
     while scrn_state == scrn_states[3]:
-        
         # update the time left in the game
         if (game_time - int(time() - game_timer)) == prev_time - 1:
             ag_time_c.text = str(prev_time - 1)
@@ -540,7 +543,7 @@ def arcade_scrn():
         # check if the previously set hiscore has been beaten
         if int(ag_score_c.text) > int(saved_hiscore):
             highest_score = ag_score_c.text
-            if not hiscore_beaten and int(ag_time_c.text) >= 31:
+            if not hiscore_beaten and int(ag_time_c.text) >= 1:
                 hiscore_beaten = True
                 ag_hiscore.color = 0x00FFFF
                 ag_hiscore_c.color = 0x00FFFF
@@ -553,10 +556,14 @@ def arcade_scrn():
             if int(highest_score) > int(saved_hiscore): # hiscore was beaten
                 scrn_state = scrn_states[5]
                 get_set_hiscore(value=ag_score_c.text) # save the hiscore
+                if speaker.playing:
+                    speaker.stop()
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
             else: # hiscore was not beaten
                 scrn_state = scrn_states[4]
+                if speaker.playing:
+                    speaker.stop()
                 mp3stream.file = open(audio_file["game_over"], "rb")
                 speaker.play(mp3stream)
 
@@ -596,7 +603,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
 
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
-        rainbow.animate()
+        # rainbow.animate()
 
         # update the time
         if (game_time - int(time() - game_timer)) == prev_time - 1:
@@ -625,7 +632,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
             sen_top_state = False
             sen_btm_state = False
             sen_triggered = 0
-            # # check whether the top sensor detects the ball
+            # check whether the top sensor detects the ball
             if not sen_top.value:  # it does
                 pass
             else:  # it does not
@@ -677,7 +684,7 @@ def game_over_scrn():
     display.show(gog)
 
     while time() - start_time <= 10:
-        rainbow.animate()
+        # rainbow.animate()
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -720,7 +727,7 @@ def new_hiscore_scrn():
     display.show(nhg)
 
     while time() - start_time <= 10:
-        rainbow.animate()
+        # rainbow.animate()
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
