@@ -177,6 +177,8 @@ audio_file = {
     "hiscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
+countdown_file = open(audio_file["countdown"], "rb")
+countdown_file.close()
 
 # NeoPixel setup
 pixels = neopixel.NeoPixel(board.D8, 54, brightness=0.2)
@@ -236,7 +238,7 @@ def center_labels(time_c_label, score_c_label):
         time_c_label.y = 15
 
     # center the score value label
-    if int(score_c_label.text) >= 100:
+    if int(score_c_label.text) > 99:
         score_c_label.x = 38
         score_c_label.y = 15
     elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
@@ -253,7 +255,7 @@ def control_pixels(time_c_label, mode):
     elif int(time_c_label.text) <= 20 and int(time_c_label.text) >= 11:
         solid_yellow.animate()
         if int(time_c_label.text) == 11:
-            mp3stream.file = open(audio_file["countdown"], "rb")
+            mp3stream.file = countdown_file
             speaker.play(mp3stream)
     if mode == "arcade_scrn":
         if int(time_c_label.text) <= 10 and int(time_c_label.text) >= 0:
@@ -515,6 +517,8 @@ def arcade_scrn():
 
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
+                if speaker.playing():
+                    mp3stream.file.close()
 
                 # add time when the score is beaten
                 if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
