@@ -256,8 +256,6 @@ def control_pixels(time_c_label, mode):
         if int(time_c_label.text) == 11:
             mp3stream.file = countdown_file
             speaker.play(mp3stream)
-            if speaker.playing:
-                mp3stream.file.close()
     if mode == "arcade_scrn":
         if int(time_c_label.text) <= 10 and int(time_c_label.text) >= 0:
             solid_red.animate()
