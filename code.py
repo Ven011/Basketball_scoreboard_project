@@ -178,7 +178,6 @@ audio_file = {
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
 countdown_file = open(audio_file["countdown"], "rb")
-countdown_file.close()
 
 # NeoPixel setup
 pixels = neopixel.NeoPixel(board.D8, 54, brightness=0.2)
@@ -257,6 +256,8 @@ def control_pixels(time_c_label, mode):
         if int(time_c_label.text) == 11:
             mp3stream.file = countdown_file
             speaker.play(mp3stream)
+            if speaker.playing():
+                mp3stream.file.close()
     if mode == "arcade_scrn":
         if int(time_c_label.text) <= 10 and int(time_c_label.text) >= 0:
             solid_red.animate()
@@ -517,8 +518,6 @@ def arcade_scrn():
 
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
-                if speaker.playing():
-                    mp3stream.file.close()
 
                 # add time when the score is beaten
                 if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
