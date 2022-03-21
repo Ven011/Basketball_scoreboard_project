@@ -77,7 +77,7 @@ cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00
 ag_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF, x=3, y=5)
 ag_time_c = label.Label(virtual_pet_sans, color=0xFF0000)
 ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF, x=32, y=5)
-ag_score_c = label.Label(virtual_pet_sans, color=0xFFFFFF)
+ag_score_c = label.Label(virtual_pet_sans, color=0xFFFFFF, x=38, y=15)
 ag_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF)
 ag_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF)
 
@@ -238,15 +238,15 @@ def center_labels(time_c_label, score_c_label):
         time_c_label.y = 15
 
     # center the score value label
-    if int(score_c_label.text) > 99:
-        score_c_label.x = 38
-        score_c_label.y = 15
-    elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
-        score_c_label.x = 41
-        score_c_label.y = 15
-    elif int(score_c_label.text) >= 0:
-        score_c_label.x = 44
-        score_c_label.y = 15
+    # if int(score_c_label.text) > 99:
+    #     score_c_label.x = 38
+    #     score_c_label.y = 15
+    # elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
+    #     score_c_label.x = 41
+    #     score_c_label.y = 15
+    # elif int(score_c_label.text) >= 0:
+    #     score_c_label.x = 44
+    #     score_c_label.y = 15
 
 # control pixels in the arcade and bonus time modes
 def control_pixels(time_c_label, mode):
@@ -485,7 +485,23 @@ def arcade_scrn():
                 
         # update the score if it changed
         if prev_score != score:
-            ag_score_c.text = str(score)
+            # add spaces to the score text value
+            str_score = list("   ")
+            if score <= 9:
+                str_score[0] = " "
+                str_score[1] = str(score)
+                str_score[3] = " "
+            elif score >= 10 and score <= 99:
+                str_score[0] = " "
+                str_score[1] = str(score)[0]
+                str_score[3] = str(score)[1]
+            elif score >= 100:
+                str_score[0] = str(score)[0]
+                str_score[1] = str(score)[1]
+                str_score[3] = str(score)[2]
+            
+            # combine list elements in ag_score
+            ag_score_c.text = str(str_score[0] + str_score[1] + str_score[2])
             prev_score = score
 
         # center the time and score value
