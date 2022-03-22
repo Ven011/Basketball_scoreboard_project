@@ -489,16 +489,16 @@ def arcade_scrn():
             str_score = list("   ")
             if score <= 9:
                 str_score[0] = " "
-                str_score[1] = str(score)
-                str_score[3] = " "
+                str_score[1] = str(score)[0]
+                str_score[2] = " "
             elif score >= 10 and score <= 99:
                 str_score[0] = " "
                 str_score[1] = str(score)[0]
-                str_score[3] = str(score)[1]
+                str_score[2] = str(score)[1]
             elif score >= 100:
                 str_score[0] = str(score)[0]
                 str_score[1] = str(score)[1]
-                str_score[3] = str(score)[2]
+                str_score[2] = str(score)[2]
             
             # combine list elements in ag_score
             ag_score_c.text = str(str_score[0] + str_score[1] + str_score[2])
