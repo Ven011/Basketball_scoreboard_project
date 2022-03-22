@@ -372,9 +372,6 @@ def arcade_scrn():
     sen_triggered = 0
     sen_top_state = False
     sen_btm_state = False
-    combined_sen_state = True
-    prev_time = game_time
-    prev_score = 0
     score = 0
 
     display.show(ag)
@@ -382,10 +379,10 @@ def arcade_scrn():
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
-        ag_time_c.text = str(game_time - int(time() - game_timer))
+        ag_time_c.text = str(game_time - int(time() - game_timer))[::-1]
         
         sen_triggered, sen_top_state, sen_btm_state, score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, score)
-        ag_score_c.text = str(score)
+        ag_score_c.text = str(score)[::-1]
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
@@ -426,8 +423,6 @@ def arcade_scrn():
 
                 # go to the bonus time scrn for 10 seconds
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
-                
-                # prev_time = (game_time - int(time() - game_timer)) + 1 # update the previous time to make sure that the time keeps updating in game
 
                 ag_hiscore.color = 0x00B3B3
                 ag_hiscore_c.color = 0x00B3B3
