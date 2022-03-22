@@ -236,17 +236,16 @@ def center_labels(time_c_label, score_c_label):
     elif int(time_c_label.text) >= 0:
         time_c_label.x = 12
         time_c_label.y = 15
-
-    # center the score value label
-    # if int(score_c_label.text) > 99:
-    #     score_c_label.x = 38
-    #     score_c_label.y = 15
-    # elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
-    #     score_c_label.x = 41
-    #     score_c_label.y = 15
-    # elif int(score_c_label.text) >= 0:
-    #     score_c_label.x = 44
-    #     score_c_label.y = 15
+        # center the score value label
+        # if int(score_c_label.text) > 99:
+        #     score_c_label.x = 38
+        #     score_c_label.y = 15
+        # elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
+        #     score_c_label.x = 41
+        #     score_c_label.y = 15
+        # elif int(score_c_label.text) >= 0:
+        #     score_c_label.x = 44
+        #     score_c_label.y = 15
 
 # control pixels in the arcade and bonus time modes
 def control_pixels(time_c_label, mode):
@@ -265,7 +264,38 @@ def control_pixels(time_c_label, mode):
                 if not speaker.playing:
                     mp3stream.file = open(audio_file["countdown"], "rb")
                     speaker.play(mp3stream)
+                    
+def check_sensors(sen_triggered, sen_top_state, sen_bottom_state, score):
+    # prevent point if both sensors detect an object simultaneously
+    combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
+    # check if the top sensor is triggered
+    if not sen_top.value and not sen_top_state and combined_sen_state:
+        sen_top_state = True
+        sen_triggered += 1
+    if sen_top.value and sen_top_state and sen_triggered == 1:
+        sen_triggered += 1
+
+    # check if the bottom sensor is triggered
+    if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
+        sen_btm_state = True
+        sen_triggered += 1
+    if sen_btm.value and sen_btm_state and sen_triggered == 3:
+        sen_triggered += 1
+
+    # add point if both sensors have been triggered consecutively
+    if sen_triggered == 4:
+        sen_top_state = False
+        sen_btm_state = False
+        sen_triggered = 0
+        # check whether the top sensor detects the ball
+        if not sen_top.value:  # it does
+            pass
+        else:  # it does not
+            score += 4
+    
+    return sen_triggered, sen_top_state, sen_bottom_state, score
+    
 def start_scrn():
     global scrn_state, highest_score
 
@@ -454,34 +484,36 @@ def arcade_scrn():
             ag_time_c.text = str(prev_time - 1)
             prev_time = prev_time - 1
 
-        # prevent point if both sensors detect an object simultaneously
-        combined_sen_state = False if not sen_top.value and not sen_btm.value else True
+        # # prevent point if both sensors detect an object simultaneously
+        # combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
-        # check if the top sensor is triggered
-        if not sen_top.value and not sen_top_state and combined_sen_state:
-            sen_top_state = True
-            sen_triggered += 1
-        if sen_top.value and sen_top_state and sen_triggered == 1:
-            sen_triggered += 1
+        # # check if the top sensor is triggered
+        # if not sen_top.value and not sen_top_state and combined_sen_state:
+        #     sen_top_state = True
+        #     sen_triggered += 1
+        # if sen_top.value and sen_top_state and sen_triggered == 1:
+        #     sen_triggered += 1
 
-        # check if the bottom sensor is triggered
-        if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
-            sen_btm_state = True
-            sen_triggered += 1
-        if sen_btm.value and sen_btm_state and sen_triggered == 3:
-            sen_triggered += 1
+        # # check if the bottom sensor is triggered
+        # if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
+        #     sen_btm_state = True
+        #     sen_triggered += 1
+        # if sen_btm.value and sen_btm_state and sen_triggered == 3:
+        #     sen_triggered += 1
 
-        # add point if both sensors have been triggered consecutively
-        if sen_triggered == 4:
-            sen_top_state = False
-            sen_btm_state = False
-            sen_triggered = 0
-            # check whether the top sensor detects the ball
-            if not sen_top.value:  # it does
-                pass
-            else:  # it does not
-                # ag_score_c.text = str(int(ag_score_c.text) + 4)
-                score += 4
+        # # add point if both sensors have been triggered consecutively
+        # if sen_triggered == 4:
+        #     sen_top_state = False
+        #     sen_btm_state = False
+        #     sen_triggered = 0
+        #     # check whether the top sensor detects the ball
+        #     if not sen_top.value:  # it does
+        #         pass
+        #     else:  # it does not
+        #         # ag_score_c.text = str(int(ag_score_c.text) + 4)
+        #         score += 4
+        
+        sen_triggered, sen_top_state, sen_bottom_state, score = check_sensors(sen_triggered, sen_top_state, sen_bottom_state, score)
                 
         # update the score if it changed
         if prev_score != score:
