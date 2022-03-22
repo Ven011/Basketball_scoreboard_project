@@ -284,7 +284,7 @@ def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
         if not sen_top.value:  # it does
             pass
         else:  # it does not
-            score += 4
+            score += 8
     
     return sen_triggered, sen_top_state, sen_btm_state, score
     
@@ -463,9 +463,7 @@ def arcade_scrn():
         
         sen_triggered, sen_top_state, sen_btm_state, score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, score)
         
-        if prev_score != score:
-            ag_score_c.text = str(score)
-            prev_score = score
+        ag_score_c.text = str(score)
                 
         center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
@@ -575,7 +573,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     prev_time = int(bt_time_c.text)
 
     # center the time and score value
-    center_labels(bt_time_c, bt_score_c)
+    center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
     display.show(btg)
 
@@ -587,6 +585,8 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         if (game_time - int(time() - game_timer)) == prev_time - 1:
             bt_time_c.text = str(prev_time - 1)
             prev_time = prev_time - 1
+
+        center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
         # prevent point if both sensors detect an object simultaneously
         combined_sen_state = False if not sen_top.value and not sen_btm.value else True
@@ -617,7 +617,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
                 bt_score_c.text = str(int(bt_score_c.text) + 4)
 
         # center the time and score value
-        center_labels(bt_time_c, bt_score_c)
+        center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
