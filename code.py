@@ -462,6 +462,10 @@ def arcade_scrn():
         #         score += 4
         
         sen_triggered, sen_top_state, sen_btm_state, score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, score)
+        
+        if prev_score != score:
+            ag_score_c.text = str(score)
+            prev_score = score
                 
         center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
@@ -505,7 +509,7 @@ def arcade_scrn():
                 # go to the bonus time scrn for 10 seconds
                 ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
                 
-                prev_time = (game_time - int(time() - game_timer)) + 1 # update the previous time to make sure that the time keeps updating in game
+                # prev_time = (game_time - int(time() - game_timer)) + 1 # update the previous time to make sure that the time keeps updating in game
 
                 ag_hiscore.color = 0x00FFFF
                 ag_hiscore_c.color = 0x00FFFF
