@@ -265,7 +265,7 @@ def control_pixels(time_c_label, mode):
                     mp3stream.file = open(audio_file["countdown"], "rb")
                     speaker.play(mp3stream)
                     
-def check_sensors(sen_triggered, sen_top_state, sen_bottom_state, score):
+def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
     # prevent point if both sensors detect an object simultaneously
     combined_sen_state = False if not sen_top.value and not sen_btm.value else True
 
@@ -294,7 +294,7 @@ def check_sensors(sen_triggered, sen_top_state, sen_bottom_state, score):
         else:  # it does not
             score += 4
     
-    return sen_triggered, sen_top_state, sen_bottom_state, score
+    return sen_triggered, sen_top_state, sen_btm_state, score
     
 def start_scrn():
     global scrn_state, highest_score
@@ -513,7 +513,7 @@ def arcade_scrn():
         #         # ag_score_c.text = str(int(ag_score_c.text) + 4)
         #         score += 4
         
-        sen_triggered, sen_top_state, sen_bottom_state, score = check_sensors(sen_triggered, sen_top_state, sen_bottom_state, score)
+        sen_triggered, sen_top_state, sen_btm_state, score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, score)
                 
         # update the score if it changed
         if prev_score != score:
