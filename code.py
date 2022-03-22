@@ -5,7 +5,7 @@ import framebufferio
 import audioio
 import audiomp3
 from adafruit_bitmap_font import bitmap_font
-from adafruit_display_text import bitmap_label as label
+from adafruit_display_text import label
 from time import sleep, time
 import digitalio
 #import neopixel
@@ -35,7 +35,6 @@ ag = displayio.Group()
 btg = displayio.Group()
 gog = displayio.Group()
 nhg = displayio.Group()
-hg = displayio.Group()
 
 # save hiscore
 def get_set_hiscore(value="_"):
@@ -77,7 +76,7 @@ cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00
 ag_time = label.Label(virtual_pet_sans, text="TIME", color=0x0000FF, x=3, y=5)
 ag_time_c = label.Label(virtual_pet_sans, color=0xFF0000)
 ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0x0000FF, x=32, y=5)
-ag_score_c = label.Label(virtual_pet_sans, color=0xFFFFFF, x=38, y=15)
+ag_score_c = label.Label(virtual_pet_sans, color=0xFFFFFF)
 ag_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00FFFF)
 ag_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00FFFF)
 
@@ -99,26 +98,6 @@ gog_score_c = label.Label(virtual_pet_sans, color=0xFFFFFF)
 nhg_new = label.Label(ozone, text="NEW", color=0x00B300, x=21, y=5)
 nhg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00B3B3, x=11, y=17)
 nhg_hiscore_c = label.Label(virtual_pet_sans, color=0xFFFFFF)
-
-# h.o.r.s.e graphics
-hg_time = label.Label(virtual_pet_sans, text="TIME", color=0xB35A00)
-hg_time_c = label.Label(virtual_pet_sans, color=0x00B300)
-hg_p1 = label.Label(virtual_pet_sans, text="P1", color=0x00B3B3, x=6, y=17)
-hg_p1_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF, x=21, y=17)
-hg_p1_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF, x=29, y=17)
-hg_p1_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF, x=37, y=17)
-hg_p1_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF, x=45, y=17)
-hg_p1_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF, x=53, y=17)
-hg_p2 = label.Label(virtual_pet_sans, text="P2", color=0xB300B3, x=6, y=28)
-hg_p2_h = label.Label(virtual_pet_sans, text="H.", color=0xFFFFFF, x=21, y=28)
-hg_p2_o = label.Label(virtual_pet_sans, text="O.", color=0xFFFFFF, x=29, y=28)
-hg_p2_r = label.Label(virtual_pet_sans, text="R.", color=0xFFFFFF, x=37, y=28)
-hg_p2_s = label.Label(virtual_pet_sans, text="S.", color=0xFFFFFF, x=45, y=28)
-hg_p2_e = label.Label(virtual_pet_sans, text="E", color=0xFFFFFF, x=53, y=28)
-hg_p1_won = label.Label(ozone, text="P1", color=0x00B3B3, x=13, y=4)
-hg_p1_w = label.Label(ozone, text="WON", color=0x00B3B3, x=28, y=4)
-hg_p2_won = label.Label(ozone, text="P2", color=0xB300B3, x=12, y=4)
-hg_p2_w = label.Label(ozone, text="WON", color=0xB300B3, x=29, y=4)
 
 # add graphics to the display groups
 sg.append(sg_space)
@@ -162,11 +141,6 @@ nhg.append(nhg_new)
 nhg.append(nhg_hiscore)
 nhg.append(nhg_hiscore_c)
 
-hg.append(hg_time)
-hg.append(hg_time_c)
-hg.append(hg_p1)
-hg.append(hg_p2)
-
 # audio setup
 speaker = audioio.AudioOut(board.A0)
 audio_file = {
@@ -194,11 +168,6 @@ btn_arcade = digitalio.DigitalInOut(board.SCK)
 btn_arcade.direction = digitalio.Direction.INPUT
 btn_arcade.pull = digitalio.Pull.UP
 
-# h.o.r.s.e button setup
-btn_horse = digitalio.DigitalInOut(board.MISO)
-btn_horse.direction = digitalio.Direction.INPUT
-btn_horse.pull = digitalio.Pull.UP
-
 # top sensor setup
 sen_top = digitalio.DigitalInOut(board.D0)
 sen_top.direction = digitalio.Direction.INPUT
@@ -215,8 +184,7 @@ scrn_states = {
     2: "countdown_scrn",
     3: "arcade_scrn",
     4: "game_over_scrn",
-    5: "new_hiscore_scrn",
-    6: "horse_scrn"
+    5: "new_hiscore_scrn"
 }
 
 button_states = {
@@ -228,7 +196,9 @@ scrn_state = "start_scrn"
 highest_score = "0"
 
 # center labels
-def center_labels(time_c_label, score_c_label):
+def center_labels(time_c_label, score_c_label, hiscore_label, hiscore_c_label):
+    saved_hiscore = get_set_hiscore()
+    
     # center the time value label
     if int(time_c_label.text) >= 10 and int(time_c_label.text) <= 60:
         time_c_label.x = 9
@@ -236,16 +206,38 @@ def center_labels(time_c_label, score_c_label):
     elif int(time_c_label.text) >= 0:
         time_c_label.x = 12
         time_c_label.y = 15
-        # center the score value label
-        # if int(score_c_label.text) > 99:
-        #     score_c_label.x = 38
-        #     score_c_label.y = 15
-        # elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
-        #     score_c_label.x = 41
-        #     score_c_label.y = 15
-        # elif int(score_c_label.text) >= 0:
-        #     score_c_label.x = 44
-        #     score_c_label.y = 15
+
+    # center the score value label
+    if int(score_c_label.text) > 99:
+        score_c_label.x = 38
+        score_c_label.y = 15
+    elif int(score_c_label.text) >= 10 and int(score_c_label.text) <= 99:
+        score_c_label.x = 41
+        score_c_label.y = 15
+    elif int(score_c_label.text) >= 0:
+        score_c_label.x = 44
+        score_c_label.y = 15
+
+    # center the hiscore labels
+    if int(saved_hiscore) >= 100:
+        hiscore_label.x = 1
+        hiscore_label.y = 28
+    elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
+        hiscore_label.x = 4
+        hiscore_label.y = 28
+    elif int(saved_hiscore) >= 0:
+        hiscore_label.x = 7
+        hiscore_label.y = 28
+
+    if int(saved_hiscore) >= 100:
+        hiscore_c_label.x = 46
+        hiscore_c_label.y = 28
+    elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
+        hiscore_c_label.x = 49
+        hiscore_c_label.y = 28
+    elif int(saved_hiscore) >= 0:
+        hiscore_c_label.x = 52
+        hiscore_c_label.y = 28
 
 # control pixels in the arcade and bonus time modes
 def control_pixels(time_c_label, mode):
@@ -372,15 +364,10 @@ def start_scrn():
                 speaker.stop()
             scrn_state = scrn_states[2]
 
-        # switch to the h.o.r.s.e scrn
-        if not btn_horse.value and not button_states[2]:
-            button_states[2] = True
-            if speaker.playing:
-                speaker.stop()
-            scrn_state = scrn_states[6]
-
 def countdown_scrn():
     global scrn_state
+
+    # solid_green.animate()
 
     # set properties
     cdg_time_c.text = "3"
@@ -390,44 +377,23 @@ def countdown_scrn():
     countdown_time = 3
     saved_hiscore = get_set_hiscore()
     cdg_hiscore_c.text = saved_hiscore
-    prev_time = countdown_time
 
-    # center the hiscore labels
-    if int(saved_hiscore) >= 100:
-        cdg_hiscore.x = 1
-        cdg_hiscore.y = 28
-        cdg_hiscore_c.x = 46
-        cdg_hiscore_c.y = 28
-    elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
-        cdg_hiscore.x = 4
-        cdg_hiscore.y = 28
-        cdg_hiscore_c.x = 49
-        cdg_hiscore_c.y = 28
-    elif int(saved_hiscore) >= 0:
-        cdg_hiscore.x = 7
-        cdg_hiscore.y = 28
-        cdg_hiscore_c.x = 52
-        cdg_hiscore_c.y = 28
-
-    # solid_green.animate()
+    center_labels(cdg_time_c, cdg_score_c, cdg_hiscore, cdg_hiscore_c)
 
     display.show(cdg)
     sleep(1)
     countdown_timer = time()
-    
-    # set the initial text of the countdown time counter
-    cdg_time_c.text = str(3)
 
     while scrn_state == scrn_states[2]:
         # update the time left in the countdown
-        if (countdown_time - int(time() - countdown_timer)) == prev_time - 1:
-            cdg_time_c.text = str(prev_time - 1)
-            prev_time = prev_time - 1
+        cdg_time_c.text = str(countdown_time - int(time() - countdown_timer))
 
         # switch to the arcade scrn
         if int(cdg_time_c.text) == 1:
             sleep(1)
             scrn_state = scrn_states[3]
+
+        center_labels(cdg_time_c, cdg_score_c, cdg_hiscore, cdg_hiscore_c)
 
 def arcade_scrn():
     global scrn_state, highest_score
@@ -455,34 +421,16 @@ def arcade_scrn():
     prev_score = 0
     score = 0
 
-    # center the time and score value
-    center_labels(ag_time_c, ag_score_c)
-
-    # center the hiscore labels
-    if int(saved_hiscore) >= 100:
-        ag_hiscore.x = 1
-        ag_hiscore.y = 28
-        ag_hiscore_c.x = 46
-        ag_hiscore_c.y = 28
-    elif int(saved_hiscore) >= 10 and int(saved_hiscore) <= 99:
-        ag_hiscore.x = 4
-        ag_hiscore.y = 28
-        ag_hiscore_c.x = 49
-        ag_hiscore_c.y = 28
-    elif int(saved_hiscore) >= 0:
-        ag_hiscore.x = 7
-        ag_hiscore.y = 28
-        ag_hiscore_c.x = 52
-        ag_hiscore_c.y = 28
+    center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
     display.show(ag)
     game_timer = time()
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
-        if (game_time - int(time() - game_timer)) == prev_time - 1:
-            ag_time_c.text = str(prev_time - 1)
-            prev_time = prev_time - 1
+        ag_time_c.text = str(game_time - int(time() - game_timer))
+
+        center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
         # # prevent point if both sensors detect an object simultaneously
         # combined_sen_state = False if not sen_top.value and not sen_btm.value else True
@@ -515,29 +463,7 @@ def arcade_scrn():
         
         sen_triggered, sen_top_state, sen_btm_state, score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, score)
                 
-        # update the score if it changed
-        if prev_score != score:
-            # add spaces to the score text value
-            str_score = list("   ")
-            if score <= 9:
-                str_score[0] = " "
-                str_score[1] = str(score)[0]
-                str_score[2] = " "
-            elif score >= 10 and score <= 99:
-                str_score[0] = " "
-                str_score[1] = str(score)[0]
-                str_score[2] = str(score)[1]
-            elif score >= 100:
-                str_score[0] = str(score)[0]
-                str_score[1] = str(score)[1]
-                str_score[2] = str(score)[2]
-            
-            # combine list elements in ag_score
-            ag_score_c.text = str(str_score[0] + str_score[1] + str_score[2])
-            prev_score = score
-
-        # center the time and score value
-        center_labels(ag_time_c, ag_score_c)
+        center_labels(ag_time_c, ag_score_c, ag_hiscore, ag_hiscore_c)
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
@@ -790,37 +716,13 @@ def new_hiscore_scrn():
 
     scrn_state = scrn_states[1]
 
-def horse_scrn():
-    global scrn_state
-
-    button_states[2] = False
-
-    # set properties
-    hg_time_c.text = "10"
-
-    # center the time and time value text
-    if int(hg_time_c.text) <= 9:
-        hg_time.x = 16
-        hg_time.y = 5
-        hg_time_c.x = 43
-        hg_time_c.y = 5
-    elif int(hg_time_c.text) == 10:
-        hg_time.x = 13
-        hg_time.y = 5
-        hg_time_c.x = 40
-        hg_time_c.y = 5
-
-    display.show(hg)
-    sleep(1)
-
 # variables
 scrns = {
     "start_scrn": start_scrn,
     "countdown_scrn": countdown_scrn,
     "arcade_scrn": arcade_scrn,
     "game_over_scrn": game_over_scrn,
-    "new_hiscore_scrn": new_hiscore_scrn,
-    "horse_scrn": horse_scrn
+    "new_hiscore_scrn": new_hiscore_scrn
 }
 
 # main loop, run the approriate screen function given the screen state
