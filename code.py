@@ -89,7 +89,7 @@ bt_time_c = label.Label(virtual_pet_sans, color=0xB30000, x=63, y=13, label_dire
 bt_score = label.Label(virtual_pet_sans, text="SCORE", color=0xB35900, x=1, y=21)
 bt_score_c = label.Label(virtual_pet_sans, color=0x00B300, x=63, y=21, label_direction="RTL")
 bt_bonus = label.Label(virtual_pet_sans, text="BONUS", color=0x00FF00, x=1, y=29)
-bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x00FF00, x=63, y=29, label_direction="RTL")
+bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x00FF00, x=63, y=29)
 
 # game over graphics
 gog_game = label.Label(ozone, text="GAME", color=0xB30000, x=2, y=5)
@@ -347,7 +347,7 @@ def countdown_scrn():
     # variables
     countdown_time = 3
     saved_hiscore = get_set_hiscore()
-    cdg_hiscore_c.text = saved_hiscore
+    cdg_hiscore_c.text = invert_string(str(saved_hiscore))
 
     display.show(cdg)
     sleep(1)
@@ -375,7 +375,7 @@ def arcade_scrn():
     blink_period = 0
     game_time = 60
     saved_hiscore = get_set_hiscore()
-    ag_hiscore_c.text = saved_hiscore
+    ag_hiscore_c.text = invert_string(str(saved_hiscore))
     can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
     hiscore_beaten = False
     sen_triggered = 0
