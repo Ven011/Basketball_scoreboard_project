@@ -201,6 +201,15 @@ button_states = {
 scrn_state = "start_scrn"
 highest_score = "0"
 
+def invert_string(string):
+    inv_string = ""
+    
+    for index in range(len(string)):
+        # concatenate the inverse string with elements of the string starting from the last string
+        inv_string = inv_string + string[(index * -1) + len(string) - 1]
+        
+    return inv_string
+
 def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
     # prevent point if both sensors detect an object simultaneously
     combined_sen_state = False if not sen_top.value and not sen_btm.value else True
@@ -379,10 +388,10 @@ def arcade_scrn():
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
-        ag_time_c.text = str(game_time - int(time() - game_timer))[::-1]
+        ag_time_c.text = invert_string(str(game_time - int(time() - game_timer)))
         
         sen_triggered, sen_top_state, sen_btm_state, score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, score)
-        ag_score_c.text = str(score)[::-1]
+        ag_score_c.text = invert_string(str(score))
 
         # difference between the saved high score and the game score
         score_diff = int(saved_hiscore) - int(ag_score_c.text)
