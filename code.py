@@ -37,10 +37,10 @@ gog = displayio.Group()
 nhg = displayio.Group()
 
 # save hiscore
-def get_set_hiscore(value="_"):
-    if value != "_":
+def get_set_hiscore(value=0):
+    if value:
         hiscore_file = open("/temp/hiscore.txt", "w")
-        hiscore_file.write(value)
+        hiscore_file.write(str(value))
         hiscore_file.close()
     else:
         hiscore_file = open("/temp/hiscore.txt", "r")
@@ -199,7 +199,7 @@ button_states = {
 }
 
 scrn_state = "start_scrn"
-highest_score = "0"
+highest_score = 0
 
 def invert_string(string):
     inv_string = ""
@@ -242,19 +242,19 @@ def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
     return sen_triggered, sen_top_state, sen_btm_state, score
 
 # control pixels in the arcade and bonus time modes
-def control_pixels(time_c_label, mode):
-    if int(time_c_label.text) >= 21 and int(time_c_label.text) <= 60:
+def control_pixels(time_left, mode):
+    if time_left >= 21 and time_left <= 60:
         #solid_green.animate()
-        if int(time_c_label.text) == 60:
+        if time_left == 60:
             if not speaker.playing:
                 mp3stream.file = open(audio_file["whistle"], "rb")
                 speaker.play(mp3stream)
-    # if int(time_c_label.text) >= 11 and int(time_c_label.text) <= 20:
+    # if time_left >= 11 and time_left <= 20:
         # solid_yellow.animate()
     if mode == "arcade_scrn":
-        if int(time_c_label.text) >= 0 and int(time_c_label.text) <= 10:
+        if time_left >= 0 and time_left <= 10:
             #solid_red.animate()
-            if int(time_c_label.text) == 10:
+            if time_left == 10:
                 if not speaker.playing:
                     mp3stream.file = open(audio_file["countdown"], "rb")
                     speaker.play(mp3stream)
@@ -318,8 +318,8 @@ def start_scrn():
                 reset_score_t = time() - reset_score_v
                 if reset_score_t == 5:
                     ag_hiscore_c.text = "0"
-                    highest_score = "0"
-                    get_set_hiscore(value="0")
+                    highest_score = 0
+                    get_set_hiscore(value=0)
                     # solid_white.animate()
                     # allow the button state to be changed to True after reset
                     button_states[1] = False
@@ -341,13 +341,15 @@ def countdown_scrn():
     # solid_green.animate()
 
     # set properties
-    cdg_time_c.text = "3"
-    cdg_score_c.text = "0"
+    cdg_time_c.text = invert_string("3")
+    cdg_score_c.text = invert_string("0")
 
     # variables
     countdown_time = 3
-    saved_hiscore = get_set_hiscore()
+    saved_hiscore = int(get_set_hiscore())
     cdg_hiscore_c.text = invert_string(str(saved_hiscore))
+    
+    time_left = 3
 
     display.show(cdg)
     sleep(1)
@@ -355,10 +357,11 @@ def countdown_scrn():
 
     while scrn_state == scrn_states[2]:
         # update the time left in the countdown
-        cdg_time_c.text = str(countdown_time - int(time() - countdown_timer))
+        time_left = (countdown_time - int(time() - countdown_timer))
+        cdg_time_c.text = invert_string(str(time_left))
 
         # switch to the arcade scrn
-        if int(cdg_time_c.text) == 1:
+        if time_left == 1:
             sleep(1)
             scrn_state = scrn_states[3]
 
@@ -366,35 +369,39 @@ def arcade_scrn():
     global scrn_state, highest_score
 
     # set properties
-    ag_time_c.text = "60"
-    ag_score_c.text = "0"
+    ag_time_c.text = invert_string("60")
+    ag_score_c.text = invert_string("0")
 
     # variables
     labels_are_visible = False
     blink_timer = time()
     blink_period = 0
     game_time = 60
-    saved_hiscore = get_set_hiscore()
+    saved_hiscore = int(get_set_hiscore())
     ag_hiscore_c.text = invert_string(str(saved_hiscore))
-    can_do_bonus = True if int(saved_hiscore) >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
+    can_do_bonus = True if saved_hiscore >= 20 else False # prevent the bonus time when the hiscore is 0 for the first game
     hiscore_beaten = False
     sen_triggered = 0
     sen_top_state = False
     sen_btm_state = False
-    score = 0
+    
+    time_left = 60
+    game_score = 0
 
     display.show(ag)
     game_timer = time()
 
     while scrn_state == scrn_states[3]:
         # update the time left in the game
-        ag_time_c.text = invert_string(str(game_time - int(time() - game_timer)))
+        time_left = (game_time - int(time() - game_timer))
+        ag_time_c.text = invert_string(str(time_left))
         
-        sen_triggered, sen_top_state, sen_btm_state, score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, score)
-        ag_score_c.text = invert_string(str(score))
+        sen_triggered, sen_top_state, sen_btm_state, game_score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, game_score)
+        
+        ag_score_c.text = invert_string(str(game_score))
 
         # difference between the saved high score and the game score
-        score_diff = int(saved_hiscore) - int(ag_score_c.text)
+        score_diff = saved_hiscore - game_score
 
         # bonus time
         if can_do_bonus:
@@ -413,7 +420,7 @@ def arcade_scrn():
                         ag_hiscore_c.color = 0x00B3B3
 
             # hiscore has been beaten and was not beaten before in this game
-            if score_diff < 0 and not hiscore_beaten and int(ag_time_c.text) <= 30:
+            if score_diff < 0 and not hiscore_beaten and time_left <= 30:
                 hiscore_beaten = True
 
                 ag_hiscore.color = 0x000000
@@ -423,27 +430,28 @@ def arcade_scrn():
                 speaker.play(mp3stream)
 
                 # add time when the score is beaten
-                if int(ag_time_c.text) >= 1 and int(ag_time_c.text) <= 10:
+                if time_left >= 1 and time_left <= 10:
                     game_time += 30
-                elif int(ag_time_c.text) >= 11 and int(ag_time_c.text) <= 20:
+                elif time_left >= 11 and time_left <= 20:
                     game_time += 20
-                elif int(ag_time_c.text) >= 21 and int(ag_time_c.text) <= 30:
+                elif time_left >= 21 and time_left <= 30:
                     game_time += 10
 
                 # go to the bonus time scrn for 10 seconds
-                ag_score_c.text, ag_time_c.text, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, ag_score_c.text)
+                game_score, time_left = arcade_bonus_scrn(game_time, game_timer, game_score)
+                # game_score, time_left, ag_time_c.x, ag_time_c.y = arcade_bonus_scrn(game_time, game_timer, game_score)
 
                 ag_hiscore.color = 0x00B3B3
                 ag_hiscore_c.color = 0x00B3B3
 
                 display.show(ag)
 
-        control_pixels(ag_time_c, "arcade_scrn")
+        control_pixels(time_left, "arcade_scrn")
 
         # check if the previously set hiscore has been beaten
-        if int(ag_score_c.text) > int(saved_hiscore):
-            highest_score = ag_score_c.text
-            if not hiscore_beaten and int(ag_time_c.text) >= 1:
+        if game_score > saved_hiscore:
+            highest_score = game_score
+            if not hiscore_beaten and time_left >= 1:
                 hiscore_beaten = True
                 ag_hiscore.color = 0x00B3B3
                 ag_hiscore_c.color = 0x00B3B3
@@ -451,11 +459,11 @@ def arcade_scrn():
                 speaker.play(mp3stream)
 
         # exit the game when the time is up
-        if int(ag_time_c.text) <= 0:
+        if time_left <= 0:
             sleep(1)
-            if int(highest_score) > int(saved_hiscore): # hiscore was beaten
+            if highest_score > saved_hiscore: # hiscore was beaten
                 scrn_state = scrn_states[5]
-                get_set_hiscore(value=ag_score_c.text) # save the hiscore
+                get_set_hiscore(value=game_score) # save the hiscore
                 if speaker.playing:
                     speaker.stop()
                 mp3stream.file = open(audio_file["hiscore"], "rb")
@@ -471,7 +479,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # set properties
     bt_bonus.color = 0x000000
     bt_bonus_t.color = 0x000000
-    bt_score_c.text = score
+    bt_score_c.text = invert_string(str(score))
     
     start_time = (game_time - int(time() - game_timer)) + 1
     exception = 0.5
@@ -481,8 +489,6 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         if start_time - (game_time - (time() - game_timer)) > exception:
             break
         pass
-    
-    bt_time_c.text = str(game_time - int(time() - game_timer)) # needs to come after the loop above
 
     # variables
     labels_are_visible = False
@@ -493,7 +499,11 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     sen_triggered = 0
     sen_top_state = False
     sen_btm_state = False
-    combined_sen_state = True
+    
+    time_left = (game_time - int(time() - game_timer))
+    bt_time_c.text = invert_string(str(time_left)) # needs to come after the loop above
+    
+    game_score = score
 
     display.show(btg)
 
@@ -502,35 +512,11 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         # rainbow.animate()
 
         # update the time
-        bt_time_c.text = str(game_time - int(time() - game_timer))
-
-        # prevent point if both sensors detect an object simultaneously
-        combined_sen_state = False if not sen_top.value and not sen_btm.value else True
-
-        # check if the top sensor is triggered
-        if not sen_top.value and not sen_top_state and combined_sen_state:
-            sen_top_state = True
-            sen_triggered += 1
-        if sen_top.value and sen_top_state and sen_triggered == 1:
-            sen_triggered += 1
-
-        # check if the bottom sensor is triggered
-        if not sen_btm.value and not sen_btm_state and sen_triggered == 2:
-            sen_btm_state = True
-            sen_triggered += 1
-        if sen_btm.value and sen_btm_state and sen_triggered == 3:
-            sen_triggered += 1
-
-        # add point if both sensors have been triggered consecutively
-        if sen_triggered == 4:
-            sen_top_state = False
-            sen_btm_state = False
-            sen_triggered = 0
-            # check whether the top sensor detects the ball
-            if not sen_top.value:  # it does
-                pass
-            else:  # it does not
-                bt_score_c.text = str(int(bt_score_c.text) + 4)
+        time_left = (game_time - int(time() - game_timer))
+        bt_time_c.text = invert_string(str(time_left))
+        
+        # handle scoring
+        sen_triggered, sen_top_state, sen_btm_state, game_score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, game_score)
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -547,13 +533,13 @@ def arcade_bonus_scrn(game_time, game_timer, score):
 
         control_pixels(bt_time_c, "arcade_bonus_scrn")
 
-    return bt_score_c.text, bt_time_c.text, bt_time_c.x, bt_time_c.y
+    return game_score, time_left
 
 def game_over_scrn():
     global scrn_state
 
     # set properties
-    gog_score_c.text = ag_score_c.text
+    gog_score_c.text = invert_string(ag_score_c.text)
 
     # variables
     labels_are_visible = False
@@ -596,7 +582,7 @@ def new_hiscore_scrn():
     global scrn_state, highest_score
 
     # set properties
-    nhg_hiscore_c.text = highest_score
+    nhg_hiscore_c.text = str(highest_score)
 
     # variables
     labels_are_visible = False
@@ -605,13 +591,13 @@ def new_hiscore_scrn():
     start_time = time()
 
     # center the hiscore value label
-    if int(highest_score) <= 9:
+    if highest_score <= 9:
         nhg_hiscore_c.x = 29
         nhg_hiscore_c.y = 27
-    elif int(highest_score) >= 10 and int(highest_score) <= 99:
+    elif highest_score >= 10 and highest_score <= 99:
         nhg_hiscore_c.x = 26
         nhg_hiscore_c.y = 27
-    elif int(highest_score) >= 100:
+    elif highest_score >= 100:
         nhg_hiscore_c.x = 23
         nhg_hiscore_c.y = 27
 
