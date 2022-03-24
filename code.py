@@ -531,7 +531,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
                 bt_bonus.color = 0x00FF00
                 bt_bonus_t.color = 0x00FF00
 
-        control_pixels(bt_time_c, "arcade_bonus_scrn")
+        control_pixels(time_left, "arcade_bonus_scrn")
 
     return game_score, time_left
 
