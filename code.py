@@ -517,7 +517,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         
         # handle scoring
         sen_triggered, sen_top_state, sen_btm_state, game_score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, game_score)
-        ag_score_c.text = invert_string(str(game_score))
+        bt_score_c.text = invert_string(str(game_score))
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
