@@ -246,15 +246,13 @@ def handle_audio(time_left):
     if time_left == 60:
         if speaker.playing:
             speaker.stop()
-        if not speaker.playing:
-            mp3stream.file = open(audio_file["whistle"], "rb")
-            speaker.play(mp3stream)
+        mp3stream.file = open(audio_file["whistle"], "rb")
+        speaker.play(mp3stream)
     elif time_left == 10:
         if speaker.playing:
             speaker.stop()
-        if not speaker.playing:
-            mp3stream.file = open(audio_file["countdown"], "rb")
-            speaker.play(mp3stream)
+        mp3stream.file = open(audio_file["countdown"], "rb")
+        speaker.play(mp3stream)
 
 def start_scrn():
     global scrn_state, highest_score
