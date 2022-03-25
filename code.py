@@ -88,8 +88,8 @@ bt_time = label.Label(virtual_pet_sans, text="TIME", color=0xB35900, x=1, y=13)
 bt_time_c = label.Label(virtual_pet_sans, color=0xB30000, x=63, y=13, label_direction="RTL")
 bt_score = label.Label(virtual_pet_sans, text="SCORE", color=0xB35900, x=1, y=21)
 bt_score_c = label.Label(virtual_pet_sans, color=0x00B300, x=63, y=21, label_direction="RTL")
-bt_bonus = label.Label(virtual_pet_sans, text="BONUS", color=0x00FF00, x=1, y=29)
-bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x00FF00, x=63, y=29)
+bt_bonus = label.Label(virtual_pet_sans, text="BONUS", color=0x00FF00, x=4, y=29)
+bt_bonus_t = label.Label(virtual_pet_sans, text="TIME", color=0x00FF00, x=37, y=29)
 
 # game over graphics
 gog_game = label.Label(ozone, text="GAME", color=0xB30000, x=2, y=5)
