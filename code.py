@@ -243,14 +243,15 @@ def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
 
 def handle_audio(time_left):
     # stop any playing audio files
-    if speaker.playing:
-        speaker.stop()
-    
     if time_left == 60:
+        if speaker.playing:
+            speaker.stop()
         if not speaker.playing:
             mp3stream.file = open(audio_file["whistle"], "rb")
             speaker.play(mp3stream)
     elif time_left == 10:
+        if speaker.playing:
+            speaker.stop()
         if not speaker.playing:
             mp3stream.file = open(audio_file["countdown"], "rb")
             speaker.play(mp3stream)
