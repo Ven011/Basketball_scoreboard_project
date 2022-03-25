@@ -241,23 +241,19 @@ def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
 
     return sen_triggered, sen_top_state, sen_btm_state, score
 
-# control pixels in the arcade and bonus time modes
-def control_pixels(time_left, mode):
-    if time_left >= 21 and time_left <= 60:
-        #solid_green.animate()
-        if time_left == 60:
-            if not speaker.playing:
-                mp3stream.file = open(audio_file["whistle"], "rb")
-                speaker.play(mp3stream)
-    # if time_left >= 11 and time_left <= 20:
-        # solid_yellow.animate()
-    if mode == "arcade_scrn":
-        if time_left >= 0 and time_left <= 10:
-            #solid_red.animate()
-            if time_left == 10:
-                if not speaker.playing:
-                    mp3stream.file = open(audio_file["countdown"], "rb")
-                    speaker.play(mp3stream)
+def handle_audio(time_left):
+    # stop any playing audio files
+    if speaker.playing:
+        speaker.stop()
+    
+    if time_left == 60:
+        if not speaker.playing:
+            mp3stream.file = open(audio_file["whistle"], "rb")
+            speaker.play(mp3stream)
+    elif time_left == 10:
+        if not speaker.playing:
+            mp3stream.file = open(audio_file["countdown"], "rb")
+            speaker.play(mp3stream)
 
 def start_scrn():
     global scrn_state, highest_score
@@ -446,7 +442,7 @@ def arcade_scrn():
 
                 display.show(ag)
 
-        control_pixels(time_left, "arcade_scrn")
+        handle_audio(time_left)
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
@@ -506,6 +502,14 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     game_score = score
 
     display.show(btg)
+    
+    # stop any previous audio
+    if speaker.playing:
+        speaker.stop()
+        
+    # play hiscore audio file    
+    mp3stream.file = open(audio_file["hiscore"], "rb")
+    speaker.play(mp3stream)
 
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
@@ -531,8 +535,6 @@ def arcade_bonus_scrn(game_time, game_timer, score):
                 blink_period = 1
                 bt_bonus.color = 0x00FF00
                 bt_bonus_t.color = 0x00FF00
-
-        control_pixels(time_left, "arcade_bonus_scrn")
 
     return game_score, time_left
 
