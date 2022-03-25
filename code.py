@@ -244,11 +244,13 @@ def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
 def handle_audio(time_left):
     # stop any playing audio files
     if time_left == 60:
-        mp3stream.file = open(audio_file["whistle"], "rb")
-        speaker.play(mp3stream)
+        if not speaker.playing:
+            mp3stream.file = open(audio_file["whistle"], "rb")
+            speaker.play(mp3stream)
     elif time_left == 10:
-        mp3stream.file = open(audio_file["countdown"], "rb")
-        speaker.play(mp3stream)
+        if not speaker.playing:
+            mp3stream.file = open(audio_file["countdown"], "rb")
+            speaker.play(mp3stream)
 
 def start_scrn():
     global scrn_state, highest_score
