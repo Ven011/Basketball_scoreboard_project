@@ -150,11 +150,11 @@ nhg.append(nhg_hiscore_c)
 # audio setup
 speaker = audioio.AudioOut(board.A0)
 audio_file = {
-    "space_jam": "/audio/space_jam.mp3",
-    "whistle": "/audio/whistle.mp3",
-    "countdown": "/audio/countdown.mp3",
-    "game_over": "/audio/game_over.mp3",
-    "hiscore": "/audio/hiscore.mp3"
+    "space_jam": "/audio/comp/space_jam.mp3",
+    "whistle": "/audio/comp/whistle.mp3",
+    "countdown": "/audio/comp/countdown.mp3",
+    "game_over": "/audio/comp/game_over.mp3",
+    "hiscore": "/audio/comp/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
 
