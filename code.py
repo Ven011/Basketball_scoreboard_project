@@ -390,7 +390,8 @@ def arcade_scrn():
         time_left = (game_time - int(time() - game_timer))
         ag_time_c.text = invert_string(str(time_left))
         
-        if time_left != prev_time:
+        # after bonus time, wait 0.5 seconds before showing the hiscore text
+        if time() - prev_time >= 0.5:
             ag_hiscore.color = 0x00B3B3
             ag_hiscore_c.color = 0x00B3B3
         
@@ -438,7 +439,7 @@ def arcade_scrn():
                 # go to the bonus time scrn for 10 seconds
                 game_score, time_left = arcade_bonus_scrn(game_time, game_timer, game_score)
                 
-                prev_time = time_left
+                prev_time = time()
                 ag_score_c.text = invert_string(str(time_left))
 
                 display.show(ag)
