@@ -439,6 +439,7 @@ def arcade_scrn():
                 game_score, time_left = arcade_bonus_scrn(game_time, game_timer, game_score)
                 
                 prev_time = time_left
+                ag_score_c.text = invert_string(str(time_left))
 
                 display.show(ag)
 
