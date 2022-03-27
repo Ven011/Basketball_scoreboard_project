@@ -398,6 +398,10 @@ def arcade_scrn():
         if time() - prev_time >= 0.5:
             ag_hiscore.color = 0x00B3B3
             ag_hiscore_c.color = 0x00B3B3
+            
+        # TESTING: Remove after test
+        if time_left == 59:
+            speaker.stop()
         
         sen_triggered, sen_top_state, sen_btm_state, game_score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, game_score)
         
