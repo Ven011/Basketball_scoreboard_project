@@ -8,10 +8,10 @@ from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
 from time import sleep, time
 import digitalio
-# import neopixel
-# from adafruit_led_animation.animation.colorcycle import ColorCycle
-# from adafruit_led_animation.animation.rainbow import Rainbow
-# from adafruit_led_animation.animation.solid import Solid
+import neopixel_spi as neopixel
+from adafruit_led_animation.animation.colorcycle import ColorCycle
+from adafruit_led_animation.animation.rainbow import Rainbow
+from adafruit_led_animation.animation.solid import Solid
 
 # RGBMatrix setup
 displayio.release_displays()
@@ -147,6 +147,7 @@ nhg.append(nhg_new)
 nhg.append(nhg_hiscore)
 nhg.append(nhg_hiscore_c)
 
+'''
 # audio setup
 speaker = audioio.AudioOut(board.A0)
 audio_file = {
@@ -157,20 +158,19 @@ audio_file = {
     "hiscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
-
 '''
+
 # NeoPixel setup
-pixels = neopixel.NeoPixel(board.D8, 54, brightness=0.2)
+pixels = neopixel.NeoPixel_SPI(board.SPI(), 53, brightness=0.2)
 rainbow = Rainbow(pixels, speed=0.1, period=2, step=1)
-colorcycle = ColorCycle(pixels, 0.5, colors=[0xFFFFFF, 0xB30000, 0x00B300, 0x0000B3])
+colorcycle = ColorCycle(pixels, 2.0, colors=[0xFFFFFF, 0xB30000, 0x00B300, 0x0000B3])
 solid_white = Solid(pixels, color=0xFFFFFF)
 solid_green = Solid(pixels, color=0x00B300)
 solid_yellow = Solid(pixels, color=0xB3B300)
 solid_red = Solid(pixels, color=0xB30000)
-'''
 
 # arcade button setup
-btn_arcade = digitalio.DigitalInOut(board.SCK)
+btn_arcade = digitalio.DigitalInOut(board.D8)
 btn_arcade.direction = digitalio.Direction.INPUT
 btn_arcade.pull = digitalio.Pull.UP
 
@@ -241,6 +241,7 @@ def check_sensors(sen_triggered, sen_top_state, sen_btm_state, score):
 
     return sen_triggered, sen_top_state, sen_btm_state, score
 
+'''
 def handle_audio(time_left):
     # stop any playing audio files
     if time_left == 60:
@@ -251,6 +252,7 @@ def handle_audio(time_left):
         if not speaker.playing:
             mp3stream.file = open(audio_file["countdown"], "rb")
             speaker.play(mp3stream)
+'''
 
 def start_scrn():
     global scrn_state, highest_score
@@ -266,11 +268,11 @@ def start_scrn():
 
     def checks():
         nonlocal labels_are_visible, blink_timer, blink_period
-
+        '''
         if not speaker.playing:
             mp3stream.file = open(audio_file["space_jam"], "rb")
             speaker.play(mp3stream)
-
+        '''
         if time() >= blink_timer + blink_period:
             blink_timer = time()
             if labels_are_visible:
@@ -297,7 +299,7 @@ def start_scrn():
                 sg_e.color = 0xFFFFFF
 
     while scrn_state == scrn_states[1]:
-        # colorcycle.animate()
+        colorcycle.animate()
 
         checks()
 
@@ -307,13 +309,13 @@ def start_scrn():
             button_states[1] = True
             while not btn_arcade.value:
                 checks()
-                #colorcycle.animate()
+                colorcycle.animate()
                 reset_score_t = time() - reset_score_v
                 if reset_score_t == 5:
                     ag_hiscore_c.text = "0"
                     highest_score = 0
                     get_set_hiscore(value=0)
-                    # solid_white.animate()
+                    solid_white.animate()
                     # allow the button state to be changed to True after reset
                     button_states[1] = False
                     # used to prevent entry to game after the 5 seconds
@@ -324,14 +326,16 @@ def start_scrn():
         # switch to the arcade scrn
         if button_states[1] and reset_score_v != -1:
             button_states[1] = False
+            '''
             if speaker.playing:
                 speaker.stop()
+            '''
             scrn_state = scrn_states[2]
 
 def countdown_scrn():
     global scrn_state
 
-    # solid_green.animate()
+    solid_green.animate()
 
     # set properties
     cdg_time_c.text = invert_string("3")
@@ -424,10 +428,10 @@ def arcade_scrn():
 
                 ag_hiscore.color = 0x000000
                 ag_hiscore_c.color = 0x000000
-
+                '''
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
-
+                '''
                 # add time when the score is beaten
                 if time_left >= 1 and time_left <= 10:
                     game_time += 30
@@ -444,7 +448,7 @@ def arcade_scrn():
 
                 display.show(ag)
 
-        handle_audio(time_left)
+        # handle_audio(time_left)
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
@@ -453,8 +457,10 @@ def arcade_scrn():
                 hiscore_beaten = True
                 ag_hiscore.color = 0x00B3B3
                 ag_hiscore_c.color = 0x00B3B3
+                '''
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
+                '''
 
         # exit the game when the time is up
         if time_left <= 0:
@@ -462,16 +468,20 @@ def arcade_scrn():
             if highest_score > saved_hiscore: # hiscore was beaten
                 scrn_state = scrn_states[5]
                 get_set_hiscore(value=game_score) # save the hiscore
+                '''
                 if speaker.playing:
                     speaker.stop()
                 mp3stream.file = open(audio_file["hiscore"], "rb")
                 speaker.play(mp3stream)
+                '''
             else: # hiscore was not beaten
                 scrn_state = scrn_states[4]
+                '''
                 if speaker.playing:
                     speaker.stop()
                 mp3stream.file = open(audio_file["game_over"], "rb")
                 speaker.play(mp3stream)
+                '''
 
 def arcade_bonus_scrn(game_time, game_timer, score):
     # set properties
@@ -504,18 +514,18 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     game_score = score
 
     display.show(btg)
-    
+    '''
     # stop any previous audio
     if speaker.playing:
         speaker.stop()
-        
+
     # play hiscore audio file    
     mp3stream.file = open(audio_file["hiscore"], "rb")
     speaker.play(mp3stream)
-
+    '''
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
-        # rainbow.animate()
+        rainbow.animate()
 
         # update the time
         time_left = (game_time - int(time() - game_timer))
@@ -566,7 +576,7 @@ def game_over_scrn():
     display.show(gog)
 
     while time() - start_time <= 10:
-        # rainbow.animate()
+        rainbow.animate()
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -609,7 +619,7 @@ def new_hiscore_scrn():
     display.show(nhg)
 
     while time() - start_time <= 10:
-        # rainbow.animate()
+        rainbow.animate()
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
