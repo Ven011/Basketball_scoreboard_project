@@ -157,6 +157,7 @@ audio_file = {
     "hiscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
+whistle_mp3 = audiomp3.MP3Decoder(open(audio_file["whistle"], "rb"))
 speaker.play(mp3stream)
 
 # NeoPixel setup
@@ -245,8 +246,7 @@ def handle_audio(time_left):
         solid_green.animate()
         if time_left == 60:
             if not speaker.playing:
-                mp3stream.file = open(audio_file["whistle"], "rb")
-                speaker.play(mp3stream)
+                speaker.play(whistle_mp3)
     if time_left >= 11 and time_left <= 20:
         solid_yellow.animate()
     if time_left >= 0 and time_left <= 10:
@@ -398,10 +398,6 @@ def arcade_scrn():
         if time() - prev_time >= 0.5:
             ag_hiscore.color = 0x00B3B3
             ag_hiscore_c.color = 0x00B3B3
-            
-        # TESTING: Remove after test
-        if time_left == 59:
-            speaker.stop()
         
         sen_triggered, sen_top_state, sen_btm_state, game_score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, game_score)
         
