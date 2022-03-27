@@ -157,7 +157,6 @@ audio_file = {
     "hiscore": "/audio/hiscore.mp3"
 }
 mp3stream = audiomp3.MP3Decoder(open(audio_file["space_jam"], "rb"))
-whistle_mp3 = audiomp3.MP3Decoder(open(audio_file["whistle"], "rb"))
 speaker.play(mp3stream)
 
 # NeoPixel setup
@@ -246,7 +245,8 @@ def handle_audio(time_left):
         solid_green.animate()
         if time_left == 60:
             if not speaker.playing:
-                speaker.play(whistle_mp3)
+                mp3stream.file = open(audio_file["whistle"], "rb")
+                speaker.play(mp3stream)
     if time_left >= 11 and time_left <= 20:
         solid_yellow.animate()
     if time_left >= 0 and time_left <= 10:
