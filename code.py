@@ -12,6 +12,7 @@ import neopixel_spi as neopixel
 from adafruit_led_animation.animation.colorcycle import ColorCycle
 from adafruit_led_animation.animation.rainbow import Rainbow
 from adafruit_led_animation.animation.solid import Solid
+from math import sin
 
 # RGBMatrix setup
 displayio.release_displays()
@@ -74,7 +75,7 @@ cdg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00B3B3, x=1,
 cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00B3B3, x=63, y=29, label_direction="RTL")
 
 # arcade graphics
-ag_shoot = label.Label(virtual_pet_sans, text="SHOOT", color=0xFFFFFF, x=17, y=4)
+ag_shoot = label.Label(virtual_pet_sans, text="SHOOT", color=0xFFFFFF, x=0, y=4)
 ag_time = label.Label(virtual_pet_sans, text="TIME", color=0xFFFF00, x=1, y=13)
 ag_time_c = label.Label(virtual_pet_sans, color=0xB30000, x=63, y=13, label_direction="RTL")
 ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0xFFFF00, x=1, y=21)
@@ -449,6 +450,9 @@ def arcade_scrn():
                 display.show(ag)
 
         handle_audio(time_left)
+        
+        # move shoot label along the screen
+        ag_shoot.x = int(15 * sin(time())) + 15
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
