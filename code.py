@@ -452,7 +452,7 @@ def arcade_scrn():
         handle_audio(time_left)
         
         # move shoot label along the screen
-        ag_shoot.x = (15 * sin(time() - game_timer)) + 15
+        ag_shoot.x = int(15 * sin((time() - game_timer) / 2) + 15)
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
