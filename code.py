@@ -386,8 +386,10 @@ def arcade_scrn():
     
     
     wall = True # used to bounce shoot label of the screen walls
+    moved = False
+    prev_move_t = time() # shoot label movement timer
     shoot_max_x = 30 # maximum x position the shoot value should slide to
-    shoot_move_t = 1 # Amount of time that will pass until shoot is allowed to move (seconds)
+    shoot_move_t = 0.5 # Amount of time that will pass until shoot is allowed to move (seconds)
     
     time_left = 60
     game_score = 0
@@ -457,15 +459,23 @@ def arcade_scrn():
         handle_audio(time_left)
         
         # move shoot label along the screen
-        if (time() - game_timer) % shoot_move_t == 0 and ag_shoot.x < shoot_max_x and wall:
-            ag_shoot.x = ag_shoot.x + 1
-            if ag_shoot.x == shoot_max_x:
-                wall = not wall
-        elif (time() - game_timer) % shoot_move_t == 0 and ag_shoot.x > 0 and not wall: 
-            ag_shoot.x = ag_shoot.x - 1
-            if ag_shoot.x == 0:
-                wall = not wall
+        if (time() - prev_move_t) == shoot_move_t and not moved:
+            prev_move_t = time()
+            moved = not moved
             
+            if ag_shoot.x < shoot_max_x and wall:
+                ag_shoot.x = ag_shoot.x + 1
+                if ag_shoot.x == shoot_max_x:
+                    wall = not wall
+                    
+            elif ag_shoot.x > 0 and not wall:
+                ag_shoot.x = ag_shoot.x - 1
+                if ag_shoot.x == 0:
+                    wall = not wall
+                    
+        if (time() - prev_move_t) > shoot_move_t:
+            moved = not moved
+                
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
