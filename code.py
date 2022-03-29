@@ -383,7 +383,7 @@ def arcade_scrn():
     sen_top_state = False
     sen_btm_state = False
     prev_time = 0 # used to hide hiscore text after bonus time
-    loops = 0
+    wall = True # used to bounce shoot label of the screen walls
     
     time_left = 60
     game_score = 0
@@ -453,8 +453,15 @@ def arcade_scrn():
         handle_audio(time_left)
         
         # move shoot label along the screen
-        ag_shoot.x = int(15 * sin(loops) + 15)
-        loops += 1
+        if (time() - game_timer) % 0.5 == 0 and ag_shoot.x < 15 and wall:
+            ag_shoot.x = ag_shoot.x + 1
+            if ag_shoot.x == 15:
+                wall = not wall
+        elif (time() - game_timer) % 0.5 == 0 and ag_shoot.x > 0 and not wall: 
+            ag_shoot.x = ag_shoot.x - 1
+            if ag_shoot.x == 0:
+                wall = not wall
+            
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
