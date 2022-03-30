@@ -457,18 +457,17 @@ def arcade_scrn():
         handle_audio(time_left)
         
         # move shoot label along the screen
-        if time() - prev_move_t:
+        if wall:
+            ag_shoot.x = ag_shoot.x + 1
             sleep(0.08)
-
-            if wall:
-                ag_shoot.x = ag_shoot.x + 1
-                if ag_shoot.x == shoot_max_x:
-                    wall = not wall
-                    
-            elif not wall:
-                ag_shoot.x = ag_shoot.x - 1
-                if ag_shoot.x == 1:
-                    wall = not wall
+            if ag_shoot.x == shoot_max_x:
+                wall = not wall
+                
+        elif not wall:
+            ag_shoot.x = ag_shoot.x - 1
+            sleep(0.08)
+            if ag_shoot.x == 1:
+                wall = not wall
                 
 
         # check if the previously set hiscore has been beaten
