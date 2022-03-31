@@ -385,7 +385,7 @@ def arcade_scrn():
     prev_time = 0 # used to hide hiscore text after bonus time
 
     wall = True # used to bounce shoot label of the screen walls
-    prev_wall = wall
+    prev_time = time()
     shoot_max_x = 28 # maximum x position the shoot value should slide to
     shoot_x = 0
 
@@ -458,25 +458,18 @@ def arcade_scrn():
         
         # move shoot label along the screen
         ag_shoot.x = shoot_x
-        if wall:
-            shoot_x += 1
-            # do not sleep after hitting a wall - remove stutter
-            if prev_wall == False:
-                prev_wall = True
-            else:
-                sleep(0.1)
-            if shoot_x == shoot_max_x:
-                wall = not wall
-                
-        elif not wall:
-            shoot_x -= 1
-            # do not sleep after hitting a wall - remove stutter
-            if prev_wall == True:
-                prev_wall = False
-            else:
-                sleep(0.1)
-            if shoot_x == 1:
-                wall = not wall
+        if (time() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
+            if wall:
+                shoot_x += 1
+                if shoot_x == shoot_max_x:
+                    wall = not wall
+                    
+            elif not wall:
+                shoot_x -= 1
+                if shoot_x == 1:
+                    wall = not wall
+            # update the previous time
+            prev_time = time()
                 
 
         # check if the previously set hiscore has been beaten
