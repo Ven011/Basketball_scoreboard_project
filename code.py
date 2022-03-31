@@ -6,7 +6,7 @@ import audioio
 import audiomp3
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
-from time import sleep, time
+from time import sleep, time, monotonic
 import digitalio
 import neopixel_spi as neopixel
 from adafruit_led_animation.animation.colorcycle import ColorCycle
@@ -385,7 +385,7 @@ def arcade_scrn():
     prev_time = 0 # used to hide hiscore text after bonus time
 
     wall = True # used to bounce shoot label of the screen walls
-    prev_time = time()
+    prev_time = monotonic()
     shoot_max_x = 28 # maximum x position the shoot value should slide to
     shoot_x = 0
 
@@ -458,7 +458,7 @@ def arcade_scrn():
         
         # move shoot label along the screen
         ag_shoot.x = shoot_x
-        if (time() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
+        if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
             if wall:
                 shoot_x += 1
                 if shoot_x == shoot_max_x:
@@ -469,7 +469,7 @@ def arcade_scrn():
                 if shoot_x == 1:
                     wall = not wall
             # update the previous time
-            prev_time = time()
+            prev_time = monotonic()
                 
 
         # check if the previously set hiscore has been beaten
