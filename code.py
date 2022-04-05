@@ -400,10 +400,10 @@ def arcade_scrn():
         time_left = (game_time - int(time() - game_timer))
         ag_time_c.text = invert_string(str(time_left))
         
-        # after bonus time, wait 0.5 seconds before showing the hiscore text
-        if time() - prev_time >= 0.5:
-            ag_hiscore.color = 0x00B3B3
-            ag_hiscore_c.color = 0x00B3B3
+        # # after bonus time, wait 0.5 seconds before showing the hiscore text
+        # if time() - prev_time >= 0.5:
+        #     ag_hiscore.color = 0x00B3B3
+        #     ag_hiscore_c.color = 0x00B3B3
         
         sen_triggered, sen_top_state, sen_btm_state, game_score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, game_score)
         
