@@ -447,7 +447,7 @@ def arcade_scrn():
                     game_time += 10
 
                 # go to the bonus time scrn for 10 seconds
-                game_score, time_left = arcade_bonus_scrn(game_time, game_timer, game_score)
+                game_score, time_left, shoot_x, wall, prev_time = arcade_bonus_scrn(game_time, game_timer, game_score, shoot_x, shoot_max_x, wall, prev_time)
                 
                 prev_time = time()
                 ag_score_c.text = invert_string(str(time_left))
@@ -499,7 +499,7 @@ def arcade_scrn():
                 mp3stream.file = open(audio_file["game_over"], "rb")
                 speaker.play(mp3stream)
 
-def arcade_bonus_scrn(game_time, game_timer, score):
+def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, shoot_max_x, wall, prev_time):
     # set properties
     bt_bonus.color = 0x000000
     bt_bonus_t.color = 0x000000
@@ -541,6 +541,21 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
         rainbow.animate()
+        
+        # move shoot label along the screen
+        bt_shoot.x = shoot_x
+        if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
+            if wall:
+                shoot_x += 1
+                if shoot_x == shoot_max_x:
+                    wall = not wall
+                    
+            elif not wall:
+                shoot_x -= 1
+                if shoot_x == 1:
+                    wall = not wall
+            # update the previous time
+            prev_time = monotonic()
 
         # update the time
         time_left = (game_time - int(time() - game_timer))
@@ -563,7 +578,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
                 bt_bonus.color = 0x00FF00
                 bt_bonus_t.color = 0x00FF00
 
-    return game_score, time_left
+    return game_score, time_left, wall, prev_time
 
 def game_over_scrn():
     global scrn_state
