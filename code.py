@@ -572,7 +572,7 @@ def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, shoot_max_x, wall, 
                 bt_bonus.color = 0x00FF00
                 bt_bonus_t.color = 0x00FF00
 
-    return game_score, time_left, wall, prev_time
+    return game_score, time_left, shoot_x, wall, prev_time
 
 def game_over_scrn():
     global scrn_state
