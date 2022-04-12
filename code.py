@@ -444,7 +444,9 @@ def arcade_scrn():
                 # go to the bonus time scrn for 10 seconds
                 game_score, time_left, shoot_x, wall, prev_time = arcade_bonus_scrn(game_time, game_timer, game_score, shoot_x, shoot_max_x, wall, prev_time)
 
+                # update labels
                 ag_score_c.text = invert_string(str(game_score))
+                ag_time_c.text = invert_string(str(time_left))
                 ag_shoot.x = shoot_x
                 
                 ag_hiscore.color = 0x00B3B3
