@@ -445,6 +445,10 @@ def arcade_scrn():
                 game_score, time_left, shoot_x, wall, prev_time = arcade_bonus_scrn(game_time, game_timer, game_score, shoot_x, shoot_max_x, wall, prev_time)
 
                 ag_score_c.text = invert_string(str(game_score))
+                ag_shoot.x = shoot_x
+                
+                ag_hiscore.color = 0x00B3B3
+                ag_hiscore_c.color = 0x00B3B3
 
                 display.show(ag)
 
@@ -495,6 +499,7 @@ def arcade_scrn():
 
 def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, shoot_max_x, wall, prev_time):
     # set properties
+    bt_shoot.x = shoot_x
     bt_bonus.color = 0x000000
     bt_bonus_t.color = 0x000000
     bt_score_c.text = invert_string(str(score))
