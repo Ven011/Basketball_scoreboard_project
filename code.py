@@ -369,6 +369,8 @@ def arcade_scrn():
     # set properties
     ag_time_c.text = invert_string("60")
     ag_score_c.text = invert_string("0")
+    ag_hiscore.color = 0x00B3B3
+    ag_hiscore_c.color = 0x00B3B3
 
     # variables
     labels_are_visible = False
