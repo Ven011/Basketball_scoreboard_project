@@ -384,7 +384,6 @@ def arcade_scrn():
     sen_triggered = 0
     sen_top_state = False
     sen_btm_state = False
-    prev_time = 0 # used to hide hiscore text after bonus time
 
     wall = True # used to bounce shoot label of the screen walls
     prev_time = monotonic()
@@ -460,7 +459,7 @@ def arcade_scrn():
         
         # move shoot label along the screen
         ag_shoot.x = shoot_x
-        if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
+        if (monotonic() - prev_time) >= 0.07: # check whether 0.07 seconds have passed
             if wall:
                 shoot_x += 1
                 if shoot_x == shoot_max_x:
