@@ -75,7 +75,7 @@ cdg_hiscore = label.Label(virtual_pet_sans, text="HISCORE", color=0x00B3B3, x=1,
 cdg_hiscore_c = label.Label(virtual_pet_sans, text=get_set_hiscore(), color=0x00B3B3, x=63, y=29, label_direction="RTL")
 
 # arcade graphics
-ag_shoot = label.Label(virtual_pet_sans, text="SHOOT", color=0xFFFFFF, x=0, y=4)
+ag_shoot = label.Label(virtual_pet_sans, text="SHOOT", color=0xFFFFFF, x=17, y=4)
 ag_time = label.Label(virtual_pet_sans, text="TIME", color=0xFFFF00, x=1, y=13)
 ag_time_c = label.Label(virtual_pet_sans, color=0xB30000, x=63, y=13, label_direction="RTL")
 ag_score = label.Label(virtual_pet_sans, text="SCORE", color=0xFFFF00, x=1, y=21)
@@ -388,7 +388,8 @@ def arcade_scrn():
     wall = True # used to bounce shoot label of the screen walls
     prev_time = monotonic()
     shoot_max_x = 28 # maximum x position the shoot value should slide to
-    shoot_x = 0
+    shoot_x = 17
+    ag_shoot.x = shoot_x
 
     time_left = 60
     game_score = 0
@@ -459,7 +460,7 @@ def arcade_scrn():
         
         # move shoot label along the screen
         ag_shoot.x = shoot_x
-        if (monotonic() - prev_time) >= 0.07: # check whether 0.07 seconds have passed
+        if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
             if wall:
                 shoot_x += 1
                 if shoot_x == shoot_max_x:
