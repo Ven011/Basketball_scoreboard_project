@@ -257,6 +257,28 @@ def handle_audio(time_left):
                 mp3stream.file = open(audio_file["countdown"], "rb")
                 speaker.play(mp3stream)
 
+def animate_label(label, shoot_x, prev_time, wall):
+    # variables
+    label_min_x = 1
+    label_max_x = 28 # maximum x position the shoot value should slide to
+    
+    # move shoot label along the screen
+    label.x = shoot_x
+    if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
+        if wall:
+            shoot_x += 1
+            if shoot_x == label_max_x:
+                wall = not wall
+                
+        elif not wall:
+            shoot_x -= 1
+            if shoot_x == label_min_x:
+                wall = not wall
+        # update the previous time
+        prev_time = monotonic()
+        
+    return shoot_x, prev_time, wall
+
 def start_scrn():
     global scrn_state, highest_score
 
@@ -387,7 +409,6 @@ def arcade_scrn():
 
     wall = True # used to bounce shoot label of the screen walls
     prev_time = monotonic()
-    shoot_max_x = 28 # maximum x position the shoot value should slide to
     shoot_x = 17
     ag_shoot.x = shoot_x
 
@@ -456,22 +477,12 @@ def arcade_scrn():
 
                 display.show(ag)
 
+        # play specific audio given time
         handle_audio(time_left)
         
-        # move shoot label along the screen
+        # slide the shoot label back and forth
+        shoot_x, prev_time, wall = animate_label(ag_shoot, shoot_x, prev_time, wall)
         ag_shoot.x = shoot_x
-        if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
-            if wall:
-                shoot_x += 1
-                if shoot_x == shoot_max_x:
-                    wall = not wall
-                    
-            elif not wall:
-                shoot_x -= 1
-                if shoot_x == 1:
-                    wall = not wall
-            # update the previous time
-            prev_time = monotonic()
                 
 
         # check if the previously set hiscore has been beaten
@@ -545,20 +556,9 @@ def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, shoot_max_x, wall, 
     while time() < bt_start_time + bt_stay_time:
         rainbow.animate()
         
-        # move shoot label along the screen
+        # slide the shoot label back and forth
+        shoot_x, prev_time, wall = animate_label(bt_shoot, shoot_x, prev_time, wall)
         bt_shoot.x = shoot_x
-        if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
-            if wall:
-                shoot_x += 1
-                if shoot_x == shoot_max_x:
-                    wall = not wall
-                    
-            elif not wall:
-                shoot_x -= 1
-                if shoot_x == 1:
-                    wall = not wall
-            # update the previous time
-            prev_time = monotonic()
 
         # update the time
         time_left = (game_time - int(time() - game_timer))
