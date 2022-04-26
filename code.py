@@ -501,16 +501,8 @@ def arcade_scrn():
             if highest_score > saved_hiscore: # hiscore was beaten
                 scrn_state = scrn_states[5]
                 get_set_hiscore(value=game_score) # save the hiscore
-                if speaker.playing:
-                    speaker.stop()
-                mp3stream.file = open(audio_file["hiscore"], "rb")
-                speaker.play(mp3stream)
             else: # hiscore was not beaten
                 scrn_state = scrn_states[4]
-                if speaker.playing:
-                    speaker.stop()
-                mp3stream.file = open(audio_file["game_over"], "rb")
-                speaker.play(mp3stream)
 
 def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, shoot_max_x, wall, prev_time):
     # set properties
@@ -606,10 +598,18 @@ def game_over_scrn():
         gog_score_c.x = 23
         gog_score_c.y = 27
 
+    # play the game over audio
+    if speaker.playing:
+        speaker.stop()
+    mp3stream.file = open(audio_file["game_over"], "rb")
+    speaker.play(mp3stream)
+
     display.show(gog)
 
     while time() - start_time <= 10:
         rainbow.animate()
+        
+        
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -648,6 +648,12 @@ def new_hiscore_scrn():
     elif highest_score >= 100:
         nhg_hiscore_c.x = 23
         nhg_hiscore_c.y = 27
+        
+    # play the hiscore audio
+    if speaker.playing:
+        speaker.stop()
+    mp3stream.file = open(audio_file["hiscore"], "rb")
+    speaker.play(mp3stream)
 
     display.show(nhg)
 
