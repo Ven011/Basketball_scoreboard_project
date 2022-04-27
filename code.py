@@ -586,6 +586,7 @@ def game_over_scrn():
     blink_timer = time()
     blink_period = 0
     start_time = time()
+    audio_played = False
 
     # center the score value label
     if int(gog_score_c.text) <= 9:
@@ -598,18 +599,18 @@ def game_over_scrn():
         gog_score_c.x = 23
         gog_score_c.y = 27
 
-    # play the game over audio
-    if speaker.playing:
-        speaker.stop()
-    mp3stream.file = open(audio_file["game_over"], "rb")
-    speaker.play(mp3stream)
-
     display.show(gog)
 
     while time() - start_time <= 10:
         rainbow.animate()
         
-        
+        if not audio_played:
+            # play the hiscore audio
+            if speaker.playing:
+                speaker.stop()
+            mp3stream.file = open(audio_file["game_over"], "rb")
+            speaker.play(mp3stream)
+            audio_played = True
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -637,6 +638,7 @@ def new_hiscore_scrn():
     blink_timer = time()
     blink_period = 0
     start_time = time()
+    audio_played = False
 
     # center the hiscore value label
     if highest_score <= 9:
@@ -648,17 +650,19 @@ def new_hiscore_scrn():
     elif highest_score >= 100:
         nhg_hiscore_c.x = 23
         nhg_hiscore_c.y = 27
-        
-    # play the hiscore audio
-    if speaker.playing:
-        speaker.stop()
-    mp3stream.file = open(audio_file["hiscore"], "rb")
-    speaker.play(mp3stream)
 
     display.show(nhg)
 
     while time() - start_time <= 10:
         rainbow.animate()
+        
+        if not audio_played:
+            # play the hiscore audio
+            if speaker.playing:
+                speaker.stop()
+            mp3stream.file = open(audio_file["hiscore"], "rb")
+            speaker.play(mp3stream)
+            audio_played = True
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
