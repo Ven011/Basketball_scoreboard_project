@@ -366,7 +366,9 @@ def start_scrn():
                     button_states[1] = False
                     # used to prevent entry to game after the 5 seconds
                     reset_score_v = -1
-                    sleep(1)
+                    # wait some time before proceeding
+                    while time() - reset_score_v <= 6:
+                        pass
                     break
 
         # switch to the arcade scrn
