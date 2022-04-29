@@ -209,7 +209,18 @@ button_states = {
 scrn_state = "start_scrn"
 highest_score = 0
 
-# def move_hoop():
+def move_hoop(should_i_go, hoop_index):
+    # move hoop
+    if should_i_go:
+        tic.go_target(hoop_position[hoop_index])
+        should_i_go = False
+    
+    # check if we have arrived at the position we were going
+    if tic.get_current_position() == tic.centre + hoop_position[hoop_index]:
+        should_i_go = True
+        hoop_index = not hoop_index
+    
+    return should_i_go, hoop_index
 
 def invert_string(string):
     inv_string = ""
@@ -424,6 +435,9 @@ def arcade_scrn():
 
     time_left = 60
     game_score = 0
+    
+    hoop_index = 0 # used for hoop movement
+    should_i_go = True
 
     display.show(ag)
     game_timer = time()
@@ -475,7 +489,7 @@ def arcade_scrn():
                     game_time += 10
 
                 # go to the bonus time scrn for 10 seconds
-                game_score, time_left, shoot_x, wall, prev_time = arcade_bonus_scrn(game_time, game_timer, game_score, shoot_x, shoot_max_x, wall, prev_time)
+                game_score, time_left, shoot_x, wall, prev_time = arcade_bonus_scrn(game_time, game_timer, game_score, shoot_x, wall, prev_time)
 
                 # update labels
                 ag_score_c.text = invert_string(str(game_score))
@@ -493,7 +507,9 @@ def arcade_scrn():
         # slide the shoot label back and forth
         shoot_x, prev_time, wall = animate_label(ag_shoot, shoot_x, prev_time, wall)
         ag_shoot.x = shoot_x
-                
+    
+        # move the hoop
+        should_i_go, hoop_index = move_hoop(should_i_go, hoop_index)            
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
@@ -514,7 +530,7 @@ def arcade_scrn():
             else: # hiscore was not beaten
                 scrn_state = scrn_states[4]
 
-def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, shoot_max_x, wall, prev_time):
+def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, wall, prev_time):
     # set properties
     bt_shoot.x = shoot_x
     bt_bonus.color = 0x000000
