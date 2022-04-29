@@ -12,10 +12,14 @@ import neopixel_spi as neopixel
 from adafruit_led_animation.animation.colorcycle import ColorCycle
 from adafruit_led_animation.animation.rainbow import Rainbow
 from adafruit_led_animation.animation.solid import Solid
+import TicI2C
 from math import sin
 
 # RGBMatrix setup
 displayio.release_displays()
+
+# hoop setup
+tic = TicI2C()
 
 matrix = rgbmatrix.RGBMatrix(
     width=64,
@@ -38,8 +42,8 @@ gog = displayio.Group()
 nhg = displayio.Group()
 
 # save hiscore
-def get_set_hiscore(value=0):
-    if value:
+def get_set_hiscore(value=-1):
+    if value >= 0:
         hiscore_file = open("/temp/hiscore.txt", "w")
         hiscore_file.write(str(value))
         hiscore_file.close()
@@ -184,6 +188,10 @@ sen_btm = digitalio.DigitalInOut(board.D1)
 sen_btm.direction = digitalio.Direction.INPUT
 sen_btm.pull = digitalio.Pull.UP
 
+# hoop movement setup
+hoop_position = [-100000, 100000]
+tic.control_hoop(max_speed = 300000000, starting_speed = 0, max_acceleration = 500000000, max_deceleration = 500000000) # the tic. ones are called from a TicI2C() class in an .mpy library
+
 # variables
 scrn_states = {
     1: "start_scrn",
@@ -200,6 +208,8 @@ button_states = {
 
 scrn_state = "start_scrn"
 highest_score = 0
+
+# def move_hoop():
 
 def invert_string(string):
     inv_string = ""
