@@ -189,7 +189,6 @@ sen_btm.direction = digitalio.Direction.INPUT
 sen_btm.pull = digitalio.Pull.UP
 
 # hoop movement setup
-hoop_position = [-100000, 100000]
 tic.control_hoop(max_speed = 300000000, starting_speed = 0, max_acceleration = 500000000, max_deceleration = 500000000) # the tic. ones are called from a TicI2C() class in an .mpy library
 
 # variables
@@ -210,6 +209,7 @@ scrn_state = "start_scrn"
 highest_score = 0
 
 def move_hoop(should_i_go, hoop_index):
+    hoop_position = [-100000, 100000]
     # move hoop
     if should_i_go:
         tic.go_target(hoop_position[hoop_index])
