@@ -22,7 +22,7 @@ class TicI2C(object):
         self.current_position = 0
         self.time_sleep = 0.0
         
-    def passive_sleep(duration):
+    def active_sleep(duration):
         """
         - This function is meant to mimic the sleep function, but will not stop other tasks from running like sleep does.
         """
@@ -75,7 +75,7 @@ class TicI2C(object):
             ]
             self.write_command(command)
             if self.time_sleep > 0.0:
-                self.passive_sleep(self.time_sleep)
+                self.active_sleep(self.time_sleep)
 
         # set the starting speed
         if starting_speed <= 500000000:
@@ -87,7 +87,7 @@ class TicI2C(object):
             ]
             self.write_command(command)
             if self.time_sleep > 0.0:
-                self.passive_sleep(self.time_sleep)
+                self.active_sleep(self.time_sleep)
 
         # set the max acceleration
         if max_acceleration <= 2147483647:
@@ -99,7 +99,7 @@ class TicI2C(object):
             ]
             self.write_command(command)
             if self.time_sleep > 0.0:
-                self.passive_sleep(self.time_sleep)
+                self.active_sleep(self.time_sleep)
 
         # set the max deceleration
         if max_deceleration <= 2147483647:
@@ -111,7 +111,7 @@ class TicI2C(object):
             ]
             self.write_command(command)
             if self.time_sleep > 0.0:
-                self.passive_sleep(self.time_sleep)
+                self.active_sleep(self.time_sleep)
 
     def get_current_position(self):
         """
@@ -161,7 +161,7 @@ class TicI2C(object):
             if target_sleep > 0.0:
                 while self.get_current_position() != self.centre + position:
                     if target_sleep > 0.0:
-                        self.passive_sleep(self.time_sleep)
+                        self.active_sleep(self.time_sleep)
 
     def go_home(self, reverse=True):
         """
@@ -178,7 +178,7 @@ class TicI2C(object):
         ]
         self.write_command(command)
         if self.time_sleep > 0.0:
-            self.passive_sleep(self.time_sleep)
+            self.active_sleep(self.time_sleep)
         self.current_position = 0
 
     def go_home_centre(self, reverse=True, wait_time=5, max_speed=500000000, starting_speed=0, max_acceleration=500000000, max_deceleration=500000000):
@@ -197,7 +197,7 @@ class TicI2C(object):
 
         self.go_home(reverse=reverse)
         if wait_time > 0.0:
-            self.passive_sleep(wait_time)
+            self.active_sleep(wait_time)
 
         self.control_hoop(max_speed=max_speed, starting_speed=starting_speed, max_acceleration=max_acceleration, max_deceleration=max_deceleration)
         self.go_target(0)
@@ -217,7 +217,7 @@ class TicI2C(object):
         ]
         self.write_command(command)
         if self.time_sleep > 0.0:
-            self.passive_sleep(self.time_sleep)
+            self.active_sleep(self.time_sleep)
 
     def exit_safe_start(self):
         """
