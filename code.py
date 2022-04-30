@@ -208,10 +208,11 @@ button_states = {
 scrn_state = "start_scrn"
 highest_score = 0
 
-def move_hoop(should_i_go, hoop_index):
+def move_hoop(should_i_go, hoop_index, time_left):
     hoop_position = [-100000, 100000]
+
     # move hoop
-    if should_i_go:
+    if should_i_go and time_left > 1:
         tic.go_target(hoop_position[hoop_index])
         should_i_go = False
     
@@ -219,6 +220,11 @@ def move_hoop(should_i_go, hoop_index):
     if tic.get_current_position() == tic.centre + hoop_position[hoop_index]:
         should_i_go = True
         hoop_index = not hoop_index
+    
+    # stop hoop movement when the game is coming to an end
+    if time_left <= 1:
+        tic.halt_set_position()
+    
     
     return should_i_go, hoop_index
 
@@ -511,7 +517,7 @@ def arcade_scrn():
         ag_shoot.x = shoot_x
     
         # move the hoop
-        should_i_go, hoop_index = move_hoop(should_i_go, hoop_index)            
+        should_i_go, hoop_index = move_hoop(should_i_go, hoop_index, time_left)            
 
         # check if the previously set hiscore has been beaten
         if game_score > saved_hiscore:
