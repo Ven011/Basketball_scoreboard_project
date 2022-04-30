@@ -8,8 +8,6 @@ import board
 from adafruit_bus_device.i2c_device import I2CDevice
 from time import time
 
-from code import animate_label
-
 class TicI2C(object):
     def __init__(self, address=14, centre=110000):
         """
