@@ -17,7 +17,7 @@ class TicI2C(object):
         - tic.time_sleep() is used for setting a pause in the tic.control_hoop() function
         """
 
-        self.addrefs = address
+        self.address = address
         self.centre = centre
         self.current_position = 0
         self.time_sleep = 0.0
