@@ -511,6 +511,7 @@ def arcade_scrn():
                 ag_score_c.text = invert_string(str(game_score))
                 ag_time_c.text = invert_string(str(time_left))
                 ag_shoot.x = label_sliding_vars["shoot_x"]
+                label_sliding_vars["label"] = ag_shoot
                 
                 ag_hiscore.color = 0x00B3B3
                 ag_hiscore_c.color = 0x00B3B3
@@ -542,8 +543,8 @@ def arcade_scrn():
             s_time = time()
             while time() - s_time < 1:
                 # slide the shoot label back and forth
-                shoot_x, prev_time, wall = animate_label(ag_shoot, shoot_x, prev_time, wall)
-                ag_shoot.x = shoot_x
+                animate_label()
+                ag_shoot.x = label_sliding_vars["shoot_x"]
             if highest_score > saved_hiscore: # hiscore was beaten
                 scrn_state = scrn_states[5]
                 get_set_hiscore(value=game_score) # save the hiscore
