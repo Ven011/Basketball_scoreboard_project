@@ -411,7 +411,9 @@ def countdown_scrn():
 
         # switch to the arcade scrn
         if time_left == 1:
-            sleep(1)
+            s_time = time()
+            while time() - s_time < 1: # pause for 1 second
+                pass
             scrn_state = scrn_states[3]
 
 def arcade_scrn():
