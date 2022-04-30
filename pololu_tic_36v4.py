@@ -3,8 +3,6 @@ Copyright © Tomislav Vuksic 2022, All Rights Reserved.
 This system, including hardware and software, is Copyrighted© and trademarked® by Tomislav Vuksic.
 Any unauthorised / commercial use of the system or any part of it is strictly prohibited.
 '''
-
-from multiprocessing.connection import wait
 import bitbangio
 import board
 from adafruit_bus_device.i2c_device import I2CDevice
@@ -19,7 +17,7 @@ class TicI2C(object):
         - tic.time_sleep() is used for setting a pause in the tic.control_hoop() function
         """
 
-        self.address = address
+        self.addrefs = address
         self.centre = centre
         self.current_position = 0
         self.time_sleep = 0.0
