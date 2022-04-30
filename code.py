@@ -244,7 +244,7 @@ def move_hoop(should_i_go, hoop_index, time_left):
 
     # move hoop
     if should_i_go and time_left > 1:
-        tic.go_target(hoop_position[hoop_index], animate_label)
+        tic.go_target(hoop_position[hoop_index], animate_label= animate_label) 
         should_i_go = False
     
     # check if we have arrived at the position we were going
