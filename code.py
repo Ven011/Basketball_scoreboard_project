@@ -534,7 +534,7 @@ def arcade_scrn():
         # exit the game when the time is up
         if time_left <= 0:
             s_time = time()
-            while time - s_time < 1:
+            while time() - s_time < 1:
                 # slide the shoot label back and forth
                 shoot_x, prev_time, wall = animate_label(ag_shoot, shoot_x, prev_time, wall)
                 ag_shoot.x = shoot_x
