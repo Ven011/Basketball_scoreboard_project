@@ -22,7 +22,7 @@ class TicI2C(object):
         self.current_position = 0
         self.time_sleep = 0.0
         
-    def active_sleep(duration):
+    def active_sleep(self, duration):
         """
         - This function is meant to mimic the sleep function, but will not stop other tasks from running like sleep does.
         """
