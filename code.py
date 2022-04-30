@@ -222,7 +222,7 @@ def move_hoop(should_i_go, hoop_index, time_left):
         hoop_index = not hoop_index
     
     # stop hoop movement when the game is coming to an end
-    if time_left <= 1:
+    if time_left <= 0:
         tic.halt_set_position()
     
     
