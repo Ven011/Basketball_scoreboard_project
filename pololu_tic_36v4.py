@@ -8,6 +8,8 @@ import board
 from adafruit_bus_device.i2c_device import I2CDevice
 from time import time
 
+from code import animate_label
+
 class TicI2C(object):
     def __init__(self, address=14, centre=110000):
         """
@@ -22,13 +24,16 @@ class TicI2C(object):
         self.current_position = 0
         self.time_sleep = 0.0
         
-    def active_sleep(self, duration):
+    def active_sleep(self, duration, animate_label = None):
         """
         - This function is meant to mimic the sleep function, but will not stop other tasks from running like sleep does.
         """
         s_time = time()
         while time() - s_time < duration:
-            pass
+            if animate_label == None:
+                pass
+            else:
+                animate_label()
 
     def write_command(self, command):
         """
@@ -144,7 +149,7 @@ class TicI2C(object):
         self.write_command(command)
         self.current_position = target
 
-    def go_target(self, position, target_sleep=0.0):
+    def go_target(self, position, target_sleep=0.0, animate_label = None):
         """
         this function moves to a specified position relative to the centre:
         - tic.go_target(0) is always the centre position
@@ -161,7 +166,7 @@ class TicI2C(object):
             if target_sleep > 0.0:
                 while self.get_current_position() != self.centre + position:
                     if target_sleep > 0.0:
-                        self.active_sleep(self.time_sleep)
+                        self.active_sleep(self.time_sleep, animate_label)
 
     def go_home(self, reverse=True):
         """

@@ -13,7 +13,6 @@ from adafruit_led_animation.animation.colorcycle import ColorCycle
 from adafruit_led_animation.animation.rainbow import Rainbow
 from adafruit_led_animation.animation.solid import Solid
 import TicI2C
-from math import sin
 
 # RGBMatrix setup
 displayio.release_displays()
@@ -205,15 +204,47 @@ button_states = {
     2: False
 }
 
+label_sliding_vars = {
+    "label": None,
+    "shoot_x": 17,
+    "prev_time": monotonic(),
+    "wall": True
+}
+
 scrn_state = "start_scrn"
 highest_score = 0
+
+def animate_label():
+    global label_sliding_vars
+    
+    lsv = label_sliding_vars    
+    # variables
+    label_min_x = 1
+    label_max_x = 28 # maximum x position the shoot value should slide to
+    
+    # move shoot label along the screen
+    if (monotonic() - lsv["prev_time"]) >= 0.08: # check whether 0.08 seconds have passed
+        if lsv["wall"]:
+            lsv["shoot_x"] += 1
+            if lsv["shoot_x"] == label_max_x:
+                lsv["wall"] = not lsv["wall"]
+                
+        elif lsv["wall"]:
+            lsv["shoot_x"] += 1
+            if lsv["shoot_x"] == label_min_x:
+                lsv["wall"] = not lsv["wall"]
+        # update the previous time
+        lsv["prev_time"] = monotonic()
+        
+    # update the label position
+    lsv["label"].x = lsv["shoot_x"]
 
 def move_hoop(should_i_go, hoop_index, time_left):
     hoop_position = [-100000, 100000]
 
     # move hoop
     if should_i_go and time_left > 1:
-        tic.go_target(hoop_position[hoop_index])
+        tic.go_target(hoop_position[hoop_index], animate_label)
         should_i_go = False
     
     # check if we have arrived at the position we were going
@@ -283,28 +314,6 @@ def handle_audio(time_left):
             if not speaker.playing:
                 mp3stream.file = open(audio_file["countdown"], "rb")
                 speaker.play(mp3stream)
-
-def animate_label(label, shoot_x, prev_time, wall):
-    # variables
-    label_min_x = 1
-    label_max_x = 28 # maximum x position the shoot value should slide to
-    
-    # move shoot label along the screen
-    label.x = shoot_x
-    if (monotonic() - prev_time) >= 0.08: # check whether 0.08 seconds have passed
-        if wall:
-            shoot_x += 1
-            if shoot_x == label_max_x:
-                wall = not wall
-                
-        elif not wall:
-            shoot_x -= 1
-            if shoot_x == label_min_x:
-                wall = not wall
-        # update the previous time
-        prev_time = monotonic()
-        
-    return shoot_x, prev_time, wall
 
 def start_scrn():
     global scrn_state, highest_score
@@ -417,13 +426,15 @@ def countdown_scrn():
             scrn_state = scrn_states[3]
 
 def arcade_scrn():
-    global scrn_state, highest_score
+    global scrn_state, highest_score, label_sliding_vars
 
     # set properties
     ag_time_c.text = invert_string("60")
     ag_score_c.text = invert_string("0")
     ag_hiscore.color = 0x00B3B3
     ag_hiscore_c.color = 0x00B3B3
+    label_sliding_vars["label"] = ag_shoot
+    ag_shoot.x = label_sliding_vars["shoot_x"]
 
     # variables
     labels_are_visible = False
@@ -437,11 +448,6 @@ def arcade_scrn():
     sen_triggered = 0
     sen_top_state = False
     sen_btm_state = False
-
-    wall = True # used to bounce shoot label of the screen walls
-    prev_time = monotonic()
-    shoot_x = 17
-    ag_shoot.x = shoot_x
 
     time_left = 60
     game_score = 0
@@ -499,12 +505,12 @@ def arcade_scrn():
                     game_time += 10
 
                 # go to the bonus time scrn for 10 seconds
-                game_score, time_left, shoot_x, wall, prev_time = arcade_bonus_scrn(game_time, game_timer, game_score, shoot_x, wall, prev_time)
+                game_score, time_left = arcade_bonus_scrn(game_time, game_timer, game_score)
 
                 # update labels
                 ag_score_c.text = invert_string(str(game_score))
                 ag_time_c.text = invert_string(str(time_left))
-                ag_shoot.x = shoot_x
+                ag_shoot.x = label_sliding_vars["shoot_x"]
                 
                 ag_hiscore.color = 0x00B3B3
                 ag_hiscore_c.color = 0x00B3B3
@@ -515,8 +521,8 @@ def arcade_scrn():
         handle_audio(time_left)
         
         # slide the shoot label back and forth
-        shoot_x, prev_time, wall = animate_label(ag_shoot, shoot_x, prev_time, wall)
-        ag_shoot.x = shoot_x
+        animate_label()
+        ag_shoot.x = label_sliding_vars["shoot_x"]
     
         # move the hoop
         should_i_go, hoop_index = move_hoop(should_i_go, hoop_index, time_left)            
@@ -544,12 +550,15 @@ def arcade_scrn():
             else: # hiscore was not beaten
                 scrn_state = scrn_states[4]
 
-def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, wall, prev_time):
+def arcade_bonus_scrn(game_time, game_timer, score):
+    global label_sliding_vars
+    
     # set properties
-    bt_shoot.x = shoot_x
     bt_bonus.color = 0x000000
     bt_bonus_t.color = 0x000000
     bt_score_c.text = invert_string(str(score))
+    label_sliding_vars["label"] = bt_shoot
+    bt_shoot.x = label_sliding_vars["shoot_x"]
     
     start_time = (game_time - int(time() - game_timer)) + 1
     exception = 0.5
@@ -589,8 +598,8 @@ def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, wall, prev_time):
         rainbow.animate()
         
         # slide the shoot label back and forth
-        shoot_x, prev_time, wall = animate_label(bt_shoot, shoot_x, prev_time, wall)
-        bt_shoot.x = shoot_x
+        animate_label()
+        bt_shoot.x = label_sliding_vars["shoot_x"]
 
         # update the time
         time_left = (game_time - int(time() - game_timer))
@@ -613,7 +622,7 @@ def arcade_bonus_scrn(game_time, game_timer, score, shoot_x, wall, prev_time):
                 bt_bonus.color = 0x00FF00
                 bt_bonus_t.color = 0x00FF00
 
-    return game_score, time_left, shoot_x, wall, prev_time
+    return game_score, time_left
 
 def game_over_scrn():
     global scrn_state
