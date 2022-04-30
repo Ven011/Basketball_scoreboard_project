@@ -533,7 +533,11 @@ def arcade_scrn():
 
         # exit the game when the time is up
         if time_left <= 0:
-            sleep(1)
+            s_time = time()
+            while time - s_time < 1:
+                # slide the shoot label back and forth
+                shoot_x, prev_time, wall = animate_label(ag_shoot, shoot_x, prev_time, wall)
+                ag_shoot.x = shoot_x
             if highest_score > saved_hiscore: # hiscore was beaten
                 scrn_state = scrn_states[5]
                 get_set_hiscore(value=game_score) # save the hiscore
