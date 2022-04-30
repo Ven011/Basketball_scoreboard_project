@@ -12,7 +12,7 @@ import neopixel_spi as neopixel
 from adafruit_led_animation.animation.colorcycle import ColorCycle
 from adafruit_led_animation.animation.rainbow import Rainbow
 from adafruit_led_animation.animation.solid import Solid
-import TicI2C
+from pololu_tic_36v4 import TicI2C
 
 # RGBMatrix setup
 displayio.release_displays()
