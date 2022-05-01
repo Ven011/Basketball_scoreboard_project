@@ -715,9 +715,6 @@ def game_over_scrn():
             mp3stream.file = open(audio_file["game_over"], "rb")
             speaker.play(mp3stream)
             audio_played = True
-
-        # center the hoop
-        tic.go_home_centre(bg_task=handle_blink)
         
         # blink labels
         handle_blink()
@@ -763,9 +760,6 @@ def new_hiscore_scrn():
             mp3stream.file = open(audio_file["hiscore"], "rb")
             speaker.play(mp3stream)
             audio_played = True
-            
-        # center the hoop
-        tic.go_home_centre(bg_task=handle_blink)
         
         # blink labels
         handle_blink()
