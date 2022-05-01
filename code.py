@@ -401,6 +401,7 @@ def countdown_scrn():
     # set properties
     cdg_time_c.text = invert_string("3")
     cdg_score_c.text = invert_string("0")
+    label_sliding_vars["label"] = cdg_shoot
 
     # variables
     countdown_time = 3
@@ -410,13 +411,22 @@ def countdown_scrn():
     time_left = 3
 
     display.show(cdg)
-    sleep(1)
+    
+    s_time = time()
+    while time() - s_time < 1:
+        animate_label()
+        cdg_shoot.x = label_sliding_vars["shoot_x"]
+    
     countdown_timer = time()
 
     while scrn_state == scrn_states[2]:
         # update the time left in the countdown
         time_left = (countdown_time - int(time() - countdown_timer))
         cdg_time_c.text = invert_string(str(time_left))
+        
+        # move shoot label
+        animate_label()
+        cdg_shoot.x = label_sliding_vars["shoot_x"]
 
         # switch to the arcade scrn
         if time_left == 1:
