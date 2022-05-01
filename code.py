@@ -177,6 +177,11 @@ btn_arcade = digitalio.DigitalInOut(board.D8)
 btn_arcade.direction = digitalio.Direction.INPUT
 btn_arcade.pull = digitalio.Pull.UP
 
+# reset button setup
+btn_reset = digitalio.DigitalInOut(board.D11)
+btn_reset.direction = digitalio.Direction.INPUT
+btn_reset.pull = digitalio.Pull.UP
+
 # top sensor setup
 sen_top = digitalio.DigitalInOut(board.D0)
 sen_top.direction = digitalio.Direction.INPUT
@@ -211,6 +216,44 @@ label_sliding_vars = {
     "wall": True
 }
 
+blink_labels = {
+    "ag_hiscore": {
+        "blink": False,
+        "color": 0x00B3B3,
+        "labels": {
+            1: ag_hiscore,
+            2: ag_hiscore_c
+        } 
+    },
+    "bt_bonus": {
+        "blink": False,
+        "color": 0x00FF00,
+        "labels": {
+            1: bt_bonus,
+            2: bt_bonus_t
+        }
+    },
+    "gog": {
+        "blink": False,
+        "color": 0xB30000,
+        "labels": {
+            1: gog_game,
+            2: gog_over
+        }
+    },
+    "nhg_new": {
+        "blink": False,
+        "color": 0x00B300,
+        "labels": {
+            1: nhg_new
+        }
+    }
+}
+blink_vrs = {
+    "blink_timer": time(),
+    "labels_are_visible": True
+}
+
 scrn_state = "start_scrn"
 highest_score = 0
 
@@ -239,12 +282,39 @@ def animate_label():
     # update the label position
     lsv["label"].x = lsv["shoot_x"]
 
+def handle_blink():
+    global blink_labels, blink_vrs
+    
+    """
+    This function blinks any labels that are called to blink.
+    - The variables used to blink the labels are accessed from the global scope in order to allow this function to be called from anywhere
+    """
+    
+    # blink the labels
+    if time() >= blink_vrs["blink_timer"] + 1:
+        blink_vrs["blink_timer"] = time()
+        if blink_vrs["labels_are_visible"]:
+            blink_vrs["labels_are_visible"] = False
+            # set the color of all the labels that need to be blinked to black
+            for k, v in blink_labels.items():
+                if v["blink"]:
+                    for key, value in blink_labels[k]["labels"].items():
+                        value.color = 0x000000
+                    
+        else:
+            blink_vrs["labels_are_visible"] = True
+            # set the color of all the labels that need to be blinked to their default color
+            for k, v in blink_labels.items():
+                if v["blink"]:
+                    for key, value in blink_labels[k]["labels"].items():
+                        value.color = blink_labels[k]["color"]
+
 def move_hoop(should_i_go, hoop_index, time_left):
     hoop_position = [-100000, 100000]
 
     # move hoop
     if should_i_go and time_left > 1:
-        tic.go_target(hoop_position[hoop_index], animate_label=animate_label) 
+        tic.go_target(hoop_position[hoop_index], bg_task=animate_label)
         should_i_go = False
     
     # check if we have arrived at the position we were going
@@ -322,17 +392,11 @@ def start_scrn():
     labels_are_visible = False
     blink_timer = 0
     blink_period = 0
-    reset_score_v = 0
-    reset_score_t = 0
 
     display.show(sg)
 
-    def checks():
-        nonlocal labels_are_visible, blink_timer, blink_period
-
-        if not speaker.playing:
-            mp3stream.file = open(audio_file["space_jam"], "rb")
-            speaker.play(mp3stream)
+    while scrn_state == scrn_states[1]:
+        colorcycle.animate()
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -358,36 +422,32 @@ def start_scrn():
                 sg_r.color = 0xFFFFFF
                 sg_s.color = 0xFFFFFF
                 sg_e.color = 0xFFFFFF
+        
+        if not speaker.playing:
+            mp3stream.file = open(audio_file["space_jam"], "rb")
+            speaker.play(mp3stream)
+        
+        # check if the reset button is low
+        if not btn_reset and not button_states[2]:
+            button_states[2] = True
 
-    while scrn_state == scrn_states[1]:
-        colorcycle.animate()
-
-        checks()
-
-        # reset the hiscore if the arcade button is held for 5 seconds
+        # reset the hiscore if the reset button is pressed
+        if button_states[2]:
+            button_states[2] = False
+            ag_hiscore_c.text = "0"
+            get_set_hiscore(value=0)
+            solid_white.animate() # Indicate highscore score reset
+            # delay 1 second
+            s_time = time()
+            while time() - s_time < 1:
+                pass
+                
+        # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:
-            reset_score_v = time()
             button_states[1] = True
-            while not btn_arcade.value:
-                checks()
-                colorcycle.animate()
-                reset_score_t = time() - reset_score_v
-                if reset_score_t == 5:
-                    ag_hiscore_c.text = "0"
-                    highest_score = 0
-                    get_set_hiscore(value=0)
-                    solid_white.animate()
-                    # allow the button state to be changed to True after reset
-                    button_states[1] = False
-                    # used to prevent entry to game after the 5 seconds
-                    reset_score_v = -1
-                    # wait some time before proceeding
-                    while time() - reset_score_v <= 6:
-                        pass
-                    break
 
         # switch to the arcade scrn
-        if button_states[1] and reset_score_v != -1:
+        if button_states[1]:
             button_states[1] = False
             if speaker.playing:
                 speaker.stop()
@@ -447,9 +507,6 @@ def arcade_scrn():
     ag_shoot.x = label_sliding_vars["shoot_x"]
 
     # variables
-    labels_are_visible = False
-    blink_timer = time()
-    blink_period = 0
     game_time = 60
     saved_hiscore = int(get_set_hiscore())
     ag_hiscore_c.text = invert_string(str(saved_hiscore))
@@ -483,18 +540,11 @@ def arcade_scrn():
         # bonus time
         if can_do_bonus:
             if score_diff <= 5 and score_diff >= 0:
-                if time() >= blink_timer + blink_period:
-                    blink_timer = time()
-                    if labels_are_visible:
-                        labels_are_visible = False
-                        blink_period = 1
-                        ag_hiscore.color = 0x000000
-                        ag_hiscore_c.color = 0x000000
-                    else:
-                        labels_are_visible = True
-                        blink_period = 1
-                        ag_hiscore.color = 0x00B3B3
-                        ag_hiscore_c.color = 0x00B3B3
+                # blink the ag_hiscore labels
+                blink_labels["ag_hiscore"]["blink"] = True
+            else:
+                # don't blink the ag_hiscore labels
+                blink_labels["ag_hiscore"]["blink"] = False
 
             # hiscore has been beaten and was not beaten before in this game
             if score_diff < 0 and not hiscore_beaten and time_left <= 30:
@@ -578,12 +628,10 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         # make an exception if the remainder of the past seconds is greater than the exception time
         if start_time - (game_time - (time() - game_timer)) > exception:
             break
-        pass
+        else:
+            pass
 
     # variables
-    labels_are_visible = False
-    blink_timer = time()
-    blink_period = 1
     bt_start_time = time()
     bt_stay_time = 10
     sen_triggered = 0
@@ -603,6 +651,9 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     # play hiscore audio file    
     mp3stream.file = open(audio_file["hiscore"], "rb")
     speaker.play(mp3stream)
+    
+    # give command to blink labels
+    blink_labels["bt_bonus"]["blink"] = True
 
     # stay in the bonus time scrn for the time specified in stay_time
     while time() < bt_start_time + bt_stay_time:
@@ -620,19 +671,12 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         sen_triggered, sen_top_state, sen_btm_state, game_score = check_sensors(sen_triggered, sen_top_state, sen_btm_state, game_score)
         bt_score_c.text = invert_string(str(game_score))
 
-        if time() >= blink_timer + blink_period:
-            blink_timer = time()
-            if labels_are_visible:
-                labels_are_visible = False
-                blink_period = 1
-                bt_bonus.color = 0x000000
-                bt_bonus_t.color = 0x000000
-            else:
-                labels_are_visible = True
-                blink_period = 1
-                bt_bonus.color = 0x00FF00
-                bt_bonus_t.color = 0x00FF00
+        # blink the bt_bonus and bt_bonus_t labels
+        handle_blink()
 
+    # give command to stop blinking bt_bonus labels
+    blink_labels["bt_bonus"]["blink"] = False
+    
     return game_score, time_left
 
 def game_over_scrn():
@@ -642,9 +686,6 @@ def game_over_scrn():
     gog_score_c.text = invert_string(ag_score_c.text)
 
     # variables
-    labels_are_visible = False
-    blink_timer = time()
-    blink_period = 0
     start_time = time()
     audio_played = False
 
@@ -660,6 +701,9 @@ def game_over_scrn():
         gog_score_c.y = 27
 
     display.show(gog)
+    
+    # allow gog labels to blink
+    blink_labels["gog"]["blink"] = True
 
     while time() - start_time <= 10:
         rainbow.animate()
@@ -672,18 +716,11 @@ def game_over_scrn():
             speaker.play(mp3stream)
             audio_played = True
 
-        if time() >= blink_timer + blink_period:
-            blink_timer = time()
-            if labels_are_visible:
-                labels_are_visible = False
-                blink_period = 1
-                gog_game.color = 0x000000
-                gog_over.color = 0x000000
-            else:
-                labels_are_visible = True
-                blink_period = 2
-                gog_game.color = 0xB30000
-                gog_over.color = 0xB30000
+        # center the hoop
+        tic.go_home_centre(bg_task=handle_blink)
+
+    # stop gog labels blink
+    blink_labels["gog"]["blink"] = False
 
     scrn_state = scrn_states[1]
 
@@ -694,9 +731,6 @@ def new_hiscore_scrn():
     nhg_hiscore_c.text = str(highest_score)
 
     # variables
-    labels_are_visible = False
-    blink_timer = time()
-    blink_period = 0
     start_time = time()
     audio_played = False
 
@@ -712,6 +746,9 @@ def new_hiscore_scrn():
         nhg_hiscore_c.y = 27
 
     display.show(nhg)
+    
+    # allow gog labels to blink
+    blink_labels["nhg_new"]["blink"] = True
 
     while time() - start_time <= 10:
         rainbow.animate()
@@ -723,17 +760,12 @@ def new_hiscore_scrn():
             mp3stream.file = open(audio_file["hiscore"], "rb")
             speaker.play(mp3stream)
             audio_played = True
-
-        if time() >= blink_timer + blink_period:
-            blink_timer = time()
-            if labels_are_visible:
-                labels_are_visible = False
-                blink_period = 1
-                nhg_new.color = 0x000000
-            else:
-                labels_are_visible = True
-                blink_period = 2
-                nhg_new.color = 0x00B300
+            
+        # center the hoop
+        tic.go_home_centre(bg_task=handle_blink)
+        
+    # stop nhg_new labels blink
+    blink_labels["nhg_new"]["blink"] = False
 
     scrn_state = scrn_states[1]
 

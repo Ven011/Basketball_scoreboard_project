@@ -8,6 +8,8 @@ import board
 from adafruit_bus_device.i2c_device import I2CDevice
 from time import time
 
+from code import animate_label
+
 class TicI2C(object):
     def __init__(self, address=14, centre=110000):
         """
@@ -22,16 +24,16 @@ class TicI2C(object):
         self.current_position = 0
         self.time_sleep = 0.0
         
-    def active_sleep(self, duration, animate_label = None):
+    def active_sleep(self, duration, bg_task=None):
         """
         - This function is meant to mimic the sleep function, but will not stop other tasks from running like sleep does.
         """
         s_time = time()
         while time() - s_time < duration:
-            if animate_label == None:
+            if bg_task == None:
                 pass
             else:
-                animate_label()
+                bg_task()
 
     def write_command(self, command):
         """
@@ -147,7 +149,7 @@ class TicI2C(object):
         self.write_command(command)
         self.current_position = target
 
-    def go_target(self, position, target_sleep=0.0, animate_label = None):
+    def go_target(self, position, target_sleep=0.0, bg_task=None):
         """
         this function moves to a specified position relative to the centre:
         - tic.go_target(0) is always the centre position
@@ -164,7 +166,7 @@ class TicI2C(object):
             if target_sleep > 0.0:
                 while self.get_current_position() != self.centre + position:
                     if target_sleep > 0.0:
-                        self.active_sleep(self.time_sleep, animate_label)
+                        self.active_sleep(self.time_sleep, bg_task=bg_task)
 
     def go_home(self, reverse=True):
         """
@@ -184,7 +186,7 @@ class TicI2C(object):
             self.active_sleep(self.time_sleep)
         self.current_position = 0
 
-    def go_home_centre(self, reverse=True, wait_time=5, max_speed=500000000, starting_speed=0, max_acceleration=500000000, max_deceleration=500000000):
+    def go_home_centre(self, reverse=True, wait_time=5, max_speed=500000000, starting_speed=0, max_acceleration=500000000, max_deceleration=500000000, bg_task = None):
         """
         this function executes the tic.go_home() function, then waits for the wait_time, and moves to centre using the velocity parameters
         - the parameter wait_time is by default 5 seconds
@@ -200,7 +202,7 @@ class TicI2C(object):
 
         self.go_home(reverse=reverse)
         if wait_time > 0.0:
-            self.active_sleep(wait_time)
+            self.active_sleep(wait_time, bg_task)
 
         self.control_hoop(max_speed=max_speed, starting_speed=starting_speed, max_acceleration=max_acceleration, max_deceleration=max_deceleration)
         self.go_target(0)
