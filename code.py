@@ -718,6 +718,9 @@ def game_over_scrn():
 
         # center the hoop
         tic.go_home_centre(bg_task=handle_blink)
+        
+        # blink labels
+        handle_blink()
 
     # stop gog labels blink
     blink_labels["gog"]["blink"] = False
@@ -763,6 +766,9 @@ def new_hiscore_scrn():
             
         # center the hoop
         tic.go_home_centre(bg_task=handle_blink)
+        
+        # blink labels
+        handle_blink()
         
     # stop nhg_new labels blink
     blink_labels["nhg_new"]["blink"] = False
