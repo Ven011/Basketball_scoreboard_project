@@ -711,6 +711,7 @@ def game_over_scrn():
     
     # allow gog labels to blink
     blink_labels["gog"]["blink"] = True
+    blink_vrs["labels_are_visible"] = False # makes sure the labels are visible at the start of blinking
     
     # center the hoop
     tic.go_home_centre(bg_task=bg_tasks)
@@ -758,6 +759,7 @@ def new_hiscore_scrn():
     
     # allow gog labels to blink
     blink_labels["nhg_new"]["blink"] = True
+    blink_vrs["labels_are_visible"] = False # makes sure the labels are visible at the start of blinking
     
     # center the hoop
     tic.go_home_centre(bg_task=bg_tasks)
