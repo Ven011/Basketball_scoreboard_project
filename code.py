@@ -493,7 +493,7 @@ def countdown_scrn():
             s_time = time()
             while time() - s_time < 1: # pause for 1 second
                 animate_label()
-                ag_shoot.x = label_sliding_vars["shoot_x"]
+                cdg_shoot.x = label_sliding_vars["shoot_x"]
             scrn_state = scrn_states[3]
 
 def arcade_scrn():
