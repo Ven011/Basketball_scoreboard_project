@@ -687,7 +687,6 @@ def game_over_scrn():
 
     # variables
     start_time = time()
-    audio_played = False
 
     # center the score value label
     if int(gog_score_c.text) <= 9:
@@ -702,19 +701,20 @@ def game_over_scrn():
 
     display.show(gog)
     
+    # play the game over audio
+    if speaker.playing:
+        speaker.stop()
+    mp3stream.file = open(audio_file["game_over"], "rb")
+    speaker.play(mp3stream)
+    
     # allow gog labels to blink
     blink_labels["gog"]["blink"] = True
+    
+    # center the hoop
+    tic.go_home_centre(bg_task=handle_blink)
 
-    while time() - start_time <= 10:
+    while time() - start_time <= 5:
         rainbow.animate()
-        
-        if not audio_played:
-            # play the hiscore audio
-            if speaker.playing:
-                speaker.stop()
-            mp3stream.file = open(audio_file["game_over"], "rb")
-            speaker.play(mp3stream)
-            audio_played = True
         
         # blink labels
         handle_blink()
@@ -747,19 +747,20 @@ def new_hiscore_scrn():
 
     display.show(nhg)
     
+    # play the hiscore audio
+    if speaker.playing:
+        speaker.stop()
+    mp3stream.file = open(audio_file["hiscore"], "rb")
+    speaker.play(mp3stream)
+    
     # allow gog labels to blink
     blink_labels["nhg_new"]["blink"] = True
+    
+    # center the hoop
+    tic.go_home_centre(bg_task=handle_blink)
 
-    while time() - start_time <= 10:
+    while time() - start_time <= 5:
         rainbow.animate()
-        
-        if not audio_played:
-            # play the hiscore audio
-            if speaker.playing:
-                speaker.stop()
-            mp3stream.file = open(audio_file["hiscore"], "rb")
-            speaker.play(mp3stream)
-            audio_played = True
         
         # blink labels
         handle_blink()
