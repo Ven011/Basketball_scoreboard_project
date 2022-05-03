@@ -395,16 +395,10 @@ def start_scrn():
     blink_timer = 0
     blink_period = 0
     reset_score = False
-
-    display.show(sg)
-
-    while scrn_state == scrn_states[1]:
-        # turn LEDs black if the score has been reset
-        if not reset_score:
-            colorcycle.animate()
-        else:
-            solid_black.animate()
-
+    
+    def checks():
+        nonlocal labels_are_visible, blink_timer, blink_period
+        
         if time() >= blink_timer + blink_period:
             blink_timer = time()
             if labels_are_visible:
@@ -429,6 +423,17 @@ def start_scrn():
                 sg_r.color = 0xFFFFFF
                 sg_s.color = 0xFFFFFF
                 sg_e.color = 0xFFFFFF
+
+    display.show(sg)
+
+    while scrn_state == scrn_states[1]:
+        # turn LEDs black if the score has been reset
+        if not reset_score:
+            colorcycle.animate()
+        else:
+            rainbow.animate()
+
+        checks()
         
         if not speaker.playing:
             mp3stream.file = open(audio_file["space_jam"], "rb")
@@ -442,6 +447,10 @@ def start_scrn():
         if button_states[2]:
             button_states[2] = False
             reset_score = True
+            s_time = time()
+            while time() - s_time < 1:
+                checks()
+                solid_black.animate()
                 
         # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:
