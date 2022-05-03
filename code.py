@@ -399,7 +399,11 @@ def start_scrn():
     display.show(sg)
 
     while scrn_state == scrn_states[1]:
-        colorcycle.animate()
+        # turn LEDs black if the score has been reset
+        if not reset_score:
+            colorcycle.animate()
+        else:
+            solid_black.animate()
 
         if time() >= blink_timer + blink_period:
             blink_timer = time()
@@ -438,7 +442,6 @@ def start_scrn():
         if button_states[2]:
             button_states[2] = False
             reset_score = True
-            solid_black.animate()
                 
         # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:
