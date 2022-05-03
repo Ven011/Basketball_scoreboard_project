@@ -31,7 +31,7 @@ class TicI2C(object):
             if bg_task == None:
                 pass
             else:
-                if type(bg_task) == type(list): # check if there is more than one task to do
+                if type(bg_task)==type(list): # check if there is more than one task to do
                     for task in bg_task: # call all task functions
                         task()
                 else:
@@ -151,7 +151,7 @@ class TicI2C(object):
         self.write_command(command)
         self.current_position = target
 
-    def go_target(self, position, target_sleep=0.0, bg_tasks=None):
+    def go_target(self, position, target_sleep=0.0, bg_task=None):
         """
         this function moves to a specified position relative to the centre:
         - tic.go_target(0) is always the centre position
@@ -168,7 +168,7 @@ class TicI2C(object):
             if target_sleep > 0.0:
                 while self.get_current_position() != self.centre + position:
                     if target_sleep > 0.0:
-                        self.active_sleep(self.time_sleep, bg_tasks=bg_tasks)
+                        self.active_sleep(self.time_sleep, bg_task=bg_task)
 
     def go_home(self, reverse=True):
         """
