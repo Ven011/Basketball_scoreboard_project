@@ -171,6 +171,7 @@ solid_white = Solid(pixels, color=0xFFFFFF)
 solid_green = Solid(pixels, color=0x00B300)
 solid_yellow = Solid(pixels, color=0xB3B300)
 solid_red = Solid(pixels, color=0xB30000)
+solid_black = Solid(pixels, color=0x000000)
 
 # arcade button setup
 btn_arcade = digitalio.DigitalInOut(board.D8)
@@ -437,6 +438,7 @@ def start_scrn():
         if button_states[2]:
             button_states[2] = False
             reset_score = True
+            solid_black.animate()
                 
         # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:
