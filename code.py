@@ -393,7 +393,7 @@ def start_scrn():
     labels_are_visible = False
     blink_timer = 0
     blink_period = 0
-    score_is_reset = False
+    reset_score = False
 
     display.show(sg)
 
@@ -430,15 +430,13 @@ def start_scrn():
             speaker.play(mp3stream)
         
         # check if the reset button is low
-        if not btn_reset.value and not button_states[2] and not score_is_reset:
+        if not btn_reset.value and not button_states[2] and not reset_score:
             button_states[2] = True
 
         # reset the hiscore if the reset button is pressed
         if button_states[2]:
             button_states[2] = False
-            score_is_reset = True
-            ag_hiscore_c.text = "0"
-            get_set_hiscore(value=0)
+            reset_score = True
                 
         # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:
@@ -449,6 +447,12 @@ def start_scrn():
             button_states[1] = False
             if speaker.playing:
                 speaker.stop()
+                
+            # reset the hiscore if we need to 
+            if reset_score:
+                ag_hiscore_c.text = "0"
+                get_set_hiscore(value=0)
+            
             scrn_state = scrn_states[2]
 
 def countdown_scrn():
