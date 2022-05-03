@@ -311,10 +311,11 @@ def handle_blink():
 
 def move_hoop(should_i_go, hoop_index, time_left):
     hoop_position = [-100000, 100000]
+    bg_tasks = [animate_label]
 
     # move hoop
     if should_i_go and time_left > 1:
-        tic.go_target(hoop_position[hoop_index], bg_task=animate_label)
+        tic.go_target(hoop_position[hoop_index], bg_task=bg_tasks)
         should_i_go = False
     
     # check if we have arrived at the position we were going
@@ -444,7 +445,6 @@ def start_scrn():
                 if not speaker.playing:
                     mp3stream.file = open(audio_file["space_jam"], "rb")
                     speaker.play(mp3stream)
-                
                 
         # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:

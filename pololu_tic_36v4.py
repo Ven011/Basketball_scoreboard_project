@@ -31,11 +31,8 @@ class TicI2C(object):
             if bg_task == None:
                 pass
             else:
-                if type(bg_task)==type(list): # check if there is more than one task to do
-                    for task in bg_task: # call all task functions
-                        task()
-                else:
-                    bg_task()
+                for task in bg_task: # call all task functions
+                    task()
 
     def write_command(self, command):
         """
