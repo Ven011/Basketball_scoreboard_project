@@ -440,7 +440,11 @@ def start_scrn():
             # delay 1 second
             s_time = time()
             while time() - s_time < 1:
-                pass
+                colorcycle.animate()
+                if not speaker.playing:
+                    mp3stream.file = open(audio_file["space_jam"], "rb")
+                    speaker.play(mp3stream)
+                
                 
         # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:
