@@ -428,7 +428,7 @@ def start_scrn():
             speaker.play(mp3stream)
         
         # check if the reset button is low
-        if not btn_reset and not button_states[2]:
+        if not btn_reset.value and not button_states[2]:
             button_states[2] = True
 
         # reset the hiscore if the reset button is pressed
