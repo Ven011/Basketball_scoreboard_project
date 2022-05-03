@@ -688,6 +688,7 @@ def game_over_scrn():
 
     # variables
     start_time = time()
+    bg_tasks = [rainbow.animate, handle_blink] # functions to be called while the hoop centers
 
     # center the score value label
     if int(gog_score_c.text) <= 9:
@@ -712,9 +713,10 @@ def game_over_scrn():
     blink_labels["gog"]["blink"] = True
     
     # center the hoop
-    tic.go_home_centre(bg_task=handle_blink)
+    tic.go_home_centre(bg_task=bg_tasks)
 
-    while time() - start_time <= 5:
+    while time() - start_time <= 10:
+        # animate LEDs
         rainbow.animate()
         
         # blink labels
@@ -733,7 +735,7 @@ def new_hiscore_scrn():
 
     # variables
     start_time = time()
-    audio_played = False
+    bg_tasks = [rainbow.animate, handle_blink] # functions to be called while the hoop centers
 
     # center the hiscore value label
     if highest_score <= 9:
@@ -758,9 +760,10 @@ def new_hiscore_scrn():
     blink_labels["nhg_new"]["blink"] = True
     
     # center the hoop
-    tic.go_home_centre(bg_task=handle_blink)
+    tic.go_home_centre(bg_task=bg_tasks)
 
-    while time() - start_time <= 5:
+    while time() - start_time <= 10:
+        # animate LEDs
         rainbow.animate()
         
         # blink labels
