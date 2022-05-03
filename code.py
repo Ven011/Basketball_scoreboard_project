@@ -6,7 +6,7 @@ import audioio
 import audiomp3
 from adafruit_bitmap_font import bitmap_font
 from adafruit_display_text import label
-from time import sleep, time, monotonic
+from time import time, monotonic
 import digitalio
 import neopixel_spi as neopixel
 from adafruit_led_animation.animation.colorcycle import ColorCycle
@@ -393,6 +393,7 @@ def start_scrn():
     labels_are_visible = False
     blink_timer = 0
     blink_period = 0
+    score_is_reset = False
 
     display.show(sg)
 
@@ -429,22 +430,15 @@ def start_scrn():
             speaker.play(mp3stream)
         
         # check if the reset button is low
-        if not btn_reset.value and not button_states[2]:
+        if not btn_reset.value and not button_states[2] and not score_is_reset:
             button_states[2] = True
 
         # reset the hiscore if the reset button is pressed
         if button_states[2]:
             button_states[2] = False
+            score_is_reset = True
             ag_hiscore_c.text = "0"
             get_set_hiscore(value=0)
-            solid_white.animate() # Indicate highscore score reset
-            # delay 1 second
-            s_time = time()
-            while time() - s_time < 1:
-                colorcycle.animate()
-                if not speaker.playing:
-                    mp3stream.file = open(audio_file["space_jam"], "rb")
-                    speaker.play(mp3stream)
                 
         # check if the arcade btn is low
         if not btn_arcade.value and not button_states[1]:
