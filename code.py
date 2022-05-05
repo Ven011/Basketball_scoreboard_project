@@ -212,7 +212,7 @@ button_states = {
 
 label_sliding_vars = {
     "label": None,
-    "shoot_x": 17,
+    "label_x": 22,
     "prev_time": monotonic(),
     "wall": True
 }
@@ -427,7 +427,7 @@ def start_scrn():
     display.show(sg)
 
     while scrn_state == scrn_states[1]:
-        # turn LEDs black if the score has been reset
+        # use different LED animation given if the hiscore has been recent
         if not reset_score:
             colorcycle.animate()
         else:
@@ -478,11 +478,13 @@ def countdown_scrn():
     cdg_time_c.text = invert_string("3")
     cdg_score_c.text = invert_string("0")
     label_sliding_vars["label"] = cdg_shoot
+    label_sliding_vars["label_x"] = 22 # set label center position
+    cdg_shoot.x = label_sliding_vars["label_x"]
 
     # variables
     countdown_time = 3
     saved_hiscore = int(get_set_hiscore())
-    cdg_hiscore_c.text = invert_string(str(saved_hiscore))
+    cdg_hiscore_c.text = invert_string(str(saved_hiscore)) 
     
     time_left = 3
 
@@ -491,7 +493,7 @@ def countdown_scrn():
     s_time = time()
     while time() - s_time < 1:
         animate_label()
-        cdg_shoot.x = label_sliding_vars["shoot_x"]
+        cdg_shoot.x = label_sliding_vars["label_x"]
     
     countdown_timer = time()
 
@@ -502,14 +504,14 @@ def countdown_scrn():
         
         # move shoot label
         animate_label()
-        cdg_shoot.x = label_sliding_vars["shoot_x"]
+        cdg_shoot.x = label_sliding_vars["label_x"]
 
         # switch to the arcade scrn
         if time_left == 1:
             s_time = time()
             while time() - s_time < 1: # pause for 1 second
                 animate_label()
-                cdg_shoot.x = label_sliding_vars["shoot_x"]
+                cdg_shoot.x = label_sliding_vars["label_x"]
             scrn_state = scrn_states[3]
 
 def arcade_scrn():
@@ -521,7 +523,8 @@ def arcade_scrn():
     ag_hiscore.color = 0x00B3B3
     ag_hiscore_c.color = 0x00B3B3
     label_sliding_vars["label"] = ag_shoot
-    ag_shoot.x = label_sliding_vars["shoot_x"]
+    label_sliding_vars["label_x"] = 22
+    ag_shoot.x = label_sliding_vars["label_x"]
 
     # variables
     game_time = 60
@@ -587,7 +590,7 @@ def arcade_scrn():
                 # update labels
                 ag_score_c.text = invert_string(str(game_score))
                 ag_time_c.text = invert_string(str(time_left))
-                ag_shoot.x = label_sliding_vars["shoot_x"]
+                ag_shoot.x = label_sliding_vars["label_x"]
                 label_sliding_vars["label"] = ag_shoot
                 
                 ag_hiscore.color = 0x00B3B3
@@ -600,7 +603,7 @@ def arcade_scrn():
         
         # slide the shoot label back and forth
         animate_label()
-        ag_shoot.x = label_sliding_vars["shoot_x"]
+        ag_shoot.x = label_sliding_vars["label_x"]
     
         # move the hoop
         should_i_go, hoop_index = move_hoop(should_i_go, hoop_index, time_left)            
@@ -621,7 +624,7 @@ def arcade_scrn():
             while time() - s_time < 1:
                 # slide the shoot label back and forth
                 animate_label()
-                ag_shoot.x = label_sliding_vars["shoot_x"]
+                ag_shoot.x = label_sliding_vars["label_x"]
             if highest_score > saved_hiscore: # hiscore was beaten
                 scrn_state = scrn_states[5]
                 get_set_hiscore(value=game_score) # save the hiscore
@@ -636,7 +639,8 @@ def arcade_bonus_scrn(game_time, game_timer, score):
     bt_bonus_t.color = 0x000000
     bt_score_c.text = invert_string(str(score))
     label_sliding_vars["label"] = bt_shoot
-    bt_shoot.x = label_sliding_vars["shoot_x"]
+    label_sliding_vars["label_x"] = 22
+    bt_shoot.x = label_sliding_vars["label_x"]
     
     start_time = (game_time - int(time() - game_timer)) + 1
     exception = 0.5
@@ -678,7 +682,7 @@ def arcade_bonus_scrn(game_time, game_timer, score):
         
         # slide the shoot label back and forth
         animate_label()
-        bt_shoot.x = label_sliding_vars["shoot_x"]
+        bt_shoot.x = label_sliding_vars["label_x"]
 
         # update the time
         time_left = (game_time - int(time() - game_timer))
