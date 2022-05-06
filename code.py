@@ -269,13 +269,13 @@ def animate_label():
     # move shoot label along the screen
     if (monotonic() - lsv["prev_time"]) >= 0.08: # check whether 0.08 seconds have passed
         if lsv["wall"]:
-            lsv["shoot_x"] += 1
-            if lsv["shoot_x"] == label_max_x:
+            lsv["label_x"] += 1
+            if lsv["label_x"] == label_max_x:
                 lsv["wall"] = not lsv["wall"]
                 
         elif not lsv["wall"]:
-            lsv["shoot_x"] -= 1
-            if lsv["shoot_x"] == label_min_x:
+            lsv["label_x"] -= 1
+            if lsv["label_x"] == label_min_x:
                 lsv["wall"] = not lsv["wall"]
         # update the previous time
         lsv["prev_time"] = monotonic()
